@@ -17,7 +17,7 @@ class DatabaseSeeder extends Seeder
         $superAdminRole = \App\Models\Role::where('slug', 'super-admin')->first();
 
         User::factory()->create([
-            'name' => 'Test User',
+            'nama' => 'Test User',
             'email' => 'test@example.com',
             'role_id' => $superAdminRole?->id,
         ]);

@@ -23,7 +23,7 @@
             Role / Peran
         </a>
 
-        <a href="#" class="flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md text-zinc-500 hover:text-zinc-950 hover:bg-zinc-100 transition-colors">
+        <a href="{{ route('users.index') }}" class="flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md {{ request()->routeIs('users.*') ? 'bg-zinc-100 text-zinc-900 font-semibold' : 'text-zinc-500 hover:text-zinc-950 hover:bg-zinc-100' }} transition-colors">
             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.109A11.386 11.386 0 0 1 10.089 20.5c-2.057 0-3.978-.543-5.64-1.5v-.11a11.386 11.386 0 0 1 5.017-1.334c1.218 0 2.383.186 3.484.53m1.484-3.078c-.783.518-1.503 1.155-2.125 1.886L10.089 16c-1.895 0-3.665.419-5.257 1.17l-.023-.008a6.002 6.002 0 0 1 10.04-3.967A6.012 6.012 0 0 1 15 16.052Zm-4.911-3.302a4.5 4.5 0 1 1-7.078-5.592 4.5 4.5 0 0 1 7.078 5.592Zm6.422-3.302a3 3 0 1 1-4.718-3.728 3 3 0 0 1 4.718 3.728Z" />
             </svg>
