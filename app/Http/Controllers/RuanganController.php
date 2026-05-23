@@ -13,10 +13,16 @@ class RuanganController extends Controller
 {
     public function index(): View
     {
-        // Eager load jurusan untuk menghindari query N+1 di view
-        $ruangans = Ruangan::with('jurusan')->latest()->get();
+        // $jurusans dikirim ke view untuk dropdown filter by jurusan
+        $jurusans = Jurusan::orderBy('nama_jurusan')->get();
 
-        return view('ruangans.index', compact('ruangans'));
+        // Filter opsional by jurusan_id via GET parameter
+        $ruangans = Ruangan::with('jurusan')
+            ->when(request('jurusan_id'), fn($q) => $q->where('jurusan_id', request('jurusan_id')))
+            ->latest()
+            ->get();
+
+        return view('ruangans.index', compact('ruangans', 'jurusans'));
     }
 
     public function create(): View
