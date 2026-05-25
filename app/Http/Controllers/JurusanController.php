@@ -11,8 +11,8 @@ class JurusanController extends Controller
 {
     public function index(): View
     {
-        // Hitung jumlah ruangan per jurusan tanpa query N+1
-        $jurusans = Jurusan::withCount('ruangans')->latest()->get();
+        // Hitung jumlah ruangan per jurusan dengan pagination 10 per halaman
+        $jurusans = Jurusan::withCount('ruangans')->latest()->paginate(10);
 
         return view('jurusans.index', compact('jurusans'));
     }
@@ -27,11 +27,14 @@ class JurusanController extends Controller
         // kode_jurusan tidak divalidasi karena di-generate otomatis oleh Model event creating
         $validated = $request->validate([
             'nama_jurusan' => 'required|string|max:100|unique:jurusans,nama_jurusan',
+        ], [
+            'nama_jurusan.required' => 'Nama unit kerja wajib diisi.',
+            'nama_jurusan.unique' => 'Nama unit kerja sudah digunakan.',
         ]);
 
         Jurusan::create($validated);
 
-        return redirect()->route('jurusans.index')->with('success', 'Jurusan berhasil ditambahkan.');
+        return redirect()->route('jurusans.index')->with('success', 'Unit Kerja berhasil ditambahkan.');
     }
 
     public function show(Jurusan $jurusan): View
@@ -52,11 +55,14 @@ class JurusanController extends Controller
         // Exclude ID jurusan saat ini agar unique rule tidak menolak nama yang tidak berubah
         $validated = $request->validate([
             'nama_jurusan' => 'required|string|max:100|unique:jurusans,nama_jurusan,' . $jurusan->id,
+        ], [
+            'nama_jurusan.required' => 'Nama unit kerja wajib diisi.',
+            'nama_jurusan.unique' => 'Nama unit kerja sudah digunakan.',
         ]);
 
         $jurusan->update($validated);
 
-        return redirect()->route('jurusans.index')->with('success', 'Jurusan berhasil diperbarui.');
+        return redirect()->route('jurusans.index')->with('success', 'Unit Kerja berhasil diperbarui.');
     }
 
     public function destroy(Jurusan $jurusan): RedirectResponse
@@ -65,9 +71,12 @@ class JurusanController extends Controller
             // Exception dilempar oleh Model event deleting jika masih ada ruangan terdaftar
             $jurusan->delete();
 
-            return redirect()->route('jurusans.index')->with('success', 'Jurusan berhasil dihapus.');
+            return redirect()->route('jurusans.index')->with('success', 'Unit Kerja berhasil dihapus.');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', $e->getMessage());
+            $message = $e->getMessage();
+            $message = str_replace('Jurusan', 'Unit Kerja', $message);
+            $message = str_replace('jurusan', 'unit kerja', $message);
+            return redirect()->back()->with('error', $message);
         }
     }
 }

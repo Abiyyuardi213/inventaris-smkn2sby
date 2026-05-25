@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'Edit Jurusan - Inventaris SMKN 2 SBY')
-@section('page_title', 'Edit Jurusan')
+@@section('title', 'Edit Unit Kerja - Inventaris SMKN 2 SBY')
+@section('page_title', 'Edit Unit Kerja')
 
 @section('content')
 <div class="max-w-2xl mx-auto space-y-6">
@@ -12,11 +12,11 @@
         <svg class="w-3.5 h-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
         </svg>
-        <a href="{{ route('jurusans.index') }}" class="hover:text-zinc-900 transition-colors">Jurusan</a>
+        <a href="{{ route('jurusans.index') }}" class="hover:text-zinc-900 transition-colors">Unit Kerja</a>
         <svg class="w-3.5 h-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
         </svg>
-        <span class="font-medium text-zinc-900">Edit Jurusan</span>
+        <span class="font-medium text-zinc-900">Edit Unit Kerja</span>
     </nav>
 
     {{-- Page Heading --}}
@@ -26,10 +26,10 @@
             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
             </svg>
-            Kembali ke Daftar Jurusan
+            Kembali ke Daftar Unit Kerja
         </a>
-        <h2 class="text-2xl font-bold tracking-tight text-zinc-900">Edit Jurusan</h2>
-        <p class="text-sm text-zinc-500">Perbarui nama jurusan. Kode jurusan tidak dapat diubah.</p>
+        <h2 class="text-2xl font-bold tracking-tight text-zinc-900">Edit Unit Kerja</h2>
+        <p class="text-sm text-zinc-500">Perbarui nama unit kerja. Kode unit kerja tidak dapat diubah.</p>
     </div>
 
     {{-- Form Card --}}
@@ -38,11 +38,11 @@
             @csrf
             @method('PUT')
 
-            {{-- Kode Jurusan (readonly) --}}
+            {{-- Kode Unit Kerja (readonly) --}}
             <div class="space-y-2">
                 <div class="flex items-center justify-between">
                     <label class="text-sm font-medium leading-none text-zinc-900">
-                        Kode Jurusan
+                        Kode Unit Kerja
                     </label>
                     {{-- Tooltip badge --}}
                     <span class="inline-flex items-center gap-1 text-xs text-amber-600 bg-amber-50 border border-amber-200/60 px-2 py-0.5 rounded-full font-medium">
@@ -58,21 +58,21 @@
                     </span>
                 </div>
                 <p class="text-xs text-zinc-400">
-                    Kode ini di-generate otomatis saat jurusan pertama kali dibuat dan bersifat permanen.
+                    Kode ini di-generate otomatis saat unit kerja pertama kali dibuat dan bersifat permanen.
                 </p>
             </div>
 
-            {{-- Nama Jurusan --}}
+            {{-- Nama Unit Kerja --}}
             <div class="space-y-2">
                 <label for="nama_jurusan" class="text-sm font-medium leading-none text-zinc-900">
-                    Nama Jurusan <span class="text-red-500">*</span>
+                    Nama Unit Kerja <span class="text-red-500">*</span>
                 </label>
                 <input
                     type="text"
                     id="nama_jurusan"
                     name="nama_jurusan"
                     value="{{ old('nama_jurusan', $jurusan->nama_jurusan) }}"
-                    placeholder="Contoh: Teknik Komputer Jaringan"
+                    placeholder="Contoh: Tata Usaha"
                     class="flex h-10 w-full rounded-md border {{ $errors->has('nama_jurusan') ? 'border-red-400 focus:ring-red-500' : 'border-zinc-200 focus:ring-zinc-950' }} bg-transparent px-3 py-2 text-sm ring-offset-white placeholder:text-zinc-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 transition-colors"
                     required
                     autofocus
@@ -98,7 +98,7 @@
                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
                     </svg>
-                    Update Jurusan
+                    Update Unit Kerja
                 </button>
             </div>
         </form>

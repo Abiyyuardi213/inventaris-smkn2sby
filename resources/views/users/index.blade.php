@@ -52,6 +52,7 @@
                             </td>
                             <td class="px-6 py-4">
                                 <div class="font-medium text-zinc-900">{{ $user->nama }}</div>
+                                <div class="text-xs text-zinc-500">{{ '@' . $user->username }}</div>
                             </td>
                             <td class="px-6 py-4 text-zinc-600">
                                 {{ $user->email }}

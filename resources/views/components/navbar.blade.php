@@ -1,4 +1,4 @@
-<header class="h-16 border-b border-zinc-200 bg-white flex items-center justify-between px-6 md:px-8">
+<header class="h-16 border-b border-zinc-200 bg-white flex items-center justify-between px-6 md:px-8 shrink-0">
     <!-- Left: Mobile Menu Trigger and Title -->
     <div class="flex items-center gap-4">
         <button class="md:hidden p-2 rounded-md text-zinc-500 hover:bg-zinc-100">

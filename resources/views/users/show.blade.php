@@ -25,6 +25,10 @@
                 <span class="text-lg font-medium text-zinc-900">{{ $user->nama }}</span>
             </div>
             <div>
+                <span class="text-xs font-semibold text-zinc-400 uppercase tracking-wider block mb-1">Nama Pengguna (Username)</span>
+                <span class="text-lg font-medium text-zinc-900">{{ '@' . $user->username }}</span>
+            </div>
+            <div>
                 <span class="text-xs font-semibold text-zinc-400 uppercase tracking-wider block mb-1">Alamat Email</span>
                 <span class="text-lg font-medium text-zinc-900">{{ $user->email }}</span>
             </div>

@@ -1,4 +1,4 @@
-<footer class="py-6 px-6 md:px-8 border-t border-zinc-200 bg-white text-center text-xs text-zinc-500 mt-auto">
+<footer class="py-6 px-6 md:px-8 border-t border-zinc-200 bg-white text-center text-xs text-zinc-500 mt-auto shrink-0">
     <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
         <p>&copy; {{ date('Y') }} SMKN 2 Surabaya. All rights reserved.</p>
         <p class="flex items-center justify-center gap-1.5">

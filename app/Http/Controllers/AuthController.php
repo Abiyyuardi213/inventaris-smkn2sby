@@ -19,17 +19,17 @@ class AuthController extends Controller
     public function authenticate(Request $request)
     {
         $request->validate([
-            'nama'     => 'required|string',
+            'username' => 'required|string',
             'password' => 'required|string',
         ]);
 
         try {
-            $credentials = $request->only('nama', 'password');
+            $credentials = $request->only('username', 'password');
 
             if (!Auth::attempt($credentials, $request->boolean('remember'))) {
                 return back()
-                    ->withErrors(['nama' => 'Nama atau kata sandi salah.'])
-                    ->onlyInput('nama');
+                    ->withErrors(['username' => 'Nama pengguna atau kata sandi salah.'])
+                    ->onlyInput('username');
             }
 
             $request->session()->regenerate();
