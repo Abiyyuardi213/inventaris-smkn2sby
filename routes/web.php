@@ -9,6 +9,7 @@ use App\Http\Controllers\RuanganController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\InventarisController;
 use App\Http\Controllers\MutasiController;
+use App\Http\Controllers\PeminjamanController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [AuthController::class, 'login'])->name('login');
@@ -27,5 +28,6 @@ Route::middleware('auth')->prefix('admin')->group(function () {
     Route::resource('kategoris', KategoriController::class);
     Route::resource('inventaris', InventarisController::class);
     Route::resource('mutasis', MutasiController::class);
+    Route::resource('peminjamans', PeminjamanController::class);
 });
 

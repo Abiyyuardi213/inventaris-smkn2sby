@@ -5,7 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use App\Models\Peminjaman;
 
 #[Fillable([
     'kode_inventaris',
@@ -65,5 +67,13 @@ class Inventaris extends Model
     public function ruangan(): BelongsTo
     {
         return $this->belongsTo(Ruangan::class);
+    }
+
+    /**
+     * Relasi ke model Peminjaman (riwayat peminjaman eksternal).
+     */
+    public function peminjamans(): HasMany
+    {
+        return $this->hasMany(Peminjaman::class, 'inventaris_id');
     }
 }

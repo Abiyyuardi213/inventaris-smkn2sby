@@ -124,5 +124,25 @@ class DatabaseSeeder extends Seeder
                 'tanggal_pengadaan' => '2023-08-12'
             ]
         );
+
+        // Sample peminjaman (external) if an inventaris exists
+        $sampleInventaris = \App\Models\Inventaris::first();
+        if ($sampleInventaris) {
+            \App\Models\Peminjaman::updateOrCreate(
+                [
+                    'nama_peminjam' => 'Tamu Sekolah',
+                    'inventaris_id' => $sampleInventaris->id,
+                ],
+                [
+                    'instansi' => 'Komite Sekolah',
+                    'kontak' => '08123456789',
+                    'jumlah_pinjam' => 1,
+                    'tanggal_pinjam' => now()->toDateString(),
+                    'tanggal_estimasi_kembali' => now()->addDays(3)->toDateString(),
+                    'status' => 'Dipinjam',
+                    'user_id' => User::first()?->id,
+                ]
+            );
+        }
     }
 }
