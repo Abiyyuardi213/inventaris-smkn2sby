@@ -7,9 +7,11 @@ use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\RuanganController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ApprovalController;
 use App\Http\Controllers\InventarisController;
 use App\Http\Controllers\MutasiController;
 use App\Http\Controllers\PeminjamanController;
+use App\Http\Controllers\PengadaanController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [AuthController::class, 'login'])->name('login');
@@ -29,5 +31,17 @@ Route::middleware('auth')->prefix('admin')->group(function () {
     Route::resource('inventaris', InventarisController::class);
     Route::resource('mutasis', MutasiController::class);
     Route::resource('peminjamans', PeminjamanController::class);
-});
 
+    // Route pengadaan — semua user yang sudah login
+    Route::resource('pengadaans', PengadaanController::class);
+
+    // Route approval — khusus Super Admin
+    Route::middleware('role:super-admin')
+        ->prefix('approvals')
+        ->name('approvals.')
+        ->group(function () {
+            Route::get('/', [ApprovalController::class, 'index'])->name('index');
+            Route::patch('/{pengadaan}/approve', [ApprovalController::class, 'approve'])->name('approve');
+            Route::patch('/{pengadaan}/tolak', [ApprovalController::class, 'tolak'])->name('tolak');
+        });
+});
