@@ -41,7 +41,10 @@ class Jurusan extends Model
 
         static::deleting(function (Jurusan $jurusan) {
             if ($jurusan->ruangans()->exists()) {
-                throw new \Exception('Jurusan tidak dapat dihapus karena masih memiliki ruangan terdaftar.');
+                throw new \Exception('Unit Kerja tidak dapat dihapus karena masih memiliki ruangan terdaftar.');
+            }
+            if ($jurusan->inventaris()->exists()) {
+                throw new \Exception('Unit Kerja tidak dapat dihapus karena masih memiliki data inventaris.');
             }
         });
     }
@@ -52,5 +55,13 @@ class Jurusan extends Model
     public function ruangans(): HasMany
     {
         return $this->hasMany(Ruangan::class);
+    }
+
+    /**
+     * Relasi ke model Inventaris.
+     */
+    public function inventaris(): HasMany
+    {
+        return $this->hasMany(Inventaris::class);
     }
 }

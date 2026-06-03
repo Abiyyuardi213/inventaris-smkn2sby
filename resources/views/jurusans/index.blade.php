@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'Daftar Jurusan - Inventaris SMKN 2 SBY')
-@section('page_title', 'Manajemen Jurusan')
+@section('title', 'Daftar Unit Kerja - Inventaris SMKN 2 SBY')
+@section('page_title', 'Manajemen Unit Kerja')
 
 @section('content')
 <div class="space-y-6">
@@ -12,14 +12,14 @@
         <svg class="w-3.5 h-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
         </svg>
-        <span class="font-medium text-zinc-900">Jurusan</span>
+        <span class="font-medium text-zinc-900">Unit Kerja</span>
     </nav>
 
     {{-- Header Section --}}
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-            <h2 class="text-2xl font-bold tracking-tight text-zinc-900">Daftar Jurusan</h2>
-            <p class="text-sm text-zinc-500">Kelola data jurusan yang tersedia di SMKN 2 Surabaya.</p>
+            <h2 class="text-2xl font-bold tracking-tight text-zinc-900">Daftar Unit Kerja</h2>
+            <p class="text-sm text-zinc-500">Kelola data unit kerja yang tersedia di SMKN 2 Surabaya.</p>
         </div>
         <div>
             <a href="{{ route('jurusans.create') }}"
@@ -27,7 +27,7 @@
                 <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                 </svg>
-                Tambah Jurusan
+                Tambah Unit Kerja
             </a>
         </div>
     </div>
@@ -39,8 +39,9 @@
                 <thead class="text-xs uppercase bg-zinc-50 text-zinc-500 border-b border-zinc-200">
                     <tr>
                         <th scope="col" class="px-6 py-4 font-semibold w-12">No</th>
-                        <th scope="col" class="px-6 py-4 font-semibold">Kode Jurusan</th>
-                        <th scope="col" class="px-6 py-4 font-semibold">Nama Jurusan</th>
+                        <th scope="col" class="px-6 py-4 font-semibold w-24">ID</th>
+                        <th scope="col" class="px-6 py-4 font-semibold">Kode Unit Kerja</th>
+                        <th scope="col" class="px-6 py-4 font-semibold">Nama Unit Kerja</th>
                         <th scope="col" class="px-6 py-4 font-semibold text-center">Jumlah Ruangan</th>
                         <th scope="col" class="px-6 py-4 font-semibold text-right">Aksi</th>
                     </tr>
@@ -49,7 +50,17 @@
                     @forelse ($jurusans as $jurusan)
                         <tr class="hover:bg-zinc-50/60 transition-colors {{ $loop->even ? 'bg-zinc-50/30' : 'bg-white' }}">
                             <td class="px-6 py-4 text-zinc-400 font-mono text-xs">
-                                {{ $loop->iteration }}
+                                {{ ($jurusans->currentPage() - 1) * $jurusans->perPage() + $loop->iteration }}
+                            </td>
+                            <td class="px-6 py-4">
+                                <button onclick="copyToClipboard('{{ $jurusan->id }}', this)" 
+                                    class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-zinc-50 hover:bg-zinc-100 border border-zinc-200 hover:border-zinc-300 text-[10px] font-semibold text-zinc-600 hover:text-zinc-900 transition-all shadow-sm cursor-pointer"
+                                    title="Salin ID Unit Kerja">
+                                    <svg class="w-3 h-3 text-zinc-400" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 01-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H5.25m11.9-3.675A2.25 2.25 0 0013.5 2.25h-3a2.25 2.25 0 00-2.25 2.25m9 0V18.75a2.25 2.25 0 01-2.25 2.25h-9a2.25 2.25 0 01-2.25-2.25V4.5m9 0H7.5" />
+                                    </svg>
+                                    <span>Salin ID</span>
+                                </button>
                             </td>
                             <td class="px-6 py-4">
                                 <span class="inline-flex items-center rounded-md bg-indigo-50 px-2.5 py-1 text-xs font-mono font-semibold text-indigo-700 border border-indigo-200/60 tracking-wide">
@@ -106,7 +117,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5" class="px-6 py-16 text-center text-zinc-500">
+                            <td colspan="6" class="px-6 py-16 text-center text-zinc-500">
                                 <div class="flex flex-col items-center justify-center gap-3">
                                     <div class="w-14 h-14 rounded-full bg-zinc-100 flex items-center justify-center">
                                         <svg class="w-7 h-7 text-zinc-300" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -114,15 +125,15 @@
                                         </svg>
                                     </div>
                                     <div>
-                                        <p class="font-semibold text-zinc-700">Belum ada data jurusan</p>
-                                        <p class="text-xs text-zinc-400 mt-0.5">Klik tombol "Tambah Jurusan" untuk menambahkan data pertama.</p>
+                                        <p class="font-semibold text-zinc-700">Belum ada data unit kerja</p>
+                                        <p class="text-xs text-zinc-400 mt-0.5">Klik tombol "Tambah Unit Kerja" untuk menambahkan data pertama.</p>
                                     </div>
                                     <a href="{{ route('jurusans.create') }}"
                                         class="mt-1 inline-flex items-center gap-1.5 rounded-md bg-zinc-900 text-zinc-50 hover:bg-zinc-800 px-3 py-1.5 text-xs font-medium transition-colors">
                                         <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                                         </svg>
-                                        Tambah Jurusan
+                                        Tambah Unit Kerja
                                     </a>
                                 </div>
                             </td>
@@ -132,12 +143,15 @@
             </table>
         </div>
 
-        {{-- Table Footer: total count --}}
+        {{-- Table Footer: total count & pagination --}}
         @if ($jurusans->isNotEmpty())
-            <div class="px-6 py-3 border-t border-zinc-100 bg-zinc-50/50">
+            <div class="px-6 py-4 border-t border-zinc-100 bg-zinc-50/50 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <p class="text-xs text-zinc-400">
-                    Menampilkan <span class="font-medium text-zinc-600">{{ $jurusans->count() }}</span> jurusan
+                    Menampilkan <span class="font-medium text-zinc-600">{{ $jurusans->firstItem() }}</span> sampai <span class="font-medium text-zinc-600">{{ $jurusans->lastItem() }}</span> dari <span class="font-medium text-zinc-600">{{ $jurusans->total() }}</span> unit kerja
                 </p>
+                <div class="shrink-0 pagination-sm">
+                    {{ $jurusans->links() }}
+                </div>
             </div>
         @endif
     </div>
@@ -146,9 +160,9 @@
 <script>
     function confirmDelete(id, nama) {
         Swal.fire({
-            title: 'Hapus Jurusan?',
-            html: `Anda akan menghapus jurusan <strong>"${nama}"</strong>.<br>
-                   <span class="text-sm text-gray-500">Jurusan yang masih memiliki ruangan tidak dapat dihapus.</span>`,
+            title: 'Hapus Unit Kerja?',
+            html: `Anda akan menghapus unit kerja <strong>"${nama}"</strong>.<br>
+                   <span class="text-sm text-gray-500">Unit kerja yang masih memiliki ruangan tidak dapat dihapus.</span>`,
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#ef4444',
@@ -161,6 +175,47 @@
             if (result.isConfirmed) {
                 document.getElementById('delete-form-' + id).submit();
             }
+        });
+    }
+
+    function copyToClipboard(text, button) {
+        navigator.clipboard.writeText(text).then(() => {
+            // Ubah icon sementara menjadi checkmark dan text "Tersalin!"
+            const originalHTML = button.innerHTML;
+            button.innerHTML = `
+                <svg class="w-3 h-3 text-emerald-600 animate-scale-up" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                </svg>
+                <span class="text-emerald-700">Tersalin!</span>
+            `;
+            button.classList.add('bg-emerald-50', 'border-emerald-200');
+            button.classList.remove('bg-zinc-50', 'border-zinc-200');
+            
+            // Tampilkan Toast SweetAlert2
+            const Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 1500,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                }
+            });
+
+            Toast.fire({
+                icon: 'success',
+                title: 'ID berhasil disalin!'
+            });
+
+            setTimeout(() => {
+                button.innerHTML = originalHTML;
+                button.classList.remove('bg-emerald-50', 'border-emerald-200');
+                button.classList.add('bg-zinc-50', 'border-zinc-200');
+            }, 1500);
+        }).catch(err => {
+            console.error('Gagal menyalin text: ', err);
         });
     }
 </script>

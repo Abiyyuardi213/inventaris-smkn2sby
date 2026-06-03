@@ -16,11 +16,12 @@ class RuanganController extends Controller
         // $jurusans dikirim ke view untuk dropdown filter by jurusan
         $jurusans = Jurusan::orderBy('nama_jurusan')->get();
 
-        // Filter opsional by jurusan_id via GET parameter
+        // Filter opsional by jurusan_id via GET parameter dengan pagination 10 per halaman
         $ruangans = Ruangan::with('jurusan')
             ->when(request('jurusan_id'), fn($q) => $q->where('jurusan_id', request('jurusan_id')))
             ->latest()
-            ->get();
+            ->paginate(10)
+            ->withQueryString();
 
         return view('ruangans.index', compact('ruangans', 'jurusans'));
     }

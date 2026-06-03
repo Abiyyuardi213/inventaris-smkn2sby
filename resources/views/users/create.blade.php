@@ -41,6 +41,25 @@
                 @enderror
             </div>
 
+            <!-- Username -->
+            <div class="space-y-2">
+                <label for="username" class="text-sm font-medium leading-none text-zinc-900">
+                    Nama Pengguna (Username) <span class="text-red-500">*</span>
+                </label>
+                <input 
+                    type="text" 
+                    id="username" 
+                    name="username" 
+                    value="{{ old('username') }}"
+                    placeholder="Masukkan nama pengguna"
+                    class="flex h-10 w-full rounded-md border {{ $errors->has('username') ? 'border-red-500 focus:ring-red-500' : 'border-zinc-200 focus:ring-zinc-950' }} bg-transparent px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-zinc-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                    required
+                >
+                @error('username')
+                    <p class="text-xs font-medium text-red-500">{{ $message }}</p>
+                @enderror
+            </div>
+
             <!-- Email -->
             <div class="space-y-2">
                 <label for="email" class="text-sm font-medium leading-none text-zinc-900">

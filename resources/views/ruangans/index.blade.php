@@ -35,7 +35,7 @@
     {{-- Filter by Jurusan --}}
     <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3">
         <form method="GET" action="{{ route('ruangans.index') }}" class="flex items-center gap-2 w-full sm:w-auto">
-            <label for="filter_jurusan" class="text-sm font-medium text-zinc-600 shrink-0">Filter Jurusan:</label>
+            <label for="filter_jurusan" class="text-sm font-medium text-zinc-600 shrink-0">Filter Unit Kerja:</label>
             <select
                 id="filter_jurusan"
                 name="jurusan_id"
@@ -43,10 +43,10 @@
                 class="h-9 rounded-md border border-zinc-200 bg-white px-3 pr-8 text-sm text-zinc-700 focus:outline-none focus:ring-2 focus:ring-zinc-950 focus:ring-offset-1 transition-colors cursor-pointer appearance-none"
                 style="background-image: url('data:image/svg+xml,%3Csvg xmlns%3D%22http%3A//www.w3.org/2000/svg%22 fill%3D%22none%22 viewBox%3D%220 0 20 20%22%3E%3Cpath stroke%3D%22%236b7280%22 stroke-linecap%3D%22round%22 stroke-linejoin%3D%22round%22 stroke-width%3D%221.5%22 d%3D%22M6 8l4 4 4-4%22/%3E%3C/svg%3E'); background-repeat: no-repeat; background-position: right 0.5rem center; background-size: 1.25em;"
             >
-                <option value="">-- Semua Jurusan --</option>
+                <option value="">-- Semua Unit Kerja --</option>
                 @foreach ($jurusans as $jurusan)
                     <option value="{{ $jurusan->id }}" {{ request('jurusan_id') == $jurusan->id ? 'selected' : '' }}>
-                        {{ $jurusan->nama_jurusan }}
+                        {{ $jurusan->kode_jurusan }} | {{ $jurusan->nama_jurusan }}
                     </option>
                 @endforeach
             </select>
@@ -75,7 +75,7 @@
                     <tr>
                         <th scope="col" class="px-6 py-4 font-semibold w-12">No</th>
                         <th scope="col" class="px-6 py-4 font-semibold">Nama Ruangan</th>
-                        <th scope="col" class="px-6 py-4 font-semibold">Jurusan</th>
+                        <th scope="col" class="px-6 py-4 font-semibold">Unit Kerja</th>
                         <th scope="col" class="px-6 py-4 font-semibold text-right">Aksi</th>
                     </tr>
                 </thead>
@@ -83,7 +83,7 @@
                     @forelse ($ruangans as $ruangan)
                         <tr class="hover:bg-zinc-50/60 transition-colors {{ $loop->even ? 'bg-zinc-50/30' : 'bg-white' }}">
                             <td class="px-6 py-4 text-zinc-400 font-mono text-xs">
-                                {{ $loop->iteration }}
+                                {{ ($ruangans->currentPage() - 1) * $ruangans->perPage() + $loop->iteration }}
                             </td>
                             <td class="px-6 py-4">
                                 <div class="font-medium text-zinc-900">{{ $ruangan->nama_ruangan }}</div>
@@ -145,7 +145,7 @@
                                         <p class="font-semibold text-zinc-700">Belum ada data ruangan</p>
                                         <p class="text-xs text-zinc-400 mt-0.5">
                                             @if (request('jurusan_id'))
-                                                Tidak ada ruangan untuk jurusan yang dipilih.
+                                                Tidak ada ruangan untuk unit kerja yang dipilih.
                                             @else
                                                 Klik tombol "Tambah Ruangan" untuk menambahkan data pertama.
                                             @endif
@@ -166,15 +166,18 @@
             </table>
         </div>
 
-        {{-- Table Footer --}}
+        {{-- Table Footer: total count & pagination --}}
         @if ($ruangans->isNotEmpty())
-            <div class="px-6 py-3 border-t border-zinc-100 bg-zinc-50/50">
+            <div class="px-6 py-4 border-t border-zinc-100 bg-zinc-50/50 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <p class="text-xs text-zinc-400">
-                    Menampilkan <span class="font-medium text-zinc-600">{{ $ruangans->count() }}</span> ruangan
+                    Menampilkan <span class="font-medium text-zinc-600">{{ $ruangans->firstItem() }}</span> sampai <span class="font-medium text-zinc-600">{{ $ruangans->lastItem() }}</span> dari <span class="font-medium text-zinc-600">{{ $ruangans->total() }}</span> ruangan
                     @if (request('jurusan_id'))
-                        &mdash; difilter berdasarkan jurusan
+                        &mdash; difilter berdasarkan unit kerja
                     @endif
                 </p>
+                <div class="shrink-0 pagination-sm">
+                    {{ $ruangans->links() }}
+                </div>
             </div>
         @endif
     </div>

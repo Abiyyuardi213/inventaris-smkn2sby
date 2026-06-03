@@ -1,15 +1,15 @@
-<aside class="w-64 border-r border-zinc-200 bg-white flex-shrink-0 hidden md:flex flex-col h-full">
+<aside class="w-72 border-r border-zinc-200 bg-white flex-shrink-0 hidden md:flex flex-col h-full">
     <!-- Sidebar Header -->
     <div class="h-16 flex items-center px-6 border-b border-zinc-200 gap-2.5">
-        <div class="w-8 h-8 rounded-lg bg-zinc-900 flex items-center justify-center text-white font-bold text-lg">
-            I
+        <div class="w-8 h-8 rounded-lg bg-zinc-900 flex items-center justify-center text-white overflow-hidden p-1">
+            <img src="{{ asset('image/smkn2sby.png') }}" alt="Logo SMKN 2 Surabaya" class="w-full h-full object-contain">
         </div>
-        <span class="font-semibold text-zinc-900 tracking-tight">Inventaris SMKN 2</span>
+        <span class="font-semibold text-zinc-900 tracking-tight">Inventaris SMKN 2 SBY</span>
     </div>
 
     <!-- Navigation Links -->
     <nav class="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
-        <a href="/" class="flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md text-zinc-500 hover:text-zinc-950 hover:bg-zinc-100 transition-colors">
+        <a href="{{ route('dashboard') }}" class="flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md {{ request()->routeIs('dashboard') || request()->is('admin/dashboard') ? 'bg-zinc-100 text-zinc-900 font-semibold' : 'text-zinc-500 hover:text-zinc-950 hover:bg-zinc-100' }} transition-colors">
             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
             </svg>
@@ -39,7 +39,7 @@
             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-1.5 12V10.332A48.36 48.36 0 0 0 12 9.75c-2.551 0-5.056.2-7.5.582V21M3 21h18M12 6.75h.008v.008H12V6.75Z" />
             </svg>
-            Jurusan
+            Unit Kerja
         </a>
 
         <a href="{{ route('ruangans.index') }}" class="flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md {{ request()->routeIs('ruangans.*') ? 'bg-zinc-100 text-zinc-900 font-semibold' : 'text-zinc-500 hover:text-zinc-950 hover:bg-zinc-100' }} transition-colors">
@@ -62,16 +62,23 @@
             Inventaris
         </p>
 
-        <a href="#" class="flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md text-zinc-500 hover:text-zinc-950 hover:bg-zinc-100 transition-colors">
+        <a href="{{ route('inventaris.index') }}" class="flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md {{ request()->routeIs('inventaris.*') ? 'bg-zinc-100 text-zinc-900 font-semibold' : 'text-zinc-500 hover:text-zinc-950 hover:bg-zinc-100' }} transition-colors">
             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" d="m20.25 7.5-.625 10.632a2.25 2.25 0 0 1-2.247 2.118H6.622a2.25 2.25 0 0 1-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z" />
             </svg>
             Barang / Sarpras
         </a>
 
-        <a href="#" class="flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md text-zinc-500 hover:text-zinc-950 hover:bg-zinc-100 transition-colors">
+        <a href="{{ route('mutasis.index') }}" class="flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md {{ request()->routeIs('mutasis.*') ? 'bg-zinc-100 text-zinc-900 font-semibold' : 'text-zinc-500 hover:text-zinc-950 hover:bg-zinc-100' }} transition-colors">
             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 21 3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5" />
+            </svg>
+            Mutasi Barang
+        </a>
+
+        <a href="{{ route('peminjamans.index') }}" class="flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md text-zinc-500 hover:text-zinc-950 hover:bg-zinc-100 transition-colors">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
             </svg>
             Peminjaman
         </a>
@@ -106,12 +113,12 @@
     <!-- Sidebar Footer -->
     <div class="p-4 border-t border-zinc-200">
         <div class="flex items-center gap-3 p-2 rounded-lg bg-zinc-50">
-            <div class="w-9 h-9 rounded-full bg-zinc-200 flex items-center justify-center font-semibold text-sm text-zinc-800">
-                U
+            <div class="w-9 h-9 rounded-full bg-zinc-900 text-white flex items-center justify-center font-semibold text-sm">
+                {{ strtoupper(substr(Auth::user()?->nama ?? 'U', 0, 1)) }}
             </div>
             <div class="flex-1 min-w-0">
-                <p class="text-xs font-semibold text-zinc-900 truncate">User Default</p>
-                <p class="text-[10px] text-zinc-500 truncate">user@example.com</p>
+                <p class="text-xs font-semibold text-zinc-900 truncate">{{ Auth::user()?->nama ?? 'User Default' }}</p>
+                <p class="text-[10px] text-zinc-500 truncate">{{ Auth::user()?->email ?? 'user@example.com' }}</p>
             </div>
         </div>
     </div>

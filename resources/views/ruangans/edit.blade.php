@@ -41,7 +41,7 @@
             {{-- Jurusan Dropdown --}}
             <div class="space-y-2">
                 <label for="jurusan_id" class="text-sm font-medium leading-none text-zinc-900">
-                    Jurusan <span class="text-red-500">*</span>
+                    Unit Kerja <span class="text-red-500">*</span>
                 </label>
                 <select
                     id="jurusan_id"
@@ -50,7 +50,7 @@
                     style="background-image: url('data:image/svg+xml,%3Csvg xmlns%3D%22http%3A//www.w3.org/2000/svg%22 fill%3D%22none%22 viewBox%3D%220 0 20 20%22%3E%3Cpath stroke%3D%22%236b7280%22 stroke-linecap%3D%22round%22 stroke-linejoin%3D%22round%22 stroke-width%3D%221.5%22 d%3D%22M6 8l4 4 4-4%22/%3E%3C/svg%3E'); background-repeat: no-repeat; background-position: right 0.75rem center; background-size: 1.25em;"
                     required
                 >
-                    <option value="" disabled>-- Pilih Jurusan --</option>
+                    <option value="" disabled>-- Pilih Unit Kerja --</option>
                     @foreach ($jurusans as $jurusan)
                         <option value="{{ $jurusan->id }}"
                             {{ old('jurusan_id', $ruangan->jurusan_id) == $jurusan->id ? 'selected' : '' }}>

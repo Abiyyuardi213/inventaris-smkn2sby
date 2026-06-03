@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'Detail Jurusan - Inventaris SMKN 2 SBY')
-@section('page_title', 'Detail Jurusan')
+@section('title', 'Detail Unit Kerja - Inventaris SMKN 2 SBY')
+@section('page_title', 'Detail Unit Kerja')
 
 @section('content')
 <div class="max-w-3xl mx-auto space-y-6">
@@ -12,11 +12,11 @@
         <svg class="w-3.5 h-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
         </svg>
-        <a href="{{ route('jurusans.index') }}" class="hover:text-zinc-900 transition-colors">Jurusan</a>
+        <a href="{{ route('jurusans.index') }}" class="hover:text-zinc-900 transition-colors">Unit Kerja</a>
         <svg class="w-3.5 h-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
         </svg>
-        <span class="font-medium text-zinc-900">Detail Jurusan</span>
+        <span class="font-medium text-zinc-900">Detail Unit Kerja</span>
     </nav>
 
     {{-- Page Heading --}}
@@ -26,10 +26,10 @@
             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
             </svg>
-            Kembali ke Daftar Jurusan
+            Kembali ke Daftar Unit Kerja
         </a>
-        <h2 class="text-2xl font-bold tracking-tight text-zinc-900">Detail Jurusan</h2>
-        <p class="text-sm text-zinc-500">Informasi lengkap jurusan dan ruangan yang terdaftar.</p>
+        <h2 class="text-2xl font-bold tracking-tight text-zinc-900">Detail Unit Kerja</h2>
+        <p class="text-sm text-zinc-500">Informasi lengkap unit kerja dan ruangan yang terdaftar.</p>
     </div>
 
     {{-- Info Card --}}
@@ -52,11 +52,11 @@
         {{-- Card Body: Info Grid --}}
         <div class="p-6 grid grid-cols-1 sm:grid-cols-2 gap-6">
             <div>
-                <span class="text-xs font-semibold text-zinc-400 uppercase tracking-wider block mb-1">Nama Jurusan</span>
+                <span class="text-xs font-semibold text-zinc-400 uppercase tracking-wider block mb-1">Nama Unit Kerja</span>
                 <span class="text-base font-semibold text-zinc-900">{{ $jurusan->nama_jurusan }}</span>
             </div>
             <div>
-                <span class="text-xs font-semibold text-zinc-400 uppercase tracking-wider block mb-1">Kode Jurusan</span>
+                <span class="text-xs font-semibold text-zinc-400 uppercase tracking-wider block mb-1">Kode Unit Kerja</span>
                 <span class="inline-flex items-center rounded-md bg-indigo-50 px-2.5 py-1 text-sm font-mono font-bold text-indigo-700 border border-indigo-200/60 tracking-widest">
                     {{ $jurusan->kode_jurusan }}
                 </span>
@@ -82,7 +82,7 @@
                 <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.83 20.013a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125" />
                 </svg>
-                Edit Jurusan
+                Edit Unit Kerja
             </a>
         </div>
     </div>
@@ -146,7 +146,7 @@
                                     </div>
                                     <div>
                                         <p class="font-semibold text-zinc-600 text-sm">Belum ada ruangan</p>
-                                        <p class="text-xs text-zinc-400 mt-0.5">Jurusan ini belum memiliki ruangan terdaftar.</p>
+                                        <p class="text-xs text-zinc-400 mt-0.5">Unit kerja ini belum memiliki ruangan terdaftar.</p>
                                     </div>
                                     <a href="{{ route('ruangans.create') }}"
                                         class="inline-flex items-center gap-1.5 rounded-md bg-zinc-900 text-zinc-50 hover:bg-zinc-800 px-3 py-1.5 text-xs font-medium transition-colors">

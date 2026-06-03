@@ -27,7 +27,7 @@
                         </svg>
                     </div>
                 </div>
-                <p class="text-2xl font-bold text-zinc-900">248</p>
+                <p class="text-2xl font-bold text-zinc-900">{{ number_format($totalBarang) }}</p>
                 <p class="text-xs text-zinc-400 mt-1">unit terdaftar</p>
             </div>
 
@@ -43,8 +43,8 @@
                         </svg>
                     </div>
                 </div>
-                <p class="text-2xl font-bold text-emerald-800">193</p>
-                <p class="text-xs text-emerald-600 mt-1">77,8% dari total</p>
+                <p class="text-2xl font-bold text-emerald-800">{{ number_format($kondisiBaik) }}</p>
+                <p class="text-xs text-emerald-600 mt-1">{{ number_format($persenBaik, 1) }}% dari total</p>
             </div>
 
             {{-- Barang Rusak --}}
@@ -59,8 +59,8 @@
                         </svg>
                     </div>
                 </div>
-                <p class="text-2xl font-bold text-red-800">31</p>
-                <p class="text-xs text-red-600 mt-1">12,5% dari total</p>
+                <p class="text-2xl font-bold text-red-800">{{ number_format($kondisiRusak) }}</p>
+                <p class="text-xs text-red-600 mt-1">{{ number_format($persenRusak, 1) }}% dari total</p>
             </div>
 
             {{-- Barang Layak --}}
@@ -75,8 +75,8 @@
                         </svg>
                     </div>
                 </div>
-                <p class="text-2xl font-bold text-amber-800">24</p>
-                <p class="text-xs text-amber-600 mt-1">9,7% dari total</p>
+                <p class="text-2xl font-bold text-amber-800">{{ number_format($kondisiLayak) }}</p>
+                <p class="text-xs text-amber-600 mt-1">{{ number_format($persenLayak, 1) }}% dari total</p>
             </div>
 
         </div>
@@ -84,11 +84,11 @@
         {{-- Chart + Overdue --}}
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
 
-            {{-- Grafik Sebaran Aset per Jurusan --}}
+            {{-- Grafik Sebaran Aset per Unit Kerja --}}
             <div class="lg:col-span-2 rounded-lg border border-zinc-200 bg-white shadow-sm p-5">
                 <div class="mb-4">
-                    <h3 class="text-sm font-semibold text-zinc-900">Sebaran Aset per Program Keahlian</h3>
-                    <p class="text-xs text-zinc-400">Distribusi barang berdasarkan jurusan</p>
+                    <h3 class="text-sm font-semibold text-zinc-900">Sebaran Aset per Unit Kerja</h3>
+                    <p class="text-xs text-zinc-400">Distribusi barang berdasarkan unit kerja</p>
                 </div>
                 <canvas id="chartJurusan" height="220"></canvas>
             </div>
@@ -163,10 +163,10 @@
         new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: ['TKJ', 'RPL', 'MM', 'AKL', 'OTKP', 'BDP', 'PM'],
+                labels: @json($chartLabels),
                 datasets: [{
                     label: 'Jumlah Barang',
-                    data: [52, 47, 38, 29, 34, 27, 21],
+                    data: @json($chartData),
                     backgroundColor: [
                         '#18181b', '#3f3f46', '#52525b', '#71717a',
                         '#a1a1aa', '#d4d4d8', '#e4e4e7'

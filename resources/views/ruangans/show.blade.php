@@ -56,7 +56,7 @@
                 <span class="text-base font-semibold text-zinc-900">{{ $ruangan->nama_ruangan }}</span>
             </div>
             <div>
-                <span class="text-xs font-semibold text-zinc-400 uppercase tracking-wider block mb-1">Jurusan</span>
+                <span class="text-xs font-semibold text-zinc-400 uppercase tracking-wider block mb-1">Unit Kerja</span>
                 @if ($ruangan->jurusan)
                     <a href="{{ route('jurusans.show', $ruangan->jurusan->id) }}"
                         class="inline-flex items-center gap-1.5 rounded-md bg-violet-50 px-2.5 py-1 text-sm font-semibold text-violet-700 border border-violet-200/60 hover:bg-violet-100 transition-colors">
@@ -66,7 +66,7 @@
                         {{ $ruangan->jurusan->nama_jurusan }}
                     </a>
                 @else
-                    <span class="text-sm text-zinc-400 italic">Tidak ada jurusan</span>
+                    <span class="text-sm text-zinc-400 italic">Tidak ada unit kerja</span>
                 @endif
             </div>
             <div>
