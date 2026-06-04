@@ -26,7 +26,8 @@ class InventarisController extends Controller
             ->when(request('ruangan_id'), fn($q) => $q->where('ruangan_id', request('ruangan_id')))
             ->when(request('kondisi'), fn($q) => $q->where('kondisi', request('kondisi')))
             ->latest()
-            ->get();
+            ->paginate(10)
+            ->withQueryString();
 
         return view('inventaris.index', compact('inventaris', 'kategoris', 'jurusans', 'ruangans'));
     }

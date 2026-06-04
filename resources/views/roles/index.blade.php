@@ -73,6 +73,13 @@
                                         Ubah
                                     </a>
 
+                                    <a href="{{ route('roles.permissions', $role->id) }}" class="p-1.5 rounded-md border border-zinc-200 text-zinc-700 hover:text-zinc-950 bg-white hover:bg-zinc-50 transition-colors shadow-sm text-xs font-medium inline-flex items-center gap-1">
+                                        <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 12h9.75M10.5 18h9.75M3.75 6h.008v.008H3.75V6Zm0 6h.008v.008H3.75V12Zm0 6h.008v.008H3.75V18Z" />
+                                        </svg>
+                                        Hak Akses
+                                    </a>
+
                                     <form action="{{ route('roles.destroy', $role->id) }}" method="POST" class="inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus peran ini?')">
                                         @csrf
                                         @method('DELETE')
@@ -118,24 +125,64 @@ function copyToClipboard(text, button) {
             <path d="M20 6 9 17l-5-5"/>
         </svg>
     `;
-    
-    navigator.clipboard.writeText(text).then(() => {
-        // Show success state
+    const showToast = (icon, title) => {
+        if (typeof Toast !== 'undefined') {
+            Toast.fire({ icon, title });
+            return;
+        }
+
+        if (typeof Swal !== 'undefined') {
+            Swal.fire({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 2000,
+                timerProgressBar: true,
+                icon,
+                title,
+            });
+        }
+    };
+
+    const showSuccessState = () => {
         button.innerHTML = checkIcon;
         button.classList.remove('border-zinc-200', 'text-zinc-500', 'hover:bg-zinc-50', 'bg-white');
         button.classList.add('border-emerald-200', 'bg-emerald-50', 'text-emerald-600');
         button.title = "Tersalin!";
+        showToast('success', 'ID peran berhasil disalin.');
         
-        // Reset to original state after 1.5 seconds
         setTimeout(() => {
             button.innerHTML = copyIcon;
             button.classList.remove('border-emerald-200', 'bg-emerald-50', 'text-emerald-600');
             button.classList.add('border-zinc-200', 'text-zinc-500', 'hover:bg-zinc-50', 'bg-white');
             button.title = "Salin ID";
         }, 1500);
-    }).catch(err => {
-        console.error('Gagal menyalin teks: ', err);
-    });
+    };
+
+    const showErrorState = (error) => {
+        console.error('Gagal menyalin teks: ', error);
+        showToast('error', 'ID peran gagal disalin.');
+    };
+
+    if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(text).then(showSuccessState).catch(showErrorState);
+        return;
+    }
+
+    try {
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        textarea.setAttribute('readonly', '');
+        textarea.style.position = 'fixed';
+        textarea.style.opacity = '0';
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+        showSuccessState();
+    } catch (error) {
+        showErrorState(error);
+    }
 }
 </script>
 @endsection

@@ -11,6 +11,42 @@ use Illuminate\Validation\Rule;
 
 class RuanganController extends Controller
 {
+    public function monitor(): View
+    {
+        $jurusans = Jurusan::orderBy('nama_jurusan')->get();
+        $ruangans = Ruangan::with([
+                'jurusan',
+                'inventaris' => fn ($query) => $query
+                    ->with('kategori')
+                    ->orderBy('nama_barang'),
+            ])
+            ->withCount('inventaris')
+            ->withSum('inventaris as total_unit', 'jumlah_total')
+            ->when(request('jurusan_id'), fn($q) => $q->where('jurusan_id', request('jurusan_id')))
+            ->orderBy('nama_ruangan')
+            ->get();
+
+        $roomAssets = $ruangans->mapWithKeys(fn (Ruangan $ruangan) => [
+            $ruangan->id => [
+                'nama' => $ruangan->nama_ruangan,
+                'unitKerja' => $ruangan->jurusan?->nama_jurusan ?? 'Tanpa Unit Kerja',
+                'kodeUnit' => $ruangan->jurusan?->kode_jurusan ?? 'Unit Kerja',
+                'totalJenis' => $ruangan->inventaris_count,
+                'totalUnit' => $ruangan->total_unit ?? 0,
+                'assets' => $ruangan->inventaris->map(fn ($item) => [
+                    'kode' => $item->kode_inventaris,
+                    'nama' => $item->nama_barang,
+                    'merek' => $item->merek,
+                    'kategori' => $item->kategori?->nama_kategori ?? '-',
+                    'jumlah' => $item->jumlah_total,
+                    'kondisi' => $item->kondisi,
+                ])->values(),
+            ],
+        ]);
+
+        return view('ruangans.monitor', compact('ruangans', 'jurusans', 'roomAssets'));
+    }
+
     public function index(): View
     {
         // $jurusans dikirim ke view untuk dropdown filter by jurusan

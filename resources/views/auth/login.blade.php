@@ -1,231 +1,206 @@
 <!DOCTYPE html>
-<html lang="id" class="h-full bg-white">
+<html lang="id" class="h-full bg-zinc-950">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Masuk - Inventaris SMKN 2 SBY</title>
-    
+
     <!-- Google Fonts: Geist & Geist Mono -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Geist+Mono:wght@100..900&display=swap" rel="stylesheet">
 
-    <!-- SweetAlert2 -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body class="h-full antialiased font-sans bg-white text-zinc-950">
+<body class="min-h-full antialiased font-sans bg-zinc-950 text-zinc-950">
+    <div class="relative min-h-screen overflow-hidden">
+        <img src="{{ asset('image/back1.png') }}" alt="Inventaris SMKN 2" class="absolute inset-0 h-full w-full object-cover">
+        <div class="absolute inset-0 bg-zinc-950/45"></div>
 
-    <div class="min-h-screen flex flex-col md:flex-row">
-        
-        <!-- Left: Image Cover Column (Visible on md and up) -->
-        <div class="hidden md:block md:w-1/2 relative overflow-hidden bg-zinc-950">
-            <img src="{{ asset('login_bg_school.png') }}" alt="Inventaris SMKN 2" class="absolute inset-0 w-full h-full object-cover opacity-75">
-            <!-- Gradient Overlay -->
-            <div class="absolute inset-0 bg-gradient-to-t from-zinc-950/80 via-zinc-950/20 to-zinc-950/30"></div>
-            
-            <!-- Brand Logo Top-Left -->
-            <div class="absolute top-10 left-10 flex items-center gap-3 text-white">
-                <div class="w-10 h-10 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center shadow-md overflow-hidden p-1.5">
-                    <img src="{{ asset('image/smkn2sby.png') }}" alt="Logo SMKN 2 Surabaya" class="w-full h-full object-contain">
-                </div>
-                <span class="text-base font-semibold tracking-tight">Inventaris SMKN 2 SBY</span>
-            </div>
-            
-            <!-- Bottom Text Overlay -->
-            <div class="absolute bottom-16 left-16 right-16 text-white space-y-5">
-                <div class="space-y-2">
-                    <h2 class="text-3xl font-bold tracking-tight leading-tight">
-                        Kelola & Pantau Aset Sekolah dengan Mudah
-                    </h2>
-                    <p class="text-zinc-200 text-sm max-w-md font-light leading-relaxed">
-                        Sistem informasi inventarisasi sarana dan prasarana SMKN 2 Surabaya untuk efisiensi, akurasi, dan transparansi data.
-                    </p>
-                </div>
-                <!-- Carousel Indicators -->
-                <div class="flex items-center gap-2 pt-2">
-                    <span class="w-8 h-1.5 rounded-full bg-white transition-all"></span>
-                    <span class="w-1.5 h-1.5 rounded-full bg-white/40"></span>
-                    <span class="w-1.5 h-1.5 rounded-full bg-white/40"></span>
-                </div>
-            </div>
-        </div>
+        <main class="relative z-10 flex min-h-screen items-center justify-center px-4 py-8 sm:px-6 lg:px-10">
+            <section class="relative w-full max-w-7xl overflow-hidden rounded-[2rem] border border-white/15 bg-white/8 shadow-2xl shadow-zinc-950/35">
+                <div class="absolute inset-0 bg-gradient-to-r from-zinc-950/78 via-zinc-950/40 to-zinc-950/10"></div>
 
-            <!-- Right: Login Form Column -->
-            <div class="w-full md:w-1/2 flex flex-col justify-between p-6 sm:p-12 md:p-16 lg:p-20 bg-zinc-50/50">
-                
-                <!-- Header Actions -->
-                <div class="flex justify-between items-center h-10">
-                    <!-- Mobile brand logo (visible on small screens) -->
-                    <div class="md:hidden flex items-center gap-2.5">
-                        <div class="w-8 h-8 rounded-lg bg-zinc-950 flex items-center justify-center text-white overflow-hidden p-1">
-                            <img src="{{ asset('image/smkn2sby.png') }}" alt="Logo SMKN 2 Surabaya" class="w-full h-full object-contain">
+                <div class="relative grid min-h-[720px] grid-cols-1 lg:grid-cols-[1.18fr_0.82fr]">
+                    <div class="flex min-h-[320px] flex-col justify-between p-8 text-white sm:p-12 lg:p-16">
+                        <div class="flex items-center gap-3">
+                            <div class="flex h-11 w-11 items-center justify-center overflow-hidden rounded-xl border border-white/25 bg-white/15 p-1.5 shadow-md">
+                                <img src="{{ asset('image/smkn2sby.png') }}" alt="Logo SMKN 2 Surabaya" class="h-full w-full object-contain">
+                            </div>
+                            <span class="text-base font-semibold tracking-tight">Inventaris SMKN 2 SBY</span>
                         </div>
-                        <span class="font-bold text-sm text-zinc-950 tracking-tight">Inventaris SMKN 2 SBY</span>
-                    </div>
-                    <div></div>
-                    <div>
-                        @if (Route::has('register'))
-                            <a href="{{ route('register') }}" class="inline-flex items-center justify-center rounded-full bg-zinc-950 hover:bg-zinc-800 text-white px-5 py-2 text-xs font-semibold shadow-sm transition-all duration-150 cursor-pointer">
-                                Daftar Akun
-                            </a>
-                        @endif
-                    </div>
-                </div>
 
-                <!-- Middle: Form Container -->
-                <div class="max-w-md mx-auto w-full my-auto py-8">
-                    
-                    <!-- Logo SMKN 2 Surabaya & Heading -->
-                    <div class="space-y-4 mb-6">
-                        <img src="{{ asset('image/smkn2sby.png') }}" alt="Logo SMKN 2 Surabaya" class="h-16 w-auto object-contain">
-                        <div class="space-y-1.5">
-                            <h1 class="text-3xl font-bold tracking-tight text-zinc-900">Selamat Datang Kembali!</h1>
-                            <p class="text-sm text-zinc-500">Masuk untuk melanjutkan ke sistem inventaris</p>
+                        <div class="max-w-xl space-y-6 pt-24 lg:pt-0">
+                            <div class="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs font-semibold text-white shadow-sm">
+                                <span class="h-1.5 w-1.5 rounded-full bg-amber-300"></span>
+                                Sistem Manajemen Inventaris
+                            </div>
+                            <div class="space-y-3">
+                                <h2 class="max-w-lg text-4xl font-extrabold leading-tight tracking-tight sm:text-5xl">
+                                    Kelola & Pantau Aset Sekolah dengan Mudah
+                                </h2>
+                                <p class="max-w-md text-sm font-medium leading-relaxed text-zinc-100 sm:text-base">
+                                    Sistem informasi inventarisasi sarana dan prasarana SMKN 2 Surabaya untuk efisiensi, akurasi, dan transparansi data.
+                                </p>
+                            </div>
+                            <div class="flex items-center gap-2 pt-2">
+                                <span class="h-1.5 w-9 rounded-full bg-amber-400"></span>
+                                <span class="h-1.5 w-1.5 rounded-full bg-white/60"></span>
+                                <span class="h-1.5 w-1.5 rounded-full bg-white/60"></span>
+                            </div>
+                        </div>
+
+                        <div class="hidden items-center gap-2 text-sm font-medium text-zinc-100 sm:flex">
+                            <svg class="h-4 w-4 text-amber-300" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 21h16.5M4.5 3h15M5.25 3v18m13.5-18v18M9 6.75h1.5m-1.5 3h1.5m3-3H15m-1.5 3H15M9 21v-3.375c0-.621.504-1.125 1.125-1.125h3.75c.621 0 1.125.504 1.125 1.125V21" />
+                            </svg>
+                            SMK Negeri 2 Surabaya
                         </div>
                     </div>
 
-                    <!-- Card Container -->
-                    <div class="bg-white border border-zinc-200/80 shadow-md rounded-2xl p-6 sm:p-8">
-                        <form method="POST" action="{{ route('login') }}" class="space-y-5">
-                            @csrf
-
-                            <!-- Username -->
-                            <div class="space-y-1.5">
-                                <label for="username" class="text-sm font-medium text-zinc-900">
-                                    Nama Pengguna (Username)
-                                </label>
-                                <div class="relative">
-                                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-zinc-400">
-                                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
-                                        </svg>
-                                    </span>
-                                    <input id="username" name="username" type="text" autocomplete="username" required
-                                        value="{{ old('username') }}" placeholder="Masukkan username Anda"
-                                        class="flex h-11 w-full rounded-lg border border-zinc-200 bg-white pl-10 pr-3 py-2 text-sm text-zinc-900 placeholder:text-zinc-400 shadow-sm transition-colors focus:border-zinc-400 focus:outline-none focus:ring-2 focus:ring-zinc-200 @error('username') border-red-300 focus:border-red-400 focus:ring-red-100 @enderror">
+                    <div class="flex items-center justify-center px-5 pb-8 pt-0 sm:px-8 lg:px-14 lg:py-12">
+                        <div class="w-full max-w-md rounded-3xl border border-white/60 bg-white/90 p-6 shadow-2xl shadow-zinc-950/20 sm:p-8">
+                            <div class="mb-7 space-y-4">
+                                <img src="{{ asset('image/smkn2sby.png') }}" alt="Logo SMKN 2 Surabaya" class="h-14 w-auto object-contain">
+                                <div class="space-y-1.5">
+                                    <h1 class="text-3xl font-bold tracking-tight text-zinc-950">Selamat Datang Kembali!</h1>
+                                    <p class="text-sm text-zinc-600">Masuk untuk melanjutkan ke sistem inventaris</p>
                                 </div>
-                                @error('username')
-                                    <p class="text-xs text-red-600 font-medium mt-1">{{ $message }}</p>
-                                @enderror
                             </div>
 
-                            <!-- Password -->
-                            <div class="space-y-1.5">
-                                <div class="flex items-center justify-between">
-                                    <label for="password" class="text-sm font-medium text-zinc-900">
+                            <form method="POST" action="{{ route('login.authenticate') }}" class="space-y-5">
+                                @csrf
+
+                                <!-- Username -->
+                                <div class="space-y-1.5">
+                                    <label for="username" class="text-sm font-semibold text-zinc-900">
+                                        Nama Pengguna (Username)
+                                    </label>
+                                    <div class="relative">
+                                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-zinc-400">
+                                            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+                                            </svg>
+                                        </span>
+                                        <input id="username" name="username" type="text" autocomplete="username" required
+                                            value="{{ old('username') }}" placeholder="Masukkan username Anda"
+                                            class="flex h-12 w-full rounded-xl border border-white/60 bg-white/80 py-2 pl-10 pr-3 text-sm text-zinc-900 shadow-sm transition-colors placeholder:text-zinc-400 focus:border-amber-300 focus:outline-none focus:ring-2 focus:ring-amber-200 @error('username') border-red-300 focus:border-red-400 focus:ring-red-100 @enderror">
+                                    </div>
+                                    @error('username')
+                                        <p class="mt-1 text-xs font-medium text-red-600">{{ $message }}</p>
+                                    @enderror
+                                </div>
+
+                                <!-- Password -->
+                                <div class="space-y-1.5">
+                                    <label for="password" class="text-sm font-semibold text-zinc-900">
                                         Kata Sandi
                                     </label>
-                                </div>
-                                <div class="relative">
-                                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-zinc-400">
-                                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />
-                                        </svg>
-                                    </span>
-                                    <input id="password" name="password" type="password" autocomplete="current-password"
-                                        required placeholder="Masukkan password Anda"
-                                        class="flex h-11 w-full rounded-lg border border-zinc-200 bg-white pl-10 pr-10 py-2 text-sm text-zinc-900 placeholder:text-zinc-400 shadow-sm transition-colors focus:border-zinc-400 focus:outline-none focus:ring-2 focus:ring-zinc-200 @error('password') border-red-300 focus:border-red-400 focus:ring-red-100 @enderror">
-                                    
-                                    <!-- Toggle Password Visibility -->
-                                    <button type="button" onclick="togglePassword('password', this)"
-                                        class="absolute inset-y-0 right-0 flex items-center px-3 text-zinc-400 hover:text-zinc-600 transition-colors cursor-pointer"
-                                        tabindex="-1" aria-label="Tampilkan kata sandi">
-                                        <svg id="eye-icon-password" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
-                                            stroke-width="1.5" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.964-7.178z" />
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                        </svg>
-                                    </button>
-                                </div>
-                                @error('password')
-                                    <p class="text-xs text-red-600 font-medium mt-1">{{ $message }}</p>
-                                @enderror
-                            </div>
+                                    <div class="relative">
+                                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-zinc-400">
+                                            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />
+                                            </svg>
+                                        </span>
+                                        <input id="password" name="password" type="password" autocomplete="current-password"
+                                            required placeholder="Masukkan password Anda"
+                                            class="flex h-12 w-full rounded-xl border border-white/60 bg-white/80 py-2 pl-10 pr-10 text-sm text-zinc-900 shadow-sm transition-colors placeholder:text-zinc-400 focus:border-amber-300 focus:outline-none focus:ring-2 focus:ring-amber-200 @error('password') border-red-300 focus:border-red-400 focus:ring-red-100 @enderror">
 
-                            <!-- Remember Me & Forgot Password -->
-                            <div class="flex items-center justify-between pt-1">
-                                <div class="flex items-center gap-2">
-                                    <input id="remember" name="remember" type="checkbox"
-                                        class="h-4 w-4 rounded border-zinc-300 text-zinc-950 shadow-sm focus:ring-zinc-200 cursor-pointer">
-                                    <label for="remember" class="text-sm font-medium text-zinc-600 cursor-pointer select-none">
-                                        Ingat saya
-                                    </label>
+                                        <!-- Toggle Password Visibility -->
+                                        <button type="button" onclick="togglePassword('password', this)"
+                                            class="absolute inset-y-0 right-0 flex items-center px-3 text-zinc-400 transition-colors hover:text-zinc-600 cursor-pointer"
+                                            tabindex="-1" aria-label="Tampilkan kata sandi">
+                                            <svg id="eye-icon-password" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                                                stroke-width="1.5" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.964-7.178z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                    @error('password')
+                                        <p class="mt-1 text-xs font-medium text-red-600">{{ $message }}</p>
+                                    @enderror
                                 </div>
-                                @if (Route::has('password.request'))
-                                    <a href="{{ route('password.request') }}" class="text-xs text-zinc-500 hover:text-zinc-950 transition-colors">
-                                        Lupa kata sandi?
-                                    </a>
-                                @endif
-                            </div>
 
-                            <!-- Submit Button -->
-                            <button type="submit"
-                                class="w-full inline-flex items-center justify-center gap-2 rounded-lg bg-zinc-950 text-zinc-50 hover:bg-zinc-800 px-4 py-3 text-sm font-semibold shadow-sm transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 cursor-pointer mt-2">
-                                Masuk
-                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l3 3m0 0-3 3m3-3H2.25" />
-                                </svg>
-                            </button>
-                        </form>
+                                <!-- Remember Me & Forgot Password -->
+                                <div class="flex items-center justify-between pt-1">
+                                    <div class="flex items-center gap-2">
+                                        <input id="remember" name="remember" type="checkbox" value="1"
+                                            {{ old('remember') ? 'checked' : '' }}
+                                            class="h-4 w-4 rounded border-zinc-300 text-amber-500 shadow-sm focus:ring-amber-200 cursor-pointer">
+                                        <label for="remember" class="select-none text-sm font-medium text-zinc-700 cursor-pointer">
+                                            Ingat saya
+                                        </label>
+                                    </div>
+                                    @if (Route::has('password.request'))
+                                        <a href="{{ route('password.request') }}" class="text-xs font-medium text-zinc-500 transition-colors hover:text-zinc-950">
+                                            Lupa kata sandi?
+                                        </a>
+                                    @endif
+                                </div>
+
+                                <!-- Submit Button -->
+                                <button type="submit"
+                                    class="mt-2 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 px-4 py-3 text-sm font-extrabold uppercase tracking-wide text-white shadow-lg shadow-orange-500/25 transition-all duration-150 hover:from-amber-400 hover:to-orange-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-300 cursor-pointer">
+                                    Masuk
+                                    <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l3 3m0 0-3 3m3-3H2.25" />
+                                    </svg>
+                                </button>
+                            </form>
+
+                            <div class="mt-7 text-center text-xs text-zinc-500">
+                                &copy; {{ date('Y') }} SMKN 2 Surabaya. Sistem Inventaris.
+                            </div>
+                        </div>
                     </div>
-
-
-            </div>
-
-            <!-- Footer: Copyright -->
-            <div class="text-center text-xs text-zinc-400 pt-6">
-                &copy; {{ date('Y') }} SMKN 2 Surabaya. Sistem Inventaris.
-            </div>
-        </div>
+                </div>
+            </section>
+        </main>
     </div>
+
+    <div id="login-toast-root" class="fixed right-4 top-4 z-50 space-y-2"></div>
 
     <!-- Scripts -->
     <script>
-        const Toast = Swal.mixin({
-            toast: true,
-            position: 'top-end',
-            showConfirmButton: false,
-            timer: 3000,
-            timerProgressBar: true,
-            didOpen: (toast) => {
-                toast.onmouseenter = Swal.stopTimer;
-                toast.onmouseleave = Swal.resumeTimer;
-            }
-        });
+        function showLoginToast(type, message) {
+            const root = document.getElementById('login-toast-root');
+            const colors = {
+                info: 'border-sky-200 bg-sky-50 text-sky-800',
+                success: 'border-emerald-200 bg-emerald-50 text-emerald-800',
+                error: 'border-red-200 bg-red-50 text-red-800',
+            };
+            const toast = document.createElement('div');
+            toast.className = `max-w-sm rounded-lg border px-4 py-3 text-sm font-medium shadow-lg transition-all duration-200 ${colors[type] || colors.info}`;
+            toast.textContent = message;
+            root.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateY(-6px)';
+                setTimeout(() => toast.remove(), 220);
+            }, 2600);
+        }
 
         @if (session('info'))
-            Toast.fire({
-                icon: 'info',
-                title: @json(session('info'))
-            });
+            showLoginToast('info', @json(session('info')));
         @endif
 
         @if (session('success'))
-            Toast.fire({
-                icon: 'success',
-                title: @json(session('success'))
-            });
+            showLoginToast('success', @json(session('success')));
         @endif
 
         @if (session('error'))
-            Toast.fire({
-                icon: 'error',
-                title: @json(session('error'))
-            });
+            showLoginToast('error', @json(session('error')));
         @endif
 
         @if ($errors->any())
-            Toast.fire({
-                icon: 'error',
-                title: @json($errors->first())
-            });
+            showLoginToast('error', @json($errors->first()));
         @endif
 
         function togglePassword(fieldId, button) {

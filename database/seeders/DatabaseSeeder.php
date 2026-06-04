@@ -15,6 +15,7 @@ class DatabaseSeeder extends Seeder
         $this->call(RoleSeeder::class);
 
         $superAdminRole = \App\Models\Role::where('slug', 'super-admin')->first();
+        $kepalaSekolahRole = \App\Models\Role::where('slug', 'kepala-sekolah')->first();
 
         User::updateOrCreate(
             ['email' => 'test@example.com'],
@@ -33,6 +34,16 @@ class DatabaseSeeder extends Seeder
                 'username' => 'admin',
                 'password' => bcrypt('12345678'),
                 'role_id' => $superAdminRole?->id,
+            ]
+        );
+
+        User::updateOrCreate(
+            ['email' => 'kepalasekolah@example.com'],
+            [
+                'nama' => 'Kepala Sekolah',
+                'username' => 'kepalasekolah',
+                'password' => bcrypt('12345678'),
+                'role_id' => $kepalaSekolahRole?->id,
             ]
         );
 

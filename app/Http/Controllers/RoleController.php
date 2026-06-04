@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use App\Models\Permission;
 use App\Models\Role;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
@@ -43,6 +44,8 @@ class RoleController extends Controller
 
     public function show(Role $role): View
     {
+        $role->load('permissions');
+
         return view('roles.show', compact('role'));
     }
 
@@ -67,6 +70,37 @@ class RoleController extends Controller
         $role->update($validated);
 
         return redirect()->route('roles.index')->with('success', 'Peran berhasil diperbarui.');
+    }
+
+    public function permissions(Role $role): View
+    {
+        $role->load('permissions');
+        $permissionGroups = Permission::orderBy('group')
+            ->orderBy('name')
+            ->get()
+            ->groupBy('group');
+
+        return view('roles.permissions', compact('role', 'permissionGroups'));
+    }
+
+    public function updatePermissions(Request $request, Role $role): RedirectResponse
+    {
+        $validated = $request->validate([
+            'permissions' => 'nullable|array',
+            'permissions.*' => 'uuid|exists:permissions,id',
+        ]);
+
+        $permissions = $validated['permissions'] ?? [];
+
+        if ($role->slug === 'super-admin') {
+            $permissions = Permission::pluck('id')->all();
+        }
+
+        $role->permissions()->sync($permissions);
+
+        return redirect()
+            ->route('roles.permissions', $role->id)
+            ->with('success', 'Hak akses peran berhasil diperbarui.');
     }
 
     public function destroy(Role $role): RedirectResponse

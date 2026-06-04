@@ -8,10 +8,12 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\RuanganController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ApprovalController;
+use App\Http\Controllers\InventarisImportController;
 use App\Http\Controllers\InventarisController;
 use App\Http\Controllers\MutasiController;
 use App\Http\Controllers\PeminjamanController;
 use App\Http\Controllers\PengadaanController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [AuthController::class, 'login'])->name('login');
@@ -19,24 +21,53 @@ Route::post('/', [AuthController::class, 'authenticate'])->name('login.authentic
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::middleware('auth')->prefix('admin')->group(function () {
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
 
-    Route::resource('roles', RoleController::class);
-    Route::resource('users', UserController::class);
+    Route::get('/dashboard', [DashboardController::class, 'index'])
+        ->middleware('permission:dashboard.view')
+        ->name('dashboard');
+
+    Route::middleware('permission:roles.manage')->group(function () {
+        Route::resource('roles', RoleController::class);
+        Route::get('roles/{role}/permissions', [RoleController::class, 'permissions'])->name('roles.permissions');
+        Route::put('roles/{role}/permissions', [RoleController::class, 'updatePermissions'])->name('roles.permissions.update');
+    });
+    Route::resource('users', UserController::class)->middleware('permission:users.manage');
     Route::resource('unit-kerja', JurusanController::class)
         ->parameters(['unit-kerja' => 'jurusan'])
-        ->names('jurusans');
-    Route::resource('ruangans', RuanganController::class);
-    Route::resource('kategoris', KategoriController::class);
-    Route::resource('inventaris', InventarisController::class);
-    Route::resource('mutasis', MutasiController::class);
-    Route::resource('peminjamans', PeminjamanController::class);
+        ->names('jurusans')
+        ->middleware('permission:jurusans.manage');
+    Route::get('monitor-ruang', [RuanganController::class, 'monitor'])
+        ->middleware('permission:monitor-ruang.view')
+        ->name('ruangans.monitor');
+    Route::resource('ruangans', RuanganController::class)->middleware('permission:ruangans.manage');
+    Route::resource('kategoris', KategoriController::class)->middleware('permission:kategoris.manage');
+    Route::middleware('permission:inventaris.manage')->group(function () {
+        Route::get('inventaris/import', [InventarisImportController::class, 'create'])->name('inventaris.imports.create');
+        Route::post('inventaris/import', [InventarisImportController::class, 'store'])->name('inventaris.imports.store');
+        Route::get('inventaris/import/{batch}', [InventarisImportController::class, 'show'])->name('inventaris.imports.show');
+        Route::get('inventaris/import/{batch}/rows/{row}/edit', [InventarisImportController::class, 'editRow'])->name('inventaris.imports.rows.edit');
+        Route::put('inventaris/import/{batch}/rows/{row}', [InventarisImportController::class, 'updateRow'])->name('inventaris.imports.rows.update');
+        Route::patch('inventaris/import/{batch}/approve', [InventarisImportController::class, 'approve'])->name('inventaris.imports.approve');
+        Route::patch('inventaris/import/{batch}/reject', [InventarisImportController::class, 'reject'])->name('inventaris.imports.reject');
+        Route::get('inventaris/template/{format}', [InventarisImportController::class, 'template'])
+            ->whereIn('format', ['csv', 'xlsx'])
+            ->name('inventaris.template');
+        Route::get('inventaris/export/{format}', [InventarisImportController::class, 'export'])
+            ->whereIn('format', ['csv', 'xlsx'])
+            ->name('inventaris.export');
+        Route::resource('inventaris', InventarisController::class);
+    });
+    Route::resource('mutasis', MutasiController::class)->middleware('permission:mutasis.manage');
+    Route::resource('peminjamans', PeminjamanController::class)->middleware('permission:peminjamans.manage');
 
     // Route pengadaan — semua user yang sudah login
-    Route::resource('pengadaans', PengadaanController::class);
+    Route::resource('pengadaans', PengadaanController::class)->middleware('permission:pengadaans.manage');
 
-    // Route approval — khusus Super Admin
-    Route::middleware('role:super-admin')
+    // Route approval — sesuai hak akses role
+    Route::middleware('permission:approvals.manage')
         ->prefix('approvals')
         ->name('approvals.')
         ->group(function () {

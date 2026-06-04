@@ -8,7 +8,7 @@
 
         {{-- Header --}}
         <div>
-            <h2 class="text-2xl font-bold tracking-tight text-zinc-900">Selamat datang, {{ Auth::user()->nama }} 👋</h2>
+            <h2 class="text-2xl font-bold tracking-tight text-zinc-900">Selamat datang, {{ Auth::user()?->nama ?? 'User' }}</h2>
             <p class="text-sm text-zinc-500">Berikut ringkasan data inventaris SMKN 2 Surabaya.</p>
         </div>
 
@@ -28,7 +28,7 @@
                     </div>
                 </div>
                 <p class="text-2xl font-bold text-zinc-900">{{ number_format($totalBarang) }}</p>
-                <p class="text-xs text-zinc-400 mt-1">unit terdaftar</p>
+                <p class="text-xs text-zinc-400 mt-1">{{ number_format($totalJenisBarang) }} jenis barang terdaftar</p>
             </div>
 
             {{-- Barang Baik --}}
@@ -88,7 +88,7 @@
             <div class="lg:col-span-2 rounded-lg border border-zinc-200 bg-white shadow-sm p-5">
                 <div class="mb-4">
                     <h3 class="text-sm font-semibold text-zinc-900">Sebaran Aset per Unit Kerja</h3>
-                    <p class="text-xs text-zinc-400">Distribusi barang berdasarkan unit kerja</p>
+                <p class="text-xs text-zinc-400">Distribusi total unit barang berdasarkan unit kerja</p>
                 </div>
                 <canvas id="chartJurusan" height="220"></canvas>
             </div>
@@ -101,31 +101,7 @@
                 </div>
 
                 <div class="space-y-3 flex-1">
-                    {{-- Item overdue statis --}}
-                    @php
-                        $overdueList = [
-                            [
-                                'nama' => 'SMA Negeri 5 Surabaya',
-                                'barang' => 'Proyektor Epson EB-X41',
-                                'due' => '10 Mei 2026',
-                                'hari' => 11,
-                            ],
-                            [
-                                'nama' => 'SMK Negeri 1 Surabaya',
-                                'barang' => 'Laptop Lenovo IdeaPad',
-                                'due' => '14 Mei 2026',
-                                'hari' => 7,
-                            ],
-                            [
-                                'nama' => 'SMAN 7 Surabaya',
-                                'barang' => 'Kamera Canon EOS M50',
-                                'due' => '17 Mei 2026',
-                                'hari' => 4,
-                            ],
-                        ];
-                    @endphp
-
-                    @foreach ($overdueList as $item)
+                    @forelse ($overdueList as $item)
                         <div class="flex items-start gap-3 p-3 rounded-md border border-red-100 bg-red-50">
                             <div class="flex-shrink-0 mt-0.5">
                                 <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-red-100">
@@ -137,17 +113,25 @@
                                 </span>
                             </div>
                             <div class="flex-1 min-w-0">
-                                <p class="text-xs font-semibold text-zinc-900 truncate">{{ $item['nama'] }}</p>
-                                <p class="text-xs text-zinc-500 truncate">{{ $item['barang'] }}</p>
-                                <p class="text-xs text-red-600 mt-0.5">Jatuh tempo: {{ $item['due'] }} <span
-                                        class="font-semibold">(+{{ $item['hari'] }} hari)</span></p>
+                                <p class="text-xs font-semibold text-zinc-900 truncate">{{ $item->nama_peminjam }}</p>
+                                <p class="text-xs text-zinc-500 truncate">{{ $item->inventaris?->nama_barang ?? 'Barang tidak ditemukan' }}</p>
+                                <p class="text-xs text-zinc-500 truncate">{{ $item->instansi ?: 'Tanpa instansi' }} &middot; {{ number_format($item->jumlah_pinjam) }} unit</p>
+                                <p class="text-xs text-red-600 mt-0.5">Jatuh tempo: {{ $item->tanggal_estimasi_kembali?->format('d M Y') ?? '-' }} <span
+                                        class="font-semibold">(+{{ $item->hari_terlambat }} hari)</span></p>
                             </div>
                         </div>
-                    @endforeach
+                    @empty
+                        <div class="flex h-full min-h-40 items-center justify-center rounded-md border border-dashed border-zinc-200 bg-zinc-50 p-6 text-center">
+                            <div>
+                                <p class="text-sm font-semibold text-zinc-700">Tidak ada peminjaman overdue</p>
+                                <p class="mt-1 text-xs text-zinc-400">Semua peminjaman masih sesuai batas pengembalian.</p>
+                            </div>
+                        </div>
+                    @endforelse
                 </div>
 
                 <div class="mt-4 pt-4 border-t border-zinc-100">
-                    <p class="text-xs text-zinc-400 text-center">Data akan otomatis diperbarui saat modul peminjaman aktif.
+                    <p class="text-xs text-zinc-400 text-center">Menampilkan {{ $overdueList->count() }} peminjaman melewati batas pengembalian.
                     </p>
                 </div>
             </div>

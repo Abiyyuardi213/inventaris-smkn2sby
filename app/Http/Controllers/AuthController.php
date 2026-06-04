@@ -26,7 +26,9 @@ class AuthController extends Controller
         try {
             $credentials = $request->only('username', 'password');
 
-            if (!Auth::attempt($credentials, $request->boolean('remember'))) {
+            $remember = $request->has('remember');
+
+            if (!Auth::attempt($credentials, $remember)) {
                 return back()
                     ->withErrors(['username' => 'Nama pengguna atau kata sandi salah.'])
                     ->onlyInput('username');

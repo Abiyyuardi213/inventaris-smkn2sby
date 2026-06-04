@@ -39,6 +39,7 @@
                 <thead class="text-xs uppercase bg-zinc-50 text-zinc-500 border-b border-zinc-200">
                     <tr>
                         <th scope="col" class="px-6 py-4 font-semibold w-12">No</th>
+                        <th scope="col" class="px-6 py-4 font-semibold w-24">ID</th>
                         <th scope="col" class="px-6 py-4 font-semibold">Kode Kategori</th>
                         <th scope="col" class="px-6 py-4 font-semibold">Nama Kategori</th>
                         <th scope="col" class="px-6 py-4 font-semibold text-right">Aksi</th>
@@ -49,6 +50,16 @@
                         <tr class="hover:bg-zinc-50/60 transition-colors {{ $loop->even ? 'bg-zinc-50/30' : 'bg-white' }}">
                             <td class="px-6 py-4 text-zinc-400 font-mono text-xs">
                                 {{ $loop->iteration }}
+                            </td>
+                            <td class="px-6 py-4">
+                                <button onclick="copyToClipboard('{{ $kategori->id }}', this)"
+                                    class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-zinc-50 hover:bg-zinc-100 border border-zinc-200 hover:border-zinc-300 text-[10px] font-semibold text-zinc-600 hover:text-zinc-900 transition-all shadow-sm cursor-pointer"
+                                    title="Salin ID Kategori">
+                                    <svg class="w-3 h-3 text-zinc-400" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 01-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H5.25m11.9-3.675A2.25 2.25 0 0013.5 2.25h-3a2.25 2.25 0 00-2.25 2.25m9 0V18.75a2.25 2.25 0 01-2.25 2.25h-9a2.25 2.25 0 01-2.25-2.25V4.5m9 0H7.5" />
+                                    </svg>
+                                    <span>Salin ID</span>
+                                </button>
                             </td>
                             <td class="px-6 py-4">
                                 <span class="inline-flex items-center rounded-md bg-teal-50 px-2.5 py-1 text-xs font-mono font-semibold text-teal-700 border border-teal-200/60 tracking-wide">
@@ -99,7 +110,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="4" class="px-6 py-16 text-center text-zinc-500">
+                            <td colspan="5" class="px-6 py-16 text-center text-zinc-500">
                                 <div class="flex flex-col items-center justify-center gap-3">
                                     <div class="w-14 h-14 rounded-full bg-zinc-100 flex items-center justify-center">
                                         <svg class="w-7 h-7 text-zinc-300" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -156,6 +167,69 @@
                 document.getElementById('delete-form-' + id).submit();
             }
         });
+    }
+
+    function copyToClipboard(text, button) {
+        const originalHTML = button.innerHTML;
+        const showToast = (icon, title) => {
+            if (typeof Toast !== 'undefined') {
+                Toast.fire({ icon, title });
+                return;
+            }
+
+            Swal.fire({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 1500,
+                timerProgressBar: true,
+                icon,
+                title,
+            });
+        };
+
+        const showSuccessState = () => {
+            button.innerHTML = `
+                <svg class="w-3 h-3 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                </svg>
+                <span class="text-emerald-700">Tersalin!</span>
+            `;
+            button.classList.add('bg-emerald-50', 'border-emerald-200');
+            button.classList.remove('bg-zinc-50', 'border-zinc-200');
+            showToast('success', 'ID kategori berhasil disalin!');
+
+            setTimeout(() => {
+                button.innerHTML = originalHTML;
+                button.classList.remove('bg-emerald-50', 'border-emerald-200');
+                button.classList.add('bg-zinc-50', 'border-zinc-200');
+            }, 1500);
+        };
+
+        const showErrorState = (error) => {
+            console.error('Gagal menyalin text: ', error);
+            showToast('error', 'ID kategori gagal disalin.');
+        };
+
+        if (navigator.clipboard && window.isSecureContext) {
+            navigator.clipboard.writeText(text).then(showSuccessState).catch(showErrorState);
+            return;
+        }
+
+        try {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            textarea.setAttribute('readonly', '');
+            textarea.style.position = 'fixed';
+            textarea.style.opacity = '0';
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+            showSuccessState();
+        } catch (error) {
+            showErrorState(error);
+        }
     }
 </script>
 @endsection

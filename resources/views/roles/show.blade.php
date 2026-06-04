@@ -42,11 +42,26 @@
                 <span class="text-xs font-semibold text-zinc-400 uppercase tracking-wider block mb-1">Terakhir Diperbarui</span>
                 <span class="text-sm text-zinc-700">{{ $role->updated_at->format('d F Y, H:i') }}</span>
             </div>
+            <div class="sm:col-span-2 border-t border-zinc-100 pt-6">
+                <span class="text-xs font-semibold text-zinc-400 uppercase tracking-wider block mb-3">Hak Akses</span>
+                <div class="flex flex-wrap gap-2">
+                    @forelse($role->permissions as $permission)
+                        <span class="inline-flex items-center rounded-md bg-zinc-100 px-2.5 py-1 text-xs font-medium text-zinc-700 border border-zinc-200">
+                            {{ $permission->name }}
+                        </span>
+                    @empty
+                        <span class="text-sm text-zinc-500">Belum ada hak akses yang diberikan.</span>
+                    @endforelse
+                </div>
+            </div>
         </div>
 
         <div class="flex items-center justify-end gap-3 pt-6 border-t border-zinc-100">
             <a href="{{ route('roles.index') }}" class="inline-flex items-center justify-center rounded-md border border-zinc-200 text-zinc-700 hover:text-zinc-950 bg-white hover:bg-zinc-50 h-10 px-4 py-2 text-sm font-medium shadow-sm transition-all duration-150">
                 Kembali
+            </a>
+            <a href="{{ route('roles.permissions', $role->id) }}" class="inline-flex items-center justify-center rounded-md border border-zinc-200 text-zinc-700 hover:text-zinc-950 bg-white hover:bg-zinc-50 h-10 px-4 py-2 text-sm font-medium shadow-sm transition-all duration-150">
+                Hak Akses
             </a>
             <a href="{{ route('roles.edit', $role->id) }}" class="inline-flex items-center justify-center rounded-md bg-zinc-900 text-zinc-50 hover:bg-zinc-800 h-10 px-4 py-2 text-sm font-medium shadow-sm transition-all duration-150">
                 Ubah Peran

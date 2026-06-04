@@ -21,7 +21,27 @@
             <h2 class="text-2xl font-bold tracking-tight text-zinc-900">Daftar Inventaris</h2>
             <p class="text-sm text-zinc-500">Kelola dan pantau seluruh aset sarana prasarana sekolah.</p>
         </div>
-        <div>
+        <div class="flex flex-wrap items-center gap-2">
+            <a href="{{ route('inventaris.template', 'xlsx') }}"
+                class="inline-flex items-center justify-center gap-2 rounded-md border border-zinc-200 bg-white text-zinc-700 hover:bg-zinc-50 px-3 py-2 text-sm font-medium shadow-sm transition-all duration-150">
+                Template XLSX
+            </a>
+            <a href="{{ route('inventaris.template', 'csv') }}"
+                class="inline-flex items-center justify-center gap-2 rounded-md border border-zinc-200 bg-white text-zinc-700 hover:bg-zinc-50 px-3 py-2 text-sm font-medium shadow-sm transition-all duration-150">
+                Template CSV
+            </a>
+            <a href="{{ route('inventaris.imports.create') }}"
+                class="inline-flex items-center justify-center gap-2 rounded-md border border-emerald-200 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 px-3 py-2 text-sm font-medium shadow-sm transition-all duration-150">
+                Import
+            </a>
+            <a href="{{ route('inventaris.export', 'xlsx') }}"
+                class="inline-flex items-center justify-center gap-2 rounded-md border border-zinc-200 bg-white text-zinc-700 hover:bg-zinc-50 px-3 py-2 text-sm font-medium shadow-sm transition-all duration-150">
+                Export XLSX
+            </a>
+            <a href="{{ route('inventaris.export', 'csv') }}"
+                class="inline-flex items-center justify-center gap-2 rounded-md border border-zinc-200 bg-white text-zinc-700 hover:bg-zinc-50 px-3 py-2 text-sm font-medium shadow-sm transition-all duration-150">
+                Export CSV
+            </a>
             <a href="{{ route('inventaris.create') }}"
                 class="inline-flex items-center justify-center gap-2 rounded-md bg-zinc-900 text-zinc-50 hover:bg-zinc-800 px-4 py-2 text-sm font-medium shadow-sm transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 cursor-pointer">
                 <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
@@ -117,7 +137,7 @@
                     @forelse ($inventaris as $item)
                         <tr class="hover:bg-zinc-50/60 transition-colors {{ $loop->even ? 'bg-zinc-50/30' : 'bg-white' }}">
                             <td class="px-6 py-4 text-zinc-400 font-mono text-xs">
-                                {{ $loop->iteration }}
+                                {{ ($inventaris->currentPage() - 1) * $inventaris->perPage() + $loop->iteration }}
                             </td>
                             <td class="px-6 py-4">
                                 <span class="inline-flex items-center rounded-md bg-zinc-100 px-2.5 py-1 text-xs font-mono font-semibold text-zinc-700 border border-zinc-200/60 tracking-wide">
@@ -222,10 +242,13 @@
 
         {{-- Table Footer: total count --}}
         @if ($inventaris->isNotEmpty())
-            <div class="px-6 py-3 border-t border-zinc-100 bg-zinc-50/50">
+            <div class="px-6 py-4 border-t border-zinc-100 bg-zinc-50/50 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <p class="text-xs text-zinc-400">
-                    Menampilkan <span class="font-medium text-zinc-600">{{ $inventaris->count() }}</span> barang terdaftar
+                    Menampilkan <span class="font-medium text-zinc-600">{{ $inventaris->firstItem() }}</span> sampai <span class="font-medium text-zinc-600">{{ $inventaris->lastItem() }}</span> dari <span class="font-medium text-zinc-600">{{ $inventaris->total() }}</span> barang terdaftar
                 </p>
+                <div class="shrink-0 pagination-sm">
+                    {{ $inventaris->links() }}
+                </div>
             </div>
         @endif
     </div>

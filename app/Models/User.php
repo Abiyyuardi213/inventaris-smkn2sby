@@ -52,4 +52,28 @@ class User extends Authenticatable
 
         return $this->role?->slug === $roles;
     }
+
+    public function canAccess(string $permission): bool
+    {
+        if ($this->hasRole('super-admin')) {
+            return true;
+        }
+
+        return $this->role?->permissions->contains('slug', $permission) ?? false;
+    }
+
+    public function canAccessAny(array $permissions): bool
+    {
+        if (empty($permissions)) {
+            return true;
+        }
+
+        foreach ($permissions as $permission) {
+            if ($this->canAccess($permission)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }
