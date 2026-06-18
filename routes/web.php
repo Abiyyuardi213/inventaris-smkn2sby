@@ -14,6 +14,7 @@ use App\Http\Controllers\MutasiController;
 use App\Http\Controllers\PeminjamanController;
 use App\Http\Controllers\PengadaanController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ApprovalKepsekController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [AuthController::class, 'login'])->name('login');
@@ -78,4 +79,12 @@ Route::middleware('auth')->prefix('admin')->group(function () {
             Route::patch('/{pengadaan}/approve', [ApprovalController::class, 'approve'])->name('approve');
             Route::patch('/{pengadaan}/tolak', [ApprovalController::class, 'tolak'])->name('tolak');
         });
+
+    // Route approval Kepsek — khusus role kepala-sekolah
+    Route::middleware('role:kepala-sekolah')->prefix('approvals-kepsek')->name('approvals-kepsek.')->group(function () {
+        Route::get('/', [ApprovalKepsekController::class, 'index'])->name('index');
+        Route::get('/riwayat', [ApprovalKepsekController::class, 'riwayat'])->name('riwayat');
+        Route::patch('/{pengadaan}/approve', [ApprovalKepsekController::class, 'approve'])->name('approve');
+        Route::patch('/{pengadaan}/tolak', [ApprovalKepsekController::class, 'tolak'])->name('tolak');
+    });
 });

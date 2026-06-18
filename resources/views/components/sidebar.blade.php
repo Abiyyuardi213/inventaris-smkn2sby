@@ -135,7 +135,7 @@
         @endif
 
         {{-- ── Approval ── --}}
-        @if($currentUser?->canAccess('approvals.manage'))
+        @if($currentUser?->canAccess('approvals.manage') && $currentUser?->role?->slug !== 'kepala-sekolah')
             <p class="mt-4 mb-1 px-3 text-[10px] font-semibold uppercase tracking-widest text-zinc-400">
                 Approval
             </p>
@@ -145,6 +145,35 @@
                     <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                 </svg>
                 Approval Pengadaan
+            </a>
+        @endif
+
+        {{-- ── Approval Kepsek ── --}}
+        @if($currentUser?->role?->slug === 'kepala-sekolah')
+            <p class="mt-4 mb-1 px-3 text-[10px] font-semibold uppercase tracking-widest text-zinc-400">
+                Approval Kepsek
+            </p>
+
+            <a href="{{ route('approvals-kepsek.index') }}" class="flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md {{ request()->routeIs('approvals-kepsek.index') ? 'bg-zinc-100 text-zinc-900 font-semibold' : 'text-zinc-500 hover:text-zinc-950 hover:bg-zinc-100' }} transition-colors">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                </svg>
+                <span>Approval Pengadaan</span>
+                @php
+                    $kepsekPendingCount = \App\Models\Pengadaan::where('status_usulan', 'disetujui_admin')->count();
+                @endphp
+                @if($kepsekPendingCount > 0)
+                    <span class="ml-auto inline-flex items-center justify-center px-2 py-0.5 text-xs font-semibold rounded-full bg-zinc-900 text-white leading-none">
+                        {{ $kepsekPendingCount }}
+                    </span>
+                @endif
+            </a>
+
+            <a href="{{ route('approvals-kepsek.riwayat') }}" class="flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md {{ request()->routeIs('approvals-kepsek.riwayat') ? 'bg-zinc-100 text-zinc-900 font-semibold' : 'text-zinc-500 hover:text-zinc-950 hover:bg-zinc-100' }} transition-colors">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                </svg>
+                <span>Riwayat Keputusan</span>
             </a>
         @endif
     </nav>

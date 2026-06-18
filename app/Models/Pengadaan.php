@@ -16,6 +16,11 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
     'alasan_pengadaan',
     'status_usulan',
     'user_id',
+    'approved_by_admin',
+    'approved_by_admin_at',
+    'approved_by_kepsek',
+    'approved_by_kepsek_at',
+    'catatan_kepsek',
 ])]
 class Pengadaan extends Model
 {
@@ -28,11 +33,15 @@ class Pengadaan extends Model
      * - perkiraan_harga: integer agar bisa diformat dengan number_format()
      * - jumlah: integer agar aritmatika tidak error karena string dari DB
      * - status_usulan: string (enum disimpan sebagai string di MySQL)
+     * - approved_by_admin_at: datetime
+     * - approved_by_kepsek_at: datetime
      */
     protected $casts = [
         'perkiraan_harga' => 'integer',
         'jumlah'          => 'integer',
         'status_usulan'   => 'string',
+        'approved_by_admin_at' => 'datetime',
+        'approved_by_kepsek_at' => 'datetime',
     ];
 
     protected static function booted(): void
@@ -40,8 +49,8 @@ class Pengadaan extends Model
         /**
          * EVENT: deleting
          * Proteksi hapus — usulan hanya boleh dihapus selama masih berstatus 'pending'.
-         * Jika sudah diproses (disetujui/ditolak), hapus diblokir karena data
-         * sudah menjadi bagian dari alur persetujuan yang tidak boleh dihilangkan.
+         * Jika sudah diproses (disetujui_admin/disetujui_kepsek/ditolak/ditolak_kepsek),
+         * hapus diblokir karena data sudah menjadi bagian dari alur persetujuan.
          */
         static::deleting(function (Pengadaan $pengadaan) {
             if (! $pengadaan->isPending()) {
@@ -53,29 +62,37 @@ class Pengadaan extends Model
 
         /**
          * EVENT: updating
-         * Proteksi edit — setelah diproses (bukan pending), isi usulan tidak boleh diubah.
-         * Pengecualian: perubahan pada kolom status_usulan itu sendiri TETAP DIIZINKAN
-         * agar Super Admin bisa melakukan approve/tolak tanpa terblokir.
-         *
-         * Cara kerja:
-         * - getOriginal('status_usulan') → status di DB sebelum perubahan
-         * - getDirty() → array kolom yang sedang diubah pada request ini
-         * - Jika satu-satunya kolom yang berubah adalah 'status_usulan', berarti
-         *   ini adalah aksi approve/tolak → lewatkan validasi.
-         * - Jika ada kolom lain yang ikut berubah dan status sudah diproses → blokir.
+         * Proteksi edit — setelah diproses (bukan pending), isi usulan tidak boleh diubah secara bebas.
+         * Kami mengizinkan transisi status resmi:
+         * a) Tahap 1 (Super Admin): status original 'pending' -> dirty columns: status_usulan, approved_by_admin, approved_by_admin_at
+         * b) Tahap 2 (Kepsek): status original 'disetujui_admin' -> dirty columns: status_usulan, approved_by_kepsek, approved_by_kepsek_at, catatan_kepsek
          */
         static::updating(function (Pengadaan $pengadaan) {
             $statusAsli = $pengadaan->getOriginal('status_usulan');
 
-            // Hanya blokir jika status di DB sudah bukan 'pending'
-            if ($statusAsli !== 'pending') {
-                $kolomYangBerubah = array_keys($pengadaan->getDirty());
+            // Jika status asli bukan pending dan bukan disetujui_admin, tolak langsung semua perubahan
+            if ($statusAsli !== 'pending' && $statusAsli !== 'disetujui_admin') {
+                throw new \Exception(
+                    'Usulan pengadaan tidak dapat diedit karena sudah diproses.'
+                );
+            }
 
-                // Izinkan jika satu-satunya kolom yang berubah adalah status_usulan
-                // (aksi approve/tolak oleh Super Admin)
-                $hanyaStatusBerubah = $kolomYangBerubah === ['status_usulan'];
+            $kolomYangBerubah = array_keys($pengadaan->getDirty());
 
-                if (! $hanyaStatusBerubah) {
+            // Validasi transisi tahap 1 (Super Admin)
+            if ($statusAsli === 'pending') {
+                $allowedStage1 = ['status_usulan', 'approved_by_admin', 'approved_by_admin_at'];
+                if (array_diff($kolomYangBerubah, $allowedStage1) !== []) {
+                    throw new \Exception(
+                        'Usulan pengadaan tidak dapat diedit karena sudah diproses.'
+                    );
+                }
+            }
+
+            // Validasi transisi tahap 2 (Kepsek)
+            if ($statusAsli === 'disetujui_admin') {
+                $allowedStage2 = ['status_usulan', 'approved_by_kepsek', 'approved_by_kepsek_at', 'catatan_kepsek'];
+                if (array_diff($kolomYangBerubah, $allowedStage2) !== []) {
                     throw new \Exception(
                         'Usulan pengadaan tidak dapat diedit karena sudah diproses.'
                     );
@@ -85,7 +102,7 @@ class Pengadaan extends Model
     }
 
     // =========================================================================
-    // RELASI
+    // RELASI LAMA
     // =========================================================================
 
     /**
@@ -106,8 +123,6 @@ class Pengadaan extends Model
 
     /**
      * Relasi ke model User (pengusul usulan pengadaan).
-     * Menggunakan nama method 'pengusul' — bukan 'user' — agar semantik lebih jelas.
-     * foreignKey 'user_id' didefinisikan eksplisit karena nama method tidak mengikuti konvensi.
      */
     public function pengusul(): BelongsTo
     {
@@ -115,11 +130,31 @@ class Pengadaan extends Model
     }
 
     // =========================================================================
+    // RELASI BARU
+    // =========================================================================
+
+    /**
+     * Relasi ke model User (Super Admin yang menyetujui usulan di tahap 1).
+     */
+    public function approvedByAdmin(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'approved_by_admin');
+    }
+
+    /**
+     * Relasi ke model User (Kepala Sekolah yang memproses usulan di tahap 2).
+     */
+    public function approvedByKepsek(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'approved_by_kepsek');
+    }
+
+    // =========================================================================
     // HELPER METHODS — STATUS CHECK
     // =========================================================================
 
     /**
-     * Cek apakah usulan masih dalam status pending (belum diproses).
+     * Cek apakah usulan masih dalam status pending (menunggu review Super Admin).
      */
     public function isPending(): bool
     {
@@ -127,18 +162,51 @@ class Pengadaan extends Model
     }
 
     /**
-     * Cek apakah usulan sudah disetujui oleh Super Admin.
+     * Cek apakah usulan disetujui oleh Super Admin di tahap 1 (menunggu Kepsek).
      */
-    public function isDisetujui(): bool
+    public function isDisetujuiAdmin(): bool
     {
-        return $this->status_usulan === 'disetujui';
+        return $this->status_usulan === 'disetujui_admin';
     }
 
     /**
-     * Cek apakah usulan sudah ditolak oleh Super Admin.
+     * Cek apakah usulan disetujui oleh Kepala Sekolah di tahap 2 (FINAL).
+     */
+    public function isDisetujuiKepsek(): bool
+    {
+        return $this->status_usulan === 'disetujui_kepsek';
+    }
+
+    /**
+     * Cek apakah usulan ditolak oleh Super Admin di tahap 1 (FINAL).
      */
     public function isDitolak(): bool
     {
         return $this->status_usulan === 'ditolak';
+    }
+
+    /**
+     * Cek apakah usulan ditolak oleh Kepala Sekolah di tahap 2 (FINAL).
+     */
+    public function isDitolakKepsek(): bool
+    {
+        return $this->status_usulan === 'ditolak_kepsek';
+    }
+
+    /**
+     * Cek apakah usulan berstatus menunggu keputusan Kepala Sekolah.
+     * Alias untuk isDisetujuiAdmin().
+     */
+    public function isMenungguKepsek(): bool
+    {
+        return $this->isDisetujuiAdmin();
+    }
+
+    /**
+     * Cek apakah usulan sudah berada di status final (tidak bisa diproses lagi).
+     */
+    public function isFinal(): bool
+    {
+        return in_array($this->status_usulan, ['disetujui_kepsek', 'ditolak', 'ditolak_kepsek'], true);
     }
 }

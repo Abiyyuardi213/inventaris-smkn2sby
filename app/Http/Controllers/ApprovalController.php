@@ -29,13 +29,15 @@ class ApprovalController extends Controller
                 ->with('error', 'Usulan ini sudah diproses sebelumnya.');
         }
 
-        // Hanya update kolom status_usulan — tidak menyentuh kolom lain
-        // Model event updating akan meloloskan perubahan ini karena
-        // satu-satunya kolom yang dirty adalah 'status_usulan'
-        $pengadaan->update(['status_usulan' => 'disetujui']);
+        // Update status ke disetujui_admin dan catat audit trail untuk Super Admin
+        $pengadaan->update([
+            'status_usulan' => 'disetujui_admin',
+            'approved_by_admin' => auth()->id(),
+            'approved_by_admin_at' => now(),
+        ]);
 
         return redirect()->route('approvals.index')
-            ->with('success', 'Usulan berhasil disetujui.');
+            ->with('success', 'Usulan disetujui dan diteruskan ke Kepala Sekolah untuk persetujuan final.');
     }
 
     public function tolak(Pengadaan $pengadaan): RedirectResponse
@@ -47,8 +49,12 @@ class ApprovalController extends Controller
                 ->with('error', 'Usulan ini sudah diproses sebelumnya.');
         }
 
-        // Hanya update kolom status_usulan — tidak menyentuh kolom lain
-        $pengadaan->update(['status_usulan' => 'ditolak']);
+        // Update status ke ditolak dan catat audit trail untuk Super Admin
+        $pengadaan->update([
+            'status_usulan' => 'ditolak',
+            'approved_by_admin' => auth()->id(),
+            'approved_by_admin_at' => now(),
+        ]);
 
         return redirect()->route('approvals.index')
             ->with('success', 'Usulan berhasil ditolak.');
