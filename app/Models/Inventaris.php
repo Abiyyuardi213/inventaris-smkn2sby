@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Illuminate\Support\Facades\Storage;
 use App\Models\Peminjaman;
 
 #[Fillable([
@@ -19,7 +21,8 @@ use App\Models\Peminjaman;
     'ruangan_id',
     'jumlah_total',
     'kondisi',
-    'tanggal_pengadaan'
+    'tanggal_pengadaan',
+    'qr_code_path'
 ])]
 class Inventaris extends Model
 {
@@ -43,6 +46,52 @@ class Inventaris extends Model
             'tanggal_pengadaan' => 'date',
             'jumlah_total' => 'integer',
         ];
+    }
+
+    /**
+     * Boot logic for registering event hooks.
+     */
+    protected static function booted(): void
+    {
+        // Event created: generate QR code setelah model tersimpan ke DB (agar memiliki UUID)
+        static::created(function (Inventaris $inventaris) {
+            $inventaris->generateQrCode();
+            $inventaris->saveQuietly();
+        });
+
+        // Event updated: regenerasi QR code setiap kali data diperbarui agar URL selalu up-to-date
+        static::updated(function (Inventaris $inventaris) {
+            $inventaris->generateQrCode();
+            $inventaris->saveQuietly();
+        });
+    }
+
+    /**
+     * Generate QR Code for the inventaris item and save it in the storage disk.
+     */
+    public function generateQrCode(): void
+    {
+        $url = route('inventaris.show', $this->id);
+        
+        // Path relatif untuk disimpan di database (menggunakan SVG karena tidak bergantung pada Imagick)
+        $relativePath = "qrcodes/inventaris/{$this->id}.svg";
+        
+        // Pastikan folder tujuan di disk public sudah siap
+        if (!Storage::disk('public')->exists('qrcodes/inventaris')) {
+            Storage::disk('public')->makeDirectory('qrcodes/inventaris');
+        }
+        
+        // Generate QR code as SVG
+        $qrCodeBytes = QrCode::format('svg')
+            ->size(300)
+            ->margin(1)
+            ->generate($url);
+            
+        // Simpan file ke disk public
+        Storage::disk('public')->put($relativePath, $qrCodeBytes);
+        
+        // Set path di model
+        $this->qr_code_path = $relativePath;
     }
 
     /**

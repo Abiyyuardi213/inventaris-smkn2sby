@@ -22,6 +22,13 @@
             <p class="text-sm text-zinc-500">Kelola dan pantau seluruh aset sarana prasarana sekolah.</p>
         </div>
         <div class="flex flex-wrap items-center gap-2">
+            <button id="btn-print-bulk" onclick="submitBulkPrint()"
+                class="inline-flex items-center justify-center gap-2 rounded-md border border-zinc-200 bg-white text-zinc-700 hover:bg-zinc-50 px-3 py-2 text-sm font-medium shadow-sm transition-all duration-150 cursor-pointer">
+                <svg class="w-4 h-4 text-zinc-500" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0 1 10.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096a42.415 42.415 0 0 0-10.56 0m10.56 0L17.66 18m0 0a2.25 2.25 0 0 1-2.25 2.25H8.59A2.25 2.25 0 0 1 6.34 18m11.318-5.318a4.5 4.5 0 1 0-6.364-6.364 4.5 4.5 0 0 0 6.364 6.364Z" />
+                </svg>
+                Cetak Label Terpilih
+            </button>
             <a href="{{ route('inventaris.template', 'xlsx') }}"
                 class="inline-flex items-center justify-center gap-2 rounded-md border border-zinc-200 bg-white text-zinc-700 hover:bg-zinc-50 px-3 py-2 text-sm font-medium shadow-sm transition-all duration-150">
                 Template XLSX
@@ -123,6 +130,9 @@
             <table class="w-full text-sm text-left">
                 <thead class="text-xs uppercase bg-zinc-50 text-zinc-500 border-b border-zinc-200">
                     <tr>
+                        <th scope="col" class="px-6 py-4 font-semibold w-10 text-center">
+                            <input type="checkbox" id="select_all" class="rounded border-zinc-300 text-zinc-950 focus:ring-zinc-900 cursor-pointer">
+                        </th>
                         <th scope="col" class="px-6 py-4 font-semibold w-12">No</th>
                         <th scope="col" class="px-6 py-4 font-semibold">Kode</th>
                         <th scope="col" class="px-6 py-4 font-semibold">Nama Barang</th>
@@ -136,6 +146,9 @@
                 <tbody class="divide-y divide-zinc-100">
                     @forelse ($inventaris as $item)
                         <tr class="hover:bg-zinc-50/60 transition-colors {{ $loop->even ? 'bg-zinc-50/30' : 'bg-white' }}">
+                            <td class="px-6 py-4 text-center">
+                                <input type="checkbox" name="selected_ids[]" value="{{ $item->id }}" class="item-checkbox rounded border-zinc-300 text-zinc-950 focus:ring-zinc-900 cursor-pointer">
+                            </td>
                             <td class="px-6 py-4 text-zinc-400 font-mono text-xs">
                                 {{ ($inventaris->currentPage() - 1) * $inventaris->perPage() + $loop->iteration }}
                             </td>
@@ -152,8 +165,8 @@
                                 {{ $item->kategori->nama_kategori }}
                             </td>
                             <td class="px-6 py-4 text-zinc-600">
-                                <div class="font-medium text-xs text-zinc-700">{{ $item->ruangan->nama_ruangan }}</div>
-                                <div class="text-[10px] text-zinc-400">{{ $item->jurusan->nama_jurusan }}</div>
+                                <div class="font-medium text-xs text-zinc-700">{{ $item->ruangan->nama_ruangan ?? '-' }}</div>
+                                <div class="text-[10px] text-zinc-400">{{ $item->jurusan->nama_jurusan ?? '-' }}</div>
                             </td>
                             <td class="px-6 py-4 text-center font-semibold text-zinc-800">
                                 {{ $item->jumlah_total }}
@@ -175,6 +188,17 @@
                             </td>
                             <td class="px-6 py-4 text-right">
                                 <div class="inline-flex items-center justify-end gap-2">
+                                    {{-- Print QR Label --}}
+                                    <a href="{{ route('inventaris.print-label', $item->id) }}" target="_blank"
+                                        class="p-1.5 rounded-md border border-zinc-200 text-zinc-600 hover:text-zinc-950 bg-white hover:bg-zinc-50 transition-colors shadow-sm text-xs font-medium inline-flex items-center gap-1"
+                                        title="Cetak Label QR">
+                                        <svg class="w-3.5 h-3.5 text-zinc-500" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0 1 3.75 9.375v-4.5ZM3.75 14.625c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5a1.125 1.125 0 0 1-1.125-1.125v-4.5ZM13.5 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0 1 13.5 9.375v-4.5Z" />
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M16.875 15.75a1.125 1.125 0 0 1-1.125-1.125v-1.5a1.125 1.125 0 0 1 1.125-1.125h1.5a1.125 1.125 0 0 1 1.125 1.125v1.5a1.125 1.125 0 0 1-1.125 1.125h-1.5ZM13.5 18.75c0-.621.504-1.125 1.125-1.125h1.5a1.125 1.125 0 0 1 1.125 1.125v1.5c0 .621-.504 1.125-1.125 1.125h-1.5a1.125 1.125 0 0 1-1.125-1.125v-1.5Z" />
+                                        </svg>
+                                        QR
+                                    </a>
+
                                     {{-- Lihat --}}
                                     <a href="{{ route('inventaris.show', $item->id) }}"
                                         class="p-1.5 rounded-md border border-zinc-200 text-zinc-600 hover:text-zinc-950 bg-white hover:bg-zinc-50 transition-colors shadow-sm text-xs font-medium inline-flex items-center gap-1">
@@ -214,7 +238,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="8" class="px-6 py-16 text-center text-zinc-500">
+                            <td colspan="9" class="px-6 py-16 text-center text-zinc-500">
                                 <div class="flex flex-col items-center justify-center gap-3">
                                     <div class="w-14 h-14 rounded-full bg-zinc-100 flex items-center justify-center">
                                         <svg class="w-7 h-7 text-zinc-300" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -319,9 +343,40 @@
         }
     }
 
+    // Fungsi untuk cetak label massal berdasarkan checkbox terpilih
+    function submitBulkPrint() {
+        const checkboxes = document.querySelectorAll('.item-checkbox:checked');
+        if (checkboxes.length === 0) {
+            Swal.fire({
+                title: 'Pilih Barang',
+                text: 'Silakan pilih minimal satu barang untuk mencetak label.',
+                icon: 'warning',
+                confirmButtonColor: '#18181b',
+            });
+            return;
+        }
+
+        const ids = Array.from(checkboxes).map(cb => cb.value);
+        
+        // Buat url cetak massal: route('inventaris.print-label-bulk')?ids=uuid1,uuid2
+        const url = "{{ route('inventaris.print-label-bulk') }}?ids=" + ids.join(',');
+        window.open(url, '_blank');
+    }
+
     // Jalankan penyaringan saat halaman dimuat pertama kali untuk mempertahankan state filter dari URL
     document.addEventListener('DOMContentLoaded', function() {
         filterRuanganByJurusan();
+
+        // Handle select all checkbox
+        const selectAllCheckbox = document.getElementById('select_all');
+        if (selectAllCheckbox) {
+            selectAllCheckbox.addEventListener('change', function() {
+                const checkboxes = document.querySelectorAll('.item-checkbox');
+                checkboxes.forEach(cb => {
+                    cb.checked = selectAllCheckbox.checked;
+                });
+            });
+        }
     });
 </script>
 @endsection
