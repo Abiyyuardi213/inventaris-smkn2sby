@@ -71,7 +71,7 @@
             {{-- Unit Kerja --}}
             <div class="space-y-1.5">
                 <label for="jurusan_id" class="text-xs font-semibold text-zinc-500 uppercase tracking-wider">Unit Kerja</label>
-                <select id="jurusan_id" name="jurusan_id" class="flex h-9 w-full rounded-md border border-zinc-200 bg-transparent px-3 py-1 text-xs text-zinc-900 focus:outline-none focus:ring-1 focus:ring-zinc-950" onchange="this.form.submit()">
+                <select id="jurusan_id" name="jurusan_id" class="flex h-9 w-full rounded-md border border-zinc-200 bg-transparent px-3 py-1 text-xs text-zinc-900 focus:outline-none focus:ring-1 focus:ring-zinc-950" onchange="filterRuanganByJurusan(); this.form.submit();">
                     <option value="">Semua Unit Kerja</option>
                     @foreach($jurusans as $jurusan)
                         <option value="{{ $jurusan->id }}" {{ request('jurusan_id') == $jurusan->id ? 'selected' : '' }}>
@@ -87,7 +87,7 @@
                 <select id="ruangan_id" name="ruangan_id" class="flex h-9 w-full rounded-md border border-zinc-200 bg-transparent px-3 py-1 text-xs text-zinc-900 focus:outline-none focus:ring-1 focus:ring-zinc-950" onchange="this.form.submit()">
                     <option value="">Semua Ruangan</option>
                     @foreach($ruangans as $ruangan)
-                        <option value="{{ $ruangan->id }}" {{ request('ruangan_id') == $ruangan->id ? 'selected' : '' }}>
+                        <option value="{{ $ruangan->id }}" data-jurusan-id="{{ $ruangan->jurusan_id }}" {{ request('ruangan_id') == $ruangan->id ? 'selected' : '' }}>
                             {{ $ruangan->nama_ruangan }}
                         </option>
                     @endforeach
@@ -274,5 +274,54 @@
             }
         });
     }
+
+    // Fungsi untuk menyaring opsi ruangan berdasarkan unit kerja/jurusan yang dipilih
+    function filterRuanganByJurusan() {
+        const jurusanSelect = document.getElementById('jurusan_id');
+        const ruanganSelect = document.getElementById('ruangan_id');
+        if (!jurusanSelect || !ruanganSelect) return;
+
+        const selectedJurusanId = jurusanSelect.value;
+        const options = ruanganSelect.options;
+        let selectedRoomStillValid = false;
+
+        for (let i = 0; i < options.length; i++) {
+            const option = options[i];
+            const optionJurusanId = option.getAttribute('data-jurusan-id');
+
+            // Opsi "Semua Ruangan" tidak memiliki data-jurusan-id dan selalu ditampilkan
+            if (!optionJurusanId) {
+                option.hidden = false;
+                option.disabled = false;
+                if (option.selected) {
+                    selectedRoomStillValid = true;
+                }
+                continue;
+            }
+
+            // Jika tidak ada jurusan yang dipilih atau jurusan ruangan sesuai, tampilkan opsi tersebut
+            if (selectedJurusanId === "" || optionJurusanId === selectedJurusanId) {
+                option.hidden = false;
+                option.disabled = false;
+                if (option.selected) {
+                    selectedRoomStillValid = true;
+                }
+            } else {
+                // Sembunyikan dan nonaktifkan opsi ruangan dari jurusan lain
+                option.hidden = true;
+                option.disabled = true;
+            }
+        }
+
+        // Jika ruangan yang sedang terpilih berada di luar jurusan yang baru dipilih, reset pilihan ke "Semua Ruangan"
+        if (!selectedRoomStillValid) {
+            ruanganSelect.value = "";
+        }
+    }
+
+    // Jalankan penyaringan saat halaman dimuat pertama kali untuk mempertahankan state filter dari URL
+    document.addEventListener('DOMContentLoaded', function() {
+        filterRuanganByJurusan();
+    });
 </script>
 @endsection
