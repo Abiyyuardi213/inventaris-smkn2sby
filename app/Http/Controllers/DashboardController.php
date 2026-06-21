@@ -46,6 +46,21 @@ class DashboardController extends Controller
                 return $peminjaman;
             });
 
+        $barangPopuler = Inventaris::query()
+            ->select('nama_barang', 'jumlah_total')
+            ->get()
+            ->groupBy(fn (Inventaris $inventaris) => $this->kelompokBarangPopuler($inventaris->nama_barang))
+            ->map(function ($items, string $kelompok) {
+                return [
+                    'nama' => $kelompok,
+                    'jumlah' => (int) $items->sum('jumlah_total'),
+                    'jenis' => $items->pluck('nama_barang')->unique()->count(),
+                ];
+            })
+            ->sortByDesc('jumlah')
+            ->take(8)
+            ->values();
+
         return view('dashboard', compact(
             'totalBarang',
             'totalJenisBarang',
@@ -57,7 +72,45 @@ class DashboardController extends Controller
             'persenLayak',
             'chartLabels',
             'chartData',
-            'overdueList'
+            'overdueList',
+            'barangPopuler'
         ));
+    }
+
+    private function kelompokBarangPopuler(string $namaBarang): string
+    {
+        $normalized = mb_strtolower($namaBarang);
+
+        $keywords = [
+            'Kursi' => ['kursi', 'chair'],
+            'Meja' => ['meja', 'desk', 'table'],
+            'Komputer' => ['komputer', 'pc', 'cpu'],
+            'Laptop' => ['laptop', 'notebook'],
+            'Printer' => ['printer'],
+            'Monitor' => ['monitor', 'lcd', 'led display'],
+            'Proyektor' => ['proyektor', 'projector'],
+            'Lemari' => ['lemari', 'cabinet'],
+            'Rak' => ['rak', 'shelf'],
+            'Router' => ['router', 'mikrotik'],
+            'Switch' => ['switch'],
+            'AC' => ['ac', 'air conditioner', 'pendingin ruangan'],
+            'Papan' => ['papan', 'whiteboard', 'board'],
+            'Scanner' => ['scanner'],
+            'Kamera' => ['kamera', 'camera', 'cctv'],
+            'Speaker' => ['speaker', 'sound'],
+        ];
+
+        foreach ($keywords as $label => $words) {
+            foreach ($words as $word) {
+                if (preg_match('/(^|[^a-z0-9])' . preg_quote($word, '/') . '([^a-z0-9]|$)/', $normalized)) {
+                    return $label;
+                }
+            }
+        }
+
+        $words = preg_split('/\s+/', trim(preg_replace('/[^a-z0-9\s]/i', ' ', $namaBarang)));
+        $firstWord = $words[0] ?? $namaBarang;
+
+        return ucwords(mb_strtolower($firstWord));
     }
 }
