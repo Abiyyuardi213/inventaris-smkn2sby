@@ -74,6 +74,7 @@
                 <thead class="text-xs uppercase bg-zinc-50 text-zinc-500 border-b border-zinc-200">
                     <tr>
                         <th scope="col" class="px-6 py-4 font-semibold w-12">No</th>
+                        <th scope="col" class="px-6 py-4 font-semibold w-24">ID</th>
                         <th scope="col" class="px-6 py-4 font-semibold">Nama Ruangan</th>
                         <th scope="col" class="px-6 py-4 font-semibold">Unit Kerja</th>
                         <th scope="col" class="px-6 py-4 font-semibold text-right">Aksi</th>
@@ -84,6 +85,16 @@
                         <tr class="hover:bg-zinc-50/60 transition-colors {{ $loop->even ? 'bg-zinc-50/30' : 'bg-white' }}">
                             <td class="px-6 py-4 text-zinc-400 font-mono text-xs">
                                 {{ ($ruangans->currentPage() - 1) * $ruangans->perPage() + $loop->iteration }}
+                            </td>
+                            <td class="px-6 py-4">
+                                <button type="button" onclick="copyToClipboard('{{ $ruangan->id }}', this)"
+                                    class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-zinc-50 hover:bg-zinc-100 border border-zinc-200 hover:border-zinc-300 text-[10px] font-semibold text-zinc-600 hover:text-zinc-900 transition-all shadow-sm cursor-pointer"
+                                    title="Salin ID Ruangan">
+                                    <svg class="w-3 h-3 text-zinc-400" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 01-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H5.25m11.9-3.675A2.25 2.25 0 0013.5 2.25h-3a2.25 2.25 0 00-2.25 2.25m9 0V18.75a2.25 2.25 0 01-2.25 2.25h-9a2.25 2.25 0 01-2.25-2.25V4.5m9 0H7.5" />
+                                    </svg>
+                                    <span>Salin ID</span>
+                                </button>
                             </td>
                             <td class="px-6 py-4">
                                 <div class="font-medium text-zinc-900">{{ $ruangan->nama_ruangan }}</div>
@@ -134,7 +145,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="4" class="px-6 py-16 text-center text-zinc-500">
+                            <td colspan="5" class="px-6 py-16 text-center text-zinc-500">
                                 <div class="flex flex-col items-center justify-center gap-3">
                                     <div class="w-14 h-14 rounded-full bg-zinc-100 flex items-center justify-center">
                                         <svg class="w-7 h-7 text-zinc-300" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -202,6 +213,57 @@
                 document.getElementById('delete-form-' + id).submit();
             }
         });
+    }
+
+    async function copyToClipboard(text, button) {
+        const originalText = button.querySelector('span')?.textContent ?? 'Salin ID';
+
+        try {
+            if (navigator.clipboard && window.isSecureContext) {
+                await navigator.clipboard.writeText(text);
+            } else {
+                const textarea = document.createElement('textarea');
+                textarea.value = text;
+                textarea.style.position = 'fixed';
+                textarea.style.opacity = '0';
+                document.body.appendChild(textarea);
+                textarea.focus();
+                textarea.select();
+                document.execCommand('copy');
+                textarea.remove();
+            }
+
+            const label = button.querySelector('span');
+            if (label) {
+                label.textContent = 'Tersalin';
+            }
+
+            Swal.fire({
+                toast: true,
+                position: 'top-end',
+                icon: 'success',
+                title: 'ID ruangan berhasil disalin',
+                showConfirmButton: false,
+                timer: 1400,
+                timerProgressBar: true,
+            });
+
+            setTimeout(() => {
+                if (label) {
+                    label.textContent = originalText;
+                }
+            }, 1200);
+        } catch (error) {
+            Swal.fire({
+                toast: true,
+                position: 'top-end',
+                icon: 'error',
+                title: 'Gagal menyalin ID ruangan',
+                showConfirmButton: false,
+                timer: 1600,
+                timerProgressBar: true,
+            });
+        }
     }
 </script>
 @endsection
