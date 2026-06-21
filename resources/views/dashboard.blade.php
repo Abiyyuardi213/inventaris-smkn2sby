@@ -81,6 +81,42 @@
 
         </div>
 
+        {{-- Rekap Barang Populer --}}
+        <div class="rounded-lg border border-zinc-200 bg-white shadow-sm p-5">
+            <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-2 mb-4">
+                <div>
+                    <h3 class="text-sm font-semibold text-zinc-900">Rekap Barang Populer</h3>
+                    <p class="text-xs text-zinc-400">Pengelompokan otomatis dari nama barang, dijumlahkan dari seluruh lokasi dan merek.</p>
+                </div>
+                <span class="inline-flex w-fit rounded-full border border-zinc-200 bg-zinc-50 px-2.5 py-1 text-[11px] font-semibold text-zinc-500">
+                    Top {{ $barangPopuler->count() }} kelompok
+                </span>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3">
+                @forelse ($barangPopuler as $index => $barang)
+                    <div class="rounded-md border border-zinc-100 bg-zinc-50 p-4">
+                        <div class="flex items-center justify-between gap-3">
+                            <span class="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-white text-xs font-bold text-zinc-500 ring-1 ring-zinc-200">
+                                {{ $index + 1 }}
+                            </span>
+                            <span class="text-[11px] font-semibold text-zinc-400">
+                                {{ number_format($barang['jenis']) }} jenis
+                            </span>
+                        </div>
+                        <p class="mt-3 text-sm font-semibold text-zinc-900">{{ $barang['nama'] }}</p>
+                        <p class="mt-1 text-2xl font-bold text-zinc-950">{{ number_format($barang['jumlah']) }}</p>
+                        <p class="text-xs text-zinc-400">total unit</p>
+                    </div>
+                @empty
+                    <div class="sm:col-span-2 xl:col-span-4 rounded-md border border-dashed border-zinc-200 bg-zinc-50 p-6 text-center">
+                        <p class="text-sm font-semibold text-zinc-700">Belum ada data barang populer</p>
+                        <p class="mt-1 text-xs text-zinc-400">Rekap akan muncul setelah data inventaris tersedia.</p>
+                    </div>
+                @endforelse
+            </div>
+        </div>
+
         {{-- Chart + Overdue --}}
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
 
