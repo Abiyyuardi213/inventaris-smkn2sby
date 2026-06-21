@@ -36,16 +36,20 @@
         @php
             $statusFilter = request('status', '');
             $filterOptions = [
-                ''          => 'Semua',
-                'pending'   => 'Pending',
-                'disetujui' => 'Disetujui',
-                'ditolak'   => 'Ditolak',
+                ''                 => 'Semua',
+                'pending'          => 'Pending',
+                'disetujui_admin'  => 'Menunggu Kepsek',
+                'disetujui_kepsek' => 'Disetujui Final',
+                'ditolak'          => 'Ditolak Admin',
+                'ditolak_kepsek'   => 'Ditolak Kepsek',
             ];
             $filterColors = [
-                ''          => 'bg-zinc-100 text-zinc-700 border-zinc-200 hover:bg-zinc-200',
-                'pending'   => 'bg-amber-50 text-amber-700 border-amber-200 hover:bg-amber-100',
-                'disetujui' => 'bg-green-50 text-green-700 border-green-200 hover:bg-green-100',
-                'ditolak'   => 'bg-red-50 text-red-700 border-red-200 hover:bg-red-100',
+                ''                 => 'bg-zinc-100 text-zinc-700 border-zinc-200 hover:bg-zinc-200',
+                'pending'          => 'bg-amber-50 text-amber-700 border-amber-200 hover:bg-amber-100',
+                'disetujui_admin'  => 'bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100',
+                'disetujui_kepsek' => 'bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100',
+                'ditolak'          => 'bg-red-50 text-red-700 border-red-200 hover:bg-red-100',
+                'ditolak_kepsek'   => 'bg-red-100 text-red-800 border-red-300 hover:bg-red-200',
             ];
         @endphp
         @foreach ($filterOptions as $value => $label)
@@ -95,19 +99,7 @@
                             </td>
                             <td class="px-4 py-3.5 text-zinc-600 text-xs">{{ $pengadaan->pengusul->nama ?? '-' }}</td>
                             <td class="px-4 py-3.5 text-center">
-                                @if ($pengadaan->isPending())
-                                    <span class="inline-flex items-center rounded-full bg-amber-100 px-2.5 py-0.5 text-xs font-semibold text-amber-700 border border-amber-200/60">
-                                        Pending
-                                    </span>
-                                @elseif ($pengadaan->isDisetujui())
-                                    <span class="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-semibold text-green-700 border border-green-200/60">
-                                        Disetujui
-                                    </span>
-                                @else
-                                    <span class="inline-flex items-center rounded-full bg-red-100 px-2.5 py-0.5 text-xs font-semibold text-red-700 border border-red-200/60">
-                                        Ditolak
-                                    </span>
-                                @endif
+                                <x-status-pengadaan-badge :status="$pengadaan->status_usulan" />
                             </td>
                             <td class="px-4 py-3.5 text-right">
                                 <div class="inline-flex items-center justify-end gap-1.5">

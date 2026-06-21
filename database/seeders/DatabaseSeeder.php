@@ -155,5 +155,84 @@ class DatabaseSeeder extends Seeder
                 ]
             );
         }
+
+        // Seeding Pengadaan (Usulan Pengadaan) untuk testing alur approval 2 tahap
+        $testUser = User::where('email', 'test@example.com')->first();
+        $adminUser = User::where('email', 'admin@example.com')->first();
+        $kepsekUser = User::where('email', 'kepalasekolah@example.com')->first();
+
+        $pengadaans = [
+            [
+                'nama_barang_usulan' => 'Proyektor Epson EB-X500',
+                'kategori_id' => $elektronik->id,
+                'jurusan_id' => $rpl->id,
+                'jumlah' => 3,
+                'perkiraan_harga' => 7500000,
+                'alasan_pengadaan' => 'Untuk kebutuhan presentasi dan mengajar di ruang kelas teori RPL.',
+                'status_usulan' => 'pending',
+                'user_id' => $testUser?->id ?? $adminUser?->id,
+            ],
+            [
+                'nama_barang_usulan' => 'Air Conditioner (AC) Daikin 1.5 PK',
+                'kategori_id' => $elektronik->id,
+                'jurusan_id' => $tkj->id,
+                'jumlah' => 2,
+                'perkiraan_harga' => 6000000,
+                'alasan_pengadaan' => 'AC di Lab TKJ 1 sudah sering rusak dan kurang dingin untuk mendinginkan server.',
+                'status_usulan' => 'disetujui_admin',
+                'user_id' => $testUser?->id ?? $adminUser?->id,
+                'approved_by_admin' => $adminUser?->id,
+                'approved_by_admin_at' => now()->subDay(),
+            ],
+            [
+                'nama_barang_usulan' => 'Meja Kursi Guru Set',
+                'kategori_id' => $mebel->id,
+                'jurusan_id' => $rpl->id,
+                'jumlah' => 5,
+                'perkiraan_harga' => 1500000,
+                'alasan_pengadaan' => 'Penggantian meja kursi guru yang sudah rapuh dimakan rayap.',
+                'status_usulan' => 'disetujui_kepsek',
+                'user_id' => $testUser?->id ?? $adminUser?->id,
+                'approved_by_admin' => $adminUser?->id,
+                'approved_by_admin_at' => now()->subDays(3),
+                'approved_by_kepsek' => $kepsekUser?->id,
+                'approved_by_kepsek_at' => now()->subDays(2),
+                'catatan_kepsek' => 'Disetujui, silakan koordinasikan dengan bendahara sarpras untuk realisasi pembelian.',
+            ],
+            [
+                'nama_barang_usulan' => 'Printer HP Laserjet Pro M404dn',
+                'kategori_id' => $elektronik->id,
+                'jurusan_id' => $rpl->id,
+                'jumlah' => 1,
+                'perkiraan_harga' => 4800000,
+                'alasan_pengadaan' => 'Printer untuk mencetak administrasi ujian produktif RPL.',
+                'status_usulan' => 'ditolak',
+                'user_id' => $testUser?->id ?? $adminUser?->id,
+                'approved_by_admin' => $adminUser?->id,
+                'approved_by_admin_at' => now()->subDays(4),
+            ],
+            [
+                'nama_barang_usulan' => 'Kursi Lipat Chitose',
+                'kategori_id' => $mebel->id,
+                'jurusan_id' => $tkj->id,
+                'jumlah' => 30,
+                'perkiraan_harga' => 350000,
+                'alasan_pengadaan' => 'Untuk tambahan tempat duduk rapat jurusan TKJ.',
+                'status_usulan' => 'ditolak_kepsek',
+                'user_id' => $testUser?->id ?? $adminUser?->id,
+                'approved_by_admin' => $adminUser?->id,
+                'approved_by_admin_at' => now()->subDays(5),
+                'approved_by_kepsek' => $kepsekUser?->id,
+                'approved_by_kepsek_at' => now()->subDays(4),
+                'catatan_kepsek' => 'Ditolak sementara karena anggaran sarpras semester ini sudah terpakai sepenuhnya.',
+            ],
+        ];
+
+        foreach ($pengadaans as $pengadaanData) {
+            \App\Models\Pengadaan::firstOrCreate(
+                ['nama_barang_usulan' => $pengadaanData['nama_barang_usulan']],
+                $pengadaanData
+            );
+        }
     }
 }

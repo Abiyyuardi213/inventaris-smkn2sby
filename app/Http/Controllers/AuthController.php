@@ -26,9 +26,7 @@ class AuthController extends Controller
         try {
             $credentials = $request->only('username', 'password');
 
-            $remember = $request->has('remember');
-
-            if (!Auth::attempt($credentials, $remember)) {
+            if (!Auth::attempt($credentials, $request->boolean('remember'))) {
                 return back()
                     ->withErrors(['username' => 'Nama pengguna atau kata sandi salah.'])
                     ->onlyInput('username');
@@ -44,8 +42,8 @@ class AuthController extends Controller
             };
         } catch (\Exception $e) {
             return back()
-                ->withErrors(['nama' => 'Terjadi kesalahan saat login. Silakan coba lagi.'])
-                ->onlyInput('nama');
+                ->withErrors(['username' => 'Terjadi kesalahan saat login. Silakan coba lagi.'])
+                ->onlyInput('username');
         }
     }
 

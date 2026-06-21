@@ -10,6 +10,7 @@ use App\Models\Ruangan;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Storage;
 
 class InventarisController extends Controller
 {
@@ -129,10 +130,90 @@ class InventarisController extends Controller
     public function destroy(Inventaris $inventari): RedirectResponse
     {
         try {
+            // Hapus file QR code di storage sebelum data barang dihapus
+            if ($inventari->qr_code_path) {
+                Storage::disk('public')->delete($inventari->qr_code_path);
+            }
             $inventari->delete();
             return redirect()->route('inventaris.index')->with('success', 'Data inventaris berhasil dihapus.');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Tampilkan halaman cetak label untuk satu barang inventaris.
+     *
+     * @param  \App\Models\Inventaris  $inventari
+     * @return \Illuminate\View\View
+     */
+    public function printLabel(Inventaris $inventari): View
+    {
+        $inventari->load(['kategori', 'jurusan', 'ruangan']);
+        
+        // Pastikan QR code sudah ter-generate (jika data lama belum ada atau bukan format svg)
+        if (empty($inventari->qr_code_path) || !str_ends_with($inventari->qr_code_path, '.svg') || !Storage::disk('public')->exists($inventari->qr_code_path)) {
+            $inventari->generateQrCode();
+            $inventari->saveQuietly();
+        }
+ 
+        return view('inventaris.print-label', ['item' => $inventari]);
+    }
+ 
+    /**
+     * Tampilkan halaman cetak label massal untuk barang inventaris terpilih.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\View\View|\Illuminate\Http\RedirectResponse
+     */
+    public function printLabelBulk(Request $request)
+    {
+        // Mendapatkan array ID dari input (misal 'ids' query string atau form array)
+        $ids = $request->input('ids');
+ 
+        if (empty($ids)) {
+            return redirect()->back()->with('error', 'Pilih minimal satu barang untuk mencetak label.');
+        }
+ 
+        // Jika dikirim sebagai string terpisah koma (misal ?ids=uuid1,uuid2)
+        if (is_string($ids)) {
+            $ids = explode(',', $ids);
+        }
+ 
+        // Fetch all matching items with necessary relations
+        $items = Inventaris::with(['kategori', 'jurusan', 'ruangan'])
+            ->whereIn('id', $ids)
+            ->get();
+ 
+        if ($items->isEmpty()) {
+            return redirect()->back()->with('error', 'Barang inventaris tidak ditemukan.');
+        }
+ 
+        // Pastikan QR code masing-masing item sudah ter-generate (jika data lama belum ada atau bukan format svg)
+        foreach ($items as $item) {
+            if (empty($item->qr_code_path) || !str_ends_with($item->qr_code_path, '.svg') || !Storage::disk('public')->exists($item->qr_code_path)) {
+                $item->generateQrCode();
+                $item->saveQuietly();
+            }
+        }
+ 
+        return view('inventaris.print-label-bulk', compact('items'));
+    }
+
+    /**
+     * Regenerasi QR code secara manual untuk satu barang inventaris.
+     *
+     * @param  \App\Models\Inventaris  $inventari
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function regenerateQr(Inventaris $inventari): RedirectResponse
+    {
+        try {
+            $inventari->generateQrCode();
+            $inventari->saveQuietly();
+            return redirect()->back()->with('success', 'QR Code berhasil diperbarui.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Gagal memperbarui QR Code: ' . $e->getMessage());
         }
     }
 }
