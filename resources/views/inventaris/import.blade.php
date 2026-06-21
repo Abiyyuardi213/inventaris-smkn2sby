@@ -33,7 +33,7 @@
             <form action="{{ route('inventaris.imports.store') }}" method="POST" enctype="multipart/form-data" class="space-y-5">
                 @csrf
                 <div class="rounded-md border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
-                    Kolom relasi wajib diisi memakai ID: <strong>kategori_id</strong>, <strong>jurusan_id</strong>, dan <strong>ruangan_id</strong>. Kolom <strong>kode_inventaris</strong> tidak perlu diisi karena akan dibuat otomatis dari nama barang saat import disetujui.
+                    Kolom relasi wajib diisi memakai ID: <strong>kategori_id</strong>, <strong>jurusan_id</strong>, dan <strong>ruangan_id</strong>. Kolom <strong>kode_inventaris</strong> tidak perlu diisi karena akan dibuat otomatis dari nama barang saat import disetujui. Kolom <strong>harga_total</strong> tidak diimport karena dihitung otomatis dari <strong>harga_satuan x jumlah_total</strong>. Kolom <strong>sumber_dana</strong> dan <strong>foto_url</strong> opsional.
                 </div>
 
                 <div class="space-y-2">

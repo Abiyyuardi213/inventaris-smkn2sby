@@ -49,6 +49,13 @@
                 class="inline-flex items-center justify-center gap-2 rounded-md border border-zinc-200 bg-white text-zinc-700 hover:bg-zinc-50 px-3 py-2 text-sm font-medium shadow-sm transition-all duration-150">
                 Export CSV
             </a>
+            <a href="{{ route('inventaris.print-pdf') }}" target="_blank"
+                class="inline-flex items-center justify-center gap-2 rounded-md border border-sky-200 bg-sky-50 text-sky-700 hover:bg-sky-100 px-3 py-2 text-sm font-medium shadow-sm transition-all duration-150">
+                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0 1 10.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096a42.415 42.415 0 0 0-10.56 0m10.56 0L17.66 18" />
+                </svg>
+                Cetak PDF
+            </a>
             <a href="{{ route('inventaris.create') }}"
                 class="inline-flex items-center justify-center gap-2 rounded-md bg-zinc-900 text-zinc-50 hover:bg-zinc-800 px-4 py-2 text-sm font-medium shadow-sm transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 cursor-pointer">
                 <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
@@ -61,7 +68,7 @@
 
     {{-- Filters Card --}}
     <div class="rounded-lg border border-zinc-200 bg-white p-5 shadow-sm">
-        <form method="GET" action="{{ route('inventaris.index') }}" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+        <form method="GET" action="{{ route('inventaris.index') }}" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4">
             {{-- Kategori --}}
             <div class="space-y-1.5">
                 <label for="kategori_id" class="text-xs font-semibold text-zinc-500 uppercase tracking-wider">Kategori</label>
@@ -78,7 +85,7 @@
             {{-- Unit Kerja --}}
             <div class="space-y-1.5">
                 <label for="jurusan_id" class="text-xs font-semibold text-zinc-500 uppercase tracking-wider">Unit Kerja</label>
-                <select id="jurusan_id" name="jurusan_id" class="flex h-9 w-full rounded-md border border-zinc-200 bg-transparent px-3 py-1 text-xs text-zinc-900 focus:outline-none focus:ring-1 focus:ring-zinc-950" onchange="filterRuanganByJurusan(); this.form.submit();">
+                <select id="jurusan_id" name="jurusan_id" class="flex h-9 w-full rounded-md border border-zinc-200 bg-transparent px-3 py-1 text-xs text-zinc-900 focus:outline-none focus:ring-1 focus:ring-zinc-950" onchange="filterRuanganByJurusan(true); this.form.submit();">
                     <option value="">Semua Unit Kerja</option>
                     @foreach($jurusans as $jurusan)
                         <option value="{{ $jurusan->id }}" {{ request('jurusan_id') == $jurusan->id ? 'selected' : '' }}>
@@ -112,6 +119,19 @@
                 </select>
             </div>
 
+            {{-- Tahun Pengadaan --}}
+            <div class="space-y-1.5">
+                <label for="tahun_pengadaan" class="text-xs font-semibold text-zinc-500 uppercase tracking-wider">Tahun</label>
+                <select id="tahun_pengadaan" name="tahun_pengadaan" class="flex h-9 w-full rounded-md border border-zinc-200 bg-transparent px-3 py-1 text-xs text-zinc-900 focus:outline-none focus:ring-1 focus:ring-zinc-950" onchange="this.form.submit()">
+                    <option value="">Semua Tahun</option>
+                    @foreach($tahunPengadaans as $tahun)
+                        <option value="{{ $tahun }}" {{ request('tahun_pengadaan') == $tahun ? 'selected' : '' }}>
+                            {{ $tahun }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+
             {{-- Reset Filters --}}
             <div class="flex items-end">
                 <a href="{{ route('inventaris.index') }}" class="flex h-9 items-center justify-center w-full rounded-md border border-zinc-200 text-xs font-medium text-zinc-700 bg-white hover:bg-zinc-50 transition-colors shadow-sm gap-1.5">
@@ -133,13 +153,15 @@
                         <th scope="col" class="px-6 py-4 font-semibold w-10 text-center">
                             <input type="checkbox" id="select_all" class="rounded border-zinc-300 text-zinc-950 focus:ring-zinc-900 cursor-pointer">
                         </th>
-                        <th scope="col" class="px-6 py-4 font-semibold w-12">No</th>
+                        <th scope="col" class="px-6 py-4 font-semibold w-12">Nomor</th>
+                        <th scope="col" class="px-6 py-4 font-semibold">Tanggal Pengadaan</th>
                         <th scope="col" class="px-6 py-4 font-semibold">Kode</th>
                         <th scope="col" class="px-6 py-4 font-semibold">Nama Barang</th>
-                        <th scope="col" class="px-6 py-4 font-semibold">Kategori</th>
+                        <th scope="col" class="px-6 py-4 font-semibold">Merek</th>
+                        <th scope="col" class="px-6 py-4 font-semibold text-center">Jumlah</th>
+                        <th scope="col" class="px-6 py-4 font-semibold text-right">Harga Satuan</th>
+                        <th scope="col" class="px-6 py-4 font-semibold text-right">Harga Total</th>
                         <th scope="col" class="px-6 py-4 font-semibold">Lokasi</th>
-                        <th scope="col" class="px-6 py-4 font-semibold text-center">Qty</th>
-                        <th scope="col" class="px-6 py-4 font-semibold text-center">Kondisi</th>
                         <th scope="col" class="px-6 py-4 font-semibold text-right">Aksi</th>
                     </tr>
                 </thead>
@@ -152,39 +174,45 @@
                             <td class="px-6 py-4 text-zinc-400 font-mono text-xs">
                                 {{ ($inventaris->currentPage() - 1) * $inventaris->perPage() + $loop->iteration }}
                             </td>
+                            <td class="px-6 py-4 text-zinc-600">
+                                <div class="font-medium text-xs text-zinc-700">{{ $item->tanggal_pengadaan?->format('d M Y') ?? '-' }}</div>
+                                <div class="text-[10px] text-zinc-400">{{ $item->created_at?->format('H:i') ?? '' }}</div>
+                            </td>
                             <td class="px-6 py-4">
                                 <span class="inline-flex items-center rounded-md bg-zinc-100 px-2.5 py-1 text-xs font-mono font-semibold text-zinc-700 border border-zinc-200/60 tracking-wide">
                                     {{ $item->kode_inventaris }}
                                 </span>
                             </td>
                             <td class="px-6 py-4">
-                                <div class="font-medium text-zinc-900">{{ $item->nama_barang }}</div>
-                                <div class="text-xs text-zinc-400">{{ $item->merek }}</div>
+                                <div class="flex items-center gap-2 font-medium text-zinc-900">
+                                    <span>{{ $item->nama_barang }}</span>
+                                    @if ($item->foto_url)
+                                        <a href="{{ $item->foto_url }}" target="_blank" rel="noopener noreferrer"
+                                           class="inline-flex h-5 w-5 items-center justify-center rounded-md border border-sky-100 bg-sky-50 text-sky-700 hover:bg-sky-100"
+                                           title="Buka foto inventaris">
+                                            <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Z" />
+                                            </svg>
+                                        </a>
+                                    @endif
+                                </div>
+                                <div class="text-xs text-zinc-400">{{ $item->spesifikasi }}</div>
                             </td>
-                            <td class="px-6 py-4 text-zinc-600">
-                                {{ $item->kategori->nama_kategori }}
-                            </td>
-                            <td class="px-6 py-4 text-zinc-600">
-                                <div class="font-medium text-xs text-zinc-700">{{ $item->ruangan->nama_ruangan ?? '-' }}</div>
-                                <div class="text-[10px] text-zinc-400">{{ $item->jurusan->nama_jurusan ?? '-' }}</div>
+                            <td class="px-6 py-4 text-zinc-700">
+                                {{ $item->merek }}
                             </td>
                             <td class="px-6 py-4 text-center font-semibold text-zinc-800">
                                 {{ $item->jumlah_total }}
                             </td>
-                            <td class="px-6 py-4 text-center">
-                                @if($item->kondisi === 'baik')
-                                    <span class="inline-flex items-center rounded-md bg-emerald-50 px-2 py-1 text-xs font-medium text-emerald-700 border border-emerald-200/50">
-                                        Baik
-                                    </span>
-                                @elseif($item->kondisi === 'layak')
-                                    <span class="inline-flex items-center rounded-md bg-amber-50 px-2 py-1 text-xs font-medium text-amber-700 border border-amber-200/50">
-                                        Layak
-                                    </span>
-                                @else
-                                    <span class="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 border border-red-200/50">
-                                        Rusak
-                                    </span>
-                                @endif
+                            <td class="px-6 py-4 text-right font-semibold text-zinc-700">
+                                Rp {{ number_format($item->harga_satuan ?? 0, 0, ',', '.') }}
+                            </td>
+                            <td class="px-6 py-4 text-right font-bold text-zinc-900">
+                                Rp {{ number_format($item->harga_total, 0, ',', '.') }}
+                            </td>
+                            <td class="px-6 py-4 text-zinc-600">
+                                <div class="font-medium text-xs text-zinc-700">{{ $item->ruangan->nama_ruangan ?? '-' }}</div>
+                                <div class="text-[10px] text-zinc-400">{{ $item->jurusan->nama_jurusan ?? '-' }}</div>
                             </td>
                             <td class="px-6 py-4 text-right">
                                 <div class="inline-flex items-center justify-end gap-2">
@@ -238,7 +266,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="9" class="px-6 py-16 text-center text-zinc-500">
+                            <td colspan="12" class="px-6 py-16 text-center text-zinc-500">
                                 <div class="flex flex-col items-center justify-center gap-3">
                                     <div class="w-14 h-14 rounded-full bg-zinc-100 flex items-center justify-center">
                                         <svg class="w-7 h-7 text-zinc-300" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -300,10 +328,14 @@
     }
 
     // Fungsi untuk menyaring opsi ruangan berdasarkan unit kerja/jurusan yang dipilih
-    function filterRuanganByJurusan() {
+    function filterRuanganByJurusan(resetRuangan = false) {
         const jurusanSelect = document.getElementById('jurusan_id');
         const ruanganSelect = document.getElementById('ruangan_id');
         if (!jurusanSelect || !ruanganSelect) return;
+
+        if (resetRuangan) {
+            ruanganSelect.value = "";
+        }
 
         const selectedJurusanId = jurusanSelect.value;
         const options = ruanganSelect.options;

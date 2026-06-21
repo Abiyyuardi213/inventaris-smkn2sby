@@ -13,39 +13,7 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call(RoleSeeder::class);
-
-        $superAdminRole = \App\Models\Role::where('slug', 'super-admin')->first();
-        $kepalaSekolahRole = \App\Models\Role::where('slug', 'kepala-sekolah')->first();
-
-        User::updateOrCreate(
-            ['email' => 'test@example.com'],
-            [
-                'nama' => 'Test User',
-                'username' => 'testuser',
-                'password' => bcrypt('password'),
-                'role_id' => $superAdminRole?->id,
-            ]
-        );
-
-        User::updateOrCreate(
-            ['email' => 'admin@example.com'],
-            [
-                'nama' => 'admin sarpras',
-                'username' => 'admin',
-                'password' => bcrypt('12345678'),
-                'role_id' => $superAdminRole?->id,
-            ]
-        );
-
-        User::updateOrCreate(
-            ['email' => 'kepalasekolah@example.com'],
-            [
-                'nama' => 'Kepala Sekolah',
-                'username' => 'kepalasekolah',
-                'password' => bcrypt('12345678'),
-                'role_id' => $kepalaSekolahRole?->id,
-            ]
-        );
+        $this->call(UserSeeder::class);
 
         // Seed Jurusans
         $rpl = \App\Models\Jurusan::firstOrCreate(
@@ -151,14 +119,14 @@ class DatabaseSeeder extends Seeder
                     'tanggal_pinjam' => now()->toDateString(),
                     'tanggal_estimasi_kembali' => now()->addDays(3)->toDateString(),
                     'status' => 'Dipinjam',
-                    'user_id' => User::first()?->id,
+                    'user_id' => User::where('email', 'petugassarpras@example.com')->first()?->id,
                 ]
             );
         }
 
         // Seeding Pengadaan (Usulan Pengadaan) untuk testing alur approval 2 tahap
-        $testUser = User::where('email', 'test@example.com')->first();
-        $adminUser = User::where('email', 'admin@example.com')->first();
+        $pengusulUser = User::where('email', 'petugassarpras@example.com')->first();
+        $adminUser = User::where('email', 'adminutama@example.com')->first();
         $kepsekUser = User::where('email', 'kepalasekolah@example.com')->first();
 
         $pengadaans = [
@@ -170,7 +138,7 @@ class DatabaseSeeder extends Seeder
                 'perkiraan_harga' => 7500000,
                 'alasan_pengadaan' => 'Untuk kebutuhan presentasi dan mengajar di ruang kelas teori RPL.',
                 'status_usulan' => 'pending',
-                'user_id' => $testUser?->id ?? $adminUser?->id,
+                'user_id' => $pengusulUser?->id ?? $adminUser?->id,
             ],
             [
                 'nama_barang_usulan' => 'Air Conditioner (AC) Daikin 1.5 PK',
@@ -180,7 +148,7 @@ class DatabaseSeeder extends Seeder
                 'perkiraan_harga' => 6000000,
                 'alasan_pengadaan' => 'AC di Lab TKJ 1 sudah sering rusak dan kurang dingin untuk mendinginkan server.',
                 'status_usulan' => 'disetujui_admin',
-                'user_id' => $testUser?->id ?? $adminUser?->id,
+                'user_id' => $pengusulUser?->id ?? $adminUser?->id,
                 'approved_by_admin' => $adminUser?->id,
                 'approved_by_admin_at' => now()->subDay(),
             ],
@@ -192,7 +160,7 @@ class DatabaseSeeder extends Seeder
                 'perkiraan_harga' => 1500000,
                 'alasan_pengadaan' => 'Penggantian meja kursi guru yang sudah rapuh dimakan rayap.',
                 'status_usulan' => 'disetujui_kepsek',
-                'user_id' => $testUser?->id ?? $adminUser?->id,
+                'user_id' => $pengusulUser?->id ?? $adminUser?->id,
                 'approved_by_admin' => $adminUser?->id,
                 'approved_by_admin_at' => now()->subDays(3),
                 'approved_by_kepsek' => $kepsekUser?->id,
@@ -207,7 +175,7 @@ class DatabaseSeeder extends Seeder
                 'perkiraan_harga' => 4800000,
                 'alasan_pengadaan' => 'Printer untuk mencetak administrasi ujian produktif RPL.',
                 'status_usulan' => 'ditolak',
-                'user_id' => $testUser?->id ?? $adminUser?->id,
+                'user_id' => $pengusulUser?->id ?? $adminUser?->id,
                 'approved_by_admin' => $adminUser?->id,
                 'approved_by_admin_at' => now()->subDays(4),
             ],
@@ -219,7 +187,7 @@ class DatabaseSeeder extends Seeder
                 'perkiraan_harga' => 350000,
                 'alasan_pengadaan' => 'Untuk tambahan tempat duduk rapat jurusan TKJ.',
                 'status_usulan' => 'ditolak_kepsek',
-                'user_id' => $testUser?->id ?? $adminUser?->id,
+                'user_id' => $pengusulUser?->id ?? $adminUser?->id,
                 'approved_by_admin' => $adminUser?->id,
                 'approved_by_admin_at' => now()->subDays(5),
                 'approved_by_kepsek' => $kepsekUser?->id,

@@ -20,9 +20,12 @@ use App\Models\Peminjaman;
     'jurusan_id',
     'ruangan_id',
     'jumlah_total',
+    'harga_satuan',
+    'sumber_dana',
     'kondisi',
     'tanggal_pengadaan',
-    'qr_code_path'
+    'qr_code_path',
+    'foto_url'
 ])]
 class Inventaris extends Model
 {
@@ -45,6 +48,7 @@ class Inventaris extends Model
         return [
             'tanggal_pengadaan' => 'date',
             'jumlah_total' => 'integer',
+            'harga_satuan' => 'integer',
         ];
     }
 
@@ -92,6 +96,43 @@ class Inventaris extends Model
         
         // Set path di model
         $this->qr_code_path = $relativePath;
+    }
+
+    public function getFotoPreviewUrlAttribute(): ?string
+    {
+        if (blank($this->foto_url)) {
+            return null;
+        }
+
+        $fileId = $this->googleDriveFileId();
+
+        if ($fileId === null) {
+            return $this->foto_url;
+        }
+
+        return "https://drive.google.com/thumbnail?id={$fileId}&sz=w700";
+    }
+
+    public function googleDriveFileId(): ?string
+    {
+        if (blank($this->foto_url)) {
+            return null;
+        }
+
+        if (preg_match('/\/file\/d\/([^\/]+)/', $this->foto_url, $matches)) {
+            return $matches[1];
+        }
+
+        if (preg_match('/[?&]id=([^&]+)/', $this->foto_url, $matches)) {
+            return $matches[1];
+        }
+
+        return null;
+    }
+
+    public function getHargaTotalAttribute(): int
+    {
+        return (int) $this->harga_satuan * (int) $this->jumlah_total;
     }
 
     /**

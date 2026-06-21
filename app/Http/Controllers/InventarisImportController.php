@@ -129,8 +129,11 @@ class InventarisImportController extends Controller
             'jurusan_id' => 'required|string',
             'ruangan_id' => 'required|string',
             'jumlah_total' => 'required|integer|min:0',
+            'harga_satuan' => 'required|integer|min:0',
+            'sumber_dana' => 'nullable|string|max:255',
             'kondisi' => 'required|in:baik,layak,rusak',
             'tanggal_pengadaan' => 'required|date',
+            'foto_url' => 'nullable|url|max:2048',
         ]);
 
         $errors = $this->validatePayload($payload);
@@ -180,8 +183,11 @@ class InventarisImportController extends Controller
                     'jurusan_id' => $payload['jurusan_id'],
                     'ruangan_id' => $payload['ruangan_id'],
                     'jumlah_total' => (int) $payload['jumlah_total'],
+                    'harga_satuan' => (int) $payload['harga_satuan'],
+                    'sumber_dana' => $payload['sumber_dana'] ?? null,
                     'kondisi' => $payload['kondisi'],
                     'tanggal_pengadaan' => $payload['tanggal_pengadaan'],
+                    'foto_url' => $payload['foto_url'] ?? null,
                 ]);
 
                 $row->update([
@@ -245,7 +251,7 @@ class InventarisImportController extends Controller
     private function validatePayload(array $payload): array
     {
         $errors = [];
-        $required = InventarisSpreadsheetService::HEADERS;
+        $required = array_values(array_diff(InventarisSpreadsheetService::HEADERS, ['foto_url']));
 
         foreach ($required as $field) {
             if (!isset($payload[$field]) || trim((string) $payload[$field]) === '') {
@@ -276,12 +282,20 @@ class InventarisImportController extends Controller
             $errors[] = 'jumlah_total harus berupa angka minimal 0.';
         }
 
+        if (filter_var($payload['harga_satuan'], FILTER_VALIDATE_INT, ['options' => ['min_range' => 0]]) === false) {
+            $errors[] = 'harga_satuan harus berupa angka minimal 0.';
+        }
+
         if (!in_array($payload['kondisi'], ['baik', 'layak', 'rusak'], true)) {
             $errors[] = 'kondisi harus salah satu dari: baik, layak, rusak.';
         }
 
         if (!strtotime($payload['tanggal_pengadaan'])) {
             $errors[] = 'tanggal_pengadaan harus berupa tanggal valid, contoh: 2026-06-04.';
+        }
+
+        if (($payload['foto_url'] ?? '') !== '' && filter_var($payload['foto_url'], FILTER_VALIDATE_URL) === false) {
+            $errors[] = 'foto_url harus berupa URL valid.';
         }
 
         return $errors;

@@ -47,6 +47,7 @@
                         <th class="px-4 py-3">Nama Barang</th>
                         <th class="px-4 py-3">Relasi</th>
                         <th class="px-4 py-3">Qty</th>
+                        <th class="px-4 py-3 text-right">Harga</th>
                         <th class="px-4 py-3">Kondisi</th>
                         <th class="px-4 py-3">Tanggal</th>
                         <th class="px-4 py-3">Validasi</th>
@@ -64,6 +65,11 @@
                             <td class="px-4 py-3">
                                 <p class="font-medium text-zinc-900">{{ $payload['nama_barang'] ?? '-' }}</p>
                                 <p class="text-xs text-zinc-500">{{ $payload['merek'] ?? '-' }}</p>
+                                @if(!empty($payload['foto_url']))
+                                    <a href="{{ $payload['foto_url'] }}" target="_blank" rel="noopener noreferrer" class="mt-1 inline-flex text-xs font-medium text-sky-700 hover:underline">
+                                        Foto
+                                    </a>
+                                @endif
                             </td>
                             <td class="px-4 py-3 text-xs font-mono text-zinc-500">
                                 <div class="font-sans text-xs text-zinc-700">Kategori: {{ $kategoris[$payload['kategori_id'] ?? ''] ?? 'Tidak ditemukan' }}</div>
@@ -71,6 +77,10 @@
                                 <div class="font-sans text-xs text-zinc-700">Ruangan: {{ $ruangans[$payload['ruangan_id'] ?? ''] ?? 'Tidak ditemukan' }}</div>
                             </td>
                             <td class="px-4 py-3 font-semibold text-zinc-900">{{ $payload['jumlah_total'] ?? '-' }}</td>
+                            <td class="px-4 py-3 text-right text-xs font-semibold text-zinc-700">
+                                Rp {{ number_format((int) ($payload['harga_satuan'] ?? 0), 0, ',', '.') }}
+                                <span class="block text-[10px] font-medium text-zinc-400">{{ $payload['sumber_dana'] ?? '-' }}</span>
+                            </td>
                             <td class="px-4 py-3">{{ $payload['kondisi'] ?? '-' }}</td>
                             <td class="px-4 py-3">{{ $payload['tanggal_pengadaan'] ?? '-' }}</td>
                             <td class="px-4 py-3">

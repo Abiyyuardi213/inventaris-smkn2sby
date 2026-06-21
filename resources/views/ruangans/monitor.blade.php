@@ -125,11 +125,20 @@
                         <h3 id="asset-modal-title" class="mt-2 text-2xl font-extrabold tracking-tight">-</h3>
                         <p id="asset-modal-subtitle" class="mt-1 text-sm font-medium text-emerald-50">-</p>
                     </div>
-                    <button type="button" onclick="closeAssetModal()" class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white/15 text-white ring-1 ring-white/20 transition-colors hover:bg-white/25 cursor-pointer">
-                        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
-                        </svg>
-                    </button>
+                    <div class="flex shrink-0 items-center gap-2">
+                        <a id="asset-modal-print-link" href="#" target="_blank" rel="noopener noreferrer"
+                           class="inline-flex h-9 items-center justify-center gap-1.5 rounded-lg bg-white px-3 text-xs font-extrabold text-emerald-700 shadow-sm ring-1 ring-white/30 transition-colors hover:bg-emerald-50">
+                            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0 1 10.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096a42.415 42.415 0 0 0-10.56 0m10.56 0L17.66 18m0 0a2.25 2.25 0 0 1-2.25 2.25H8.59A2.25 2.25 0 0 1 6.34 18m11.318-5.318a4.5 4.5 0 1 0-6.364-6.364 4.5 4.5 0 0 0 6.364 6.364Z" />
+                            </svg>
+                            Print
+                        </a>
+                        <button type="button" onclick="closeAssetModal()" class="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-white/15 text-white ring-1 ring-white/20 transition-colors hover:bg-white/25 cursor-pointer">
+                            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -162,6 +171,7 @@
 
         document.getElementById('asset-modal-title').textContent = room.nama;
         document.getElementById('asset-modal-subtitle').textContent = `${room.unitKerja} - ${room.kodeUnit}`;
+        document.getElementById('asset-modal-print-link').href = room.printUrl;
         document.getElementById('asset-modal-summary').innerHTML = `
             <div class="rounded-xl border border-emerald-100 bg-emerald-50 px-4 py-3">
                 <p class="text-[11px] font-bold uppercase tracking-wide text-emerald-700">Jenis Aset</p>

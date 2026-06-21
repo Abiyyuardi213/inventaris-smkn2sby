@@ -18,19 +18,48 @@ class InventarisController extends Controller
     {
         $kategoris = Kategori::orderBy('nama_kategori')->get();
         $jurusans = Jurusan::orderBy('nama_jurusan')->get();
-        $ruangans = Ruangan::orderBy('nama_ruangan')->get();
+        $ruangans = Ruangan::when(request('jurusan_id'), fn ($query) => $query->where('jurusan_id', request('jurusan_id')))
+            ->orderBy('nama_ruangan')
+            ->get();
+        $tahunPengadaans = Inventaris::query()
+            ->selectRaw('YEAR(tanggal_pengadaan) as tahun')
+            ->whereNotNull('tanggal_pengadaan')
+            ->distinct()
+            ->orderByDesc('tahun')
+            ->pluck('tahun');
 
-        // Filter opsional by kategori, jurusan, ruangan, atau kondisi
+        // Filter opsional by kategori, jurusan, ruangan, tahun pengadaan, atau kondisi
         $inventaris = Inventaris::with(['kategori', 'jurusan', 'ruangan'])
             ->when(request('kategori_id'), fn($q) => $q->where('kategori_id', request('kategori_id')))
             ->when(request('jurusan_id'), fn($q) => $q->where('jurusan_id', request('jurusan_id')))
             ->when(request('ruangan_id'), fn($q) => $q->where('ruangan_id', request('ruangan_id')))
+            ->when(request('tahun_pengadaan'), fn($q) => $q->whereYear('tanggal_pengadaan', request('tahun_pengadaan')))
             ->when(request('kondisi'), fn($q) => $q->where('kondisi', request('kondisi')))
             ->latest()
             ->paginate(10)
             ->withQueryString();
 
-        return view('inventaris.index', compact('inventaris', 'kategoris', 'jurusans', 'ruangans'));
+        return view('inventaris.index', compact('inventaris', 'kategoris', 'jurusans', 'ruangans', 'tahunPengadaans'));
+    }
+
+    public function printPdf(): View
+    {
+        $ruangans = Ruangan::with([
+                'jurusan',
+                'inventaris' => fn ($query) => $query
+                    ->with('kategori')
+                    ->orderBy('nama_barang'),
+            ])
+            ->withCount('inventaris')
+            ->withSum('inventaris as total_unit', 'jumlah_total')
+            ->whereHas('inventaris')
+            ->orderBy('nama_ruangan')
+            ->get();
+
+        $totalJenis = $ruangans->sum('inventaris_count');
+        $totalUnit = $ruangans->sum(fn (Ruangan $ruangan) => $ruangan->total_unit ?? 0);
+
+        return view('inventaris.print-pdf', compact('ruangans', 'totalJenis', 'totalUnit'));
     }
 
     public function create(): View
@@ -63,8 +92,11 @@ class InventarisController extends Controller
                 }
             ],
             'jumlah_total' => 'required|integer|min:0',
+            'harga_satuan' => 'required|integer|min:0',
+            'sumber_dana' => 'nullable|string|max:255',
             'kondisi' => 'required|in:baik,layak,rusak',
             'tanggal_pengadaan' => 'required|date',
+            'foto_url' => 'nullable|url|max:2048',
         ]);
 
         Inventaris::create($validated);
@@ -118,8 +150,11 @@ class InventarisController extends Controller
                 }
             ],
             'jumlah_total' => 'required|integer|min:0',
+            'harga_satuan' => 'required|integer|min:0',
+            'sumber_dana' => 'nullable|string|max:255',
             'kondisi' => 'required|in:baik,layak,rusak',
             'tanggal_pengadaan' => 'required|date',
+            'foto_url' => 'nullable|url|max:2048',
         ]);
 
         $inventari->update($validated);
