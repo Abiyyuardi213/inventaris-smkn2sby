@@ -1,7 +1,7 @@
 <header class="h-16 border-b border-zinc-200 bg-white flex items-center justify-between px-6 md:px-8 shrink-0">
     <!-- Left: Mobile Menu Trigger and Title -->
     <div class="flex items-center gap-4">
-        <button class="md:hidden p-2 rounded-md text-zinc-500 hover:bg-zinc-100">
+        <button type="button" onclick="openMobileSidebar()" class="md:hidden p-2 rounded-md text-zinc-500 hover:bg-zinc-100" aria-label="Buka menu">
             <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
             </svg>

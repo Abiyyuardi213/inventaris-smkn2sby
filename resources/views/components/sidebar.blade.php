@@ -1,14 +1,25 @@
 @php
     $currentUser = auth()->user();
+    $sidebarMode = $sidebarMode ?? 'desktop';
+    $isMobileSidebar = $sidebarMode === 'mobile';
 @endphp
 
-<aside class="w-72 border-r border-zinc-200 bg-white flex-shrink-0 hidden md:flex flex-col h-full">
+<aside class="{{ $isMobileSidebar ? 'flex h-full w-72 max-w-[85vw]' : 'hidden md:flex h-full w-72' }} border-r border-zinc-200 bg-white flex-shrink-0 flex-col">
     <!-- Sidebar Header -->
-    <div class="h-16 flex items-center px-6 border-b border-zinc-200 gap-2.5">
-        <div class="w-8 h-8 rounded-lg bg-zinc-900 flex items-center justify-center text-white overflow-hidden p-1">
-            <img src="{{ asset('image/smkn2sby.png') }}" alt="Logo SMKN 2 Surabaya" class="w-full h-full object-contain">
+    <div class="h-16 flex items-center justify-between px-6 border-b border-zinc-200 gap-2.5">
+        <div class="flex items-center gap-2.5 min-w-0">
+            <div class="w-8 h-8 rounded-lg bg-zinc-900 flex items-center justify-center text-white overflow-hidden p-1 shrink-0">
+                <img src="{{ asset('image/smkn2sby.png') }}" alt="Logo SMKN 2 Surabaya" class="w-full h-full object-contain">
+            </div>
+            <span class="font-semibold text-zinc-900 tracking-tight truncate">Inventaris SMKN 2 SBY</span>
         </div>
-        <span class="font-semibold text-zinc-900 tracking-tight">Inventaris SMKN 2 SBY</span>
+        @if($isMobileSidebar)
+            <button type="button" onclick="closeMobileSidebar()" class="inline-flex h-9 w-9 items-center justify-center rounded-md text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900" aria-label="Tutup menu">
+                <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                </svg>
+            </button>
+        @endif
     </div>
 
     <!-- Navigation Links -->
