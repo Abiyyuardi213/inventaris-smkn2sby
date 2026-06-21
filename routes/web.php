@@ -64,6 +64,8 @@ Route::middleware('auth')->prefix('admin')->group(function () {
             ->name('inventaris.export');
         Route::get('inventaris/print-pdf', [InventarisController::class, 'printPdf'])->name('inventaris.print-pdf');
         Route::get('inventaris/print-label-bulk', [InventarisController::class, 'printLabelBulk'])->name('inventaris.print-label-bulk');
+        Route::get('inventaris/scan', [InventarisController::class, 'scan'])->name('inventaris.scan');
+        Route::get('inventaris/scan/resolve', [InventarisController::class, 'resolveScan'])->name('inventaris.scan.resolve');
         Route::get('inventaris/{inventari}/print-label', [InventarisController::class, 'printLabel'])->name('inventaris.print-label');
         Route::post('inventaris/{inventari}/regenerate-qr', [InventarisController::class, 'regenerateQr'])->name('inventaris.regenerate-qr');
         Route::resource('inventaris', InventarisController::class);
