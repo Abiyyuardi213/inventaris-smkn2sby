@@ -26,6 +26,13 @@
         <!-- Sidebar Component -->
         @include('components.sidebar')
 
+        <div id="mobile-sidebar" class="fixed inset-0 z-50 hidden md:hidden">
+            <div id="mobile-sidebar-backdrop" class="absolute inset-0 bg-zinc-950/50 opacity-0 transition-opacity duration-200" onclick="closeMobileSidebar()"></div>
+            <div id="mobile-sidebar-panel" class="relative h-full -translate-x-full transition-transform duration-200 ease-out">
+                @include('components.sidebar', ['sidebarMode' => 'mobile'])
+            </div>
+        </div>
+
         <!-- Main Content Area -->
         <div class="flex flex-col flex-1 overflow-y-auto">
             <!-- Navbar Component -->
@@ -43,6 +50,56 @@
 
     <!-- SweetAlert2 Toast Notifications -->
     <script>
+        function openMobileSidebar() {
+            const sidebar = document.getElementById('mobile-sidebar');
+            const backdrop = document.getElementById('mobile-sidebar-backdrop');
+            const panel = document.getElementById('mobile-sidebar-panel');
+
+            if (!sidebar || !backdrop || !panel) return;
+
+            sidebar.classList.remove('hidden');
+            document.body.classList.add('overflow-hidden');
+
+            requestAnimationFrame(() => {
+                backdrop.classList.remove('opacity-0');
+                backdrop.classList.add('opacity-100');
+                panel.classList.remove('-translate-x-full');
+                panel.classList.add('translate-x-0');
+            });
+        }
+
+        function closeMobileSidebar() {
+            const sidebar = document.getElementById('mobile-sidebar');
+            const backdrop = document.getElementById('mobile-sidebar-backdrop');
+            const panel = document.getElementById('mobile-sidebar-panel');
+
+            if (!sidebar || !backdrop || !panel) return;
+
+            backdrop.classList.add('opacity-0');
+            backdrop.classList.remove('opacity-100');
+            panel.classList.add('-translate-x-full');
+            panel.classList.remove('translate-x-0');
+            document.body.classList.remove('overflow-hidden');
+
+            window.setTimeout(() => {
+                sidebar.classList.add('hidden');
+            }, 200);
+        }
+
+        document.addEventListener('click', (event) => {
+            const link = event.target.closest('#mobile-sidebar a');
+
+            if (link) {
+                closeMobileSidebar();
+            }
+        });
+
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape') {
+                closeMobileSidebar();
+            }
+        });
+
         const Toast = Swal.mixin({
             toast: true,
             position: 'top-end',
