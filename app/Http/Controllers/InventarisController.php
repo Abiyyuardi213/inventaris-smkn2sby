@@ -8,6 +8,7 @@ use App\Models\Kategori;
 use App\Models\Jurusan;
 use App\Models\Ruangan;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Storage;
@@ -60,6 +61,75 @@ class InventarisController extends Controller
         $totalUnit = $ruangans->sum(fn (Ruangan $ruangan) => $ruangan->total_unit ?? 0);
 
         return view('inventaris.print-pdf', compact('ruangans', 'totalJenis', 'totalUnit'));
+    }
+
+    public function scan(): View
+    {
+        return view('inventaris.scan');
+    }
+
+    public function resolveScan(Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'value' => 'required|string|max:2048',
+        ]);
+
+        $scanValue = trim($validated['value']);
+        $candidate = $this->extractInventarisIdentifier($scanValue);
+
+        $inventaris = Inventaris::with(['kategori', 'jurusan', 'ruangan'])
+            ->where('id', $candidate)
+            ->orWhere('kode_inventaris', $candidate)
+            ->first();
+
+        if (! $inventaris && $candidate !== $scanValue) {
+            $inventaris = Inventaris::with(['kategori', 'jurusan', 'ruangan'])
+                ->where('id', $scanValue)
+                ->orWhere('kode_inventaris', $scanValue)
+                ->first();
+        }
+
+        if (! $inventaris) {
+            return response()->json([
+                'found' => false,
+                'message' => 'Data inventaris tidak ditemukan dari hasil scan tersebut.',
+            ], 404);
+        }
+
+        return response()->json([
+            'found' => true,
+            'redirect_url' => route('inventaris.show', $inventaris->id),
+            'item' => [
+                'id' => $inventaris->id,
+                'kode_inventaris' => $inventaris->kode_inventaris,
+                'nama_barang' => $inventaris->nama_barang,
+                'merek' => $inventaris->merek,
+                'jumlah_total' => $inventaris->jumlah_total,
+                'kondisi' => $inventaris->kondisi,
+                'kategori' => $inventaris->kategori?->nama_kategori,
+                'jurusan' => $inventaris->jurusan?->nama_jurusan,
+                'ruangan' => $inventaris->ruangan?->nama_ruangan,
+                'tanggal_pengadaan' => $inventaris->tanggal_pengadaan?->format('d M Y'),
+            ],
+        ]);
+    }
+
+    private function extractInventarisIdentifier(string $scanValue): string
+    {
+        $path = parse_url($scanValue, PHP_URL_PATH);
+
+        if (! is_string($path) || $path === '') {
+            return $scanValue;
+        }
+
+        $segments = array_values(array_filter(explode('/', trim($path, '/'))));
+        $inventarisIndex = array_search('inventaris', $segments, true);
+
+        if ($inventarisIndex === false || ! isset($segments[$inventarisIndex + 1])) {
+            return $scanValue;
+        }
+
+        return $segments[$inventarisIndex + 1];
     }
 
     public function create(): View
