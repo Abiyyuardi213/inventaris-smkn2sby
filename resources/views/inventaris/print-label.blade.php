@@ -4,68 +4,103 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cetak Label - {{ $item->kode_inventaris }}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Geist+Mono:wght@100..900&display=swap" rel="stylesheet">
     @vite(['resources/css/app.css'])
     <style>
         /* CSS for Screen Preview */
         body {
             background-color: #f4f4f5;
+            font-family: "Geist", ui-sans-serif, system-ui, sans-serif;
         }
         .label-card {
-            width: 8cm;
-            height: 8cm;
+            width: 8.8cm;
+            height: 3.1cm;
             background-color: white;
-            border: 1px solid #e4e4e7;
+            border: 1.5px solid #111827;
             box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
-            padding: 0.4cm;
-            display: flex;
-            flex-direction: column;
+            padding: 0;
+            display: grid;
+            grid-template-columns: 1.55cm 1fr 2.25cm;
             align-items: center;
-            justify-content: space-between;
             text-align: center;
+            overflow: hidden;
         }
-        .text-header {
-            font-size: 14px;
-            font-weight: 800;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            border-bottom: 1px solid #e4e4e7;
-            width: 100%;
-            padding-bottom: 4px;
-            line-height: 1;
+        .label-logo,
+        .label-info,
+        .label-qr {
+            height: 100%;
         }
-        .qr-image {
-            width: 4.5cm;
-            height: 4.5cm;
+        .label-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-right: 1.5px solid #111827;
+            padding: 0.04cm;
+        }
+        .label-logo img {
+            width: 1.42cm;
+            height: 2.78cm;
             object-fit: contain;
         }
+        .label-info {
+            display: grid;
+            grid-template-rows: 0.9cm 0.9cm 1fr;
+            min-width: 0;
+        }
+        .label-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 0;
+            border-bottom: 1.5px solid #111827;
+            padding: 0 0.14cm;
+        }
+        .label-row:last-child {
+            border-bottom: 0;
+        }
+        .text-header {
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 0;
+            text-transform: uppercase;
+            width: 100%;
+            line-height: 1.1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .qr-image {
+            width: 1.72cm;
+            height: 1.72cm;
+            object-fit: contain;
+        }
+        .label-qr {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-left: 1.5px solid #111827;
+            padding: 0.12cm;
+        }
         .text-code {
-            font-size: 14px;
-            font-family: monospace;
+            font-size: 10px;
+            font-family: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
             font-weight: 700;
-            background-color: #f4f4f5;
-            padding: 4px 8px;
-            border-radius: 4px;
-            line-height: 1;
+            background-color: transparent;
+            padding: 0;
+            border-radius: 0;
+            line-height: 1.1;
             width: 100%;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
         .text-name {
-            font-size: 13px;
-            font-weight: 700;
+            font-size: 9px;
+            font-weight: 650;
             color: #27272a;
-            line-height: 1.25;
-            width: 100%;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        .text-location {
-            font-size: 10px;
-            font-weight: 500;
-            color: #71717a;
-            text-transform: uppercase;
+            line-height: 1.15;
             width: 100%;
             white-space: nowrap;
             overflow: hidden;
@@ -80,6 +115,7 @@
             body {
                 background-color: white !important;
                 color: black !important;
+                font-family: "Geist", Arial, Helvetica, sans-serif !important;
                 margin: 0 !important;
                 padding: 0 !important;
                 width: 100vw !important;
@@ -93,43 +129,34 @@
                 margin: 1.5cm;
             }
             .label-card {
-                border: none !important;
+                border: 1.5px solid #111827 !important;
                 box-shadow: none !important;
-                width: 100% !important;
-                height: 100% !important;
-                max-width: 90vw !important;
-                max-height: 90vh !important;
-                padding: 2cm !important;
+                width: 8.8cm !important;
+                height: 3.1cm !important;
+                max-width: none !important;
+                max-height: none !important;
+                padding: 0 !important;
                 box-sizing: border-box !important;
-                display: flex !important;
-                flex-direction: column !important;
+                display: grid !important;
+                grid-template-columns: 1.55cm 1fr 2.25cm !important;
                 align-items: center !important;
-                justify-content: space-between !important;
             }
             .text-header {
-                font-size: 3.5vw !important;
-                border-bottom-width: 3px !important;
-                padding-bottom: 15px !important;
+                font-size: 10px !important;
             }
             .qr-image {
-                width: 42vh !important;
-                height: 42vh !important;
-                max-width: 55vw !important;
-                max-height: 55vw !important;
-                margin: 1.5cm 0 !important;
+                width: 1.72cm !important;
+                height: 1.72cm !important;
+                max-width: none !important;
+                max-height: none !important;
+                margin: 0 !important;
             }
             .text-code {
-                font-size: 3.5vw !important;
-                padding: 15px 30px !important;
-                border-radius: 8px !important;
+                font-size: 10px !important;
+                padding: 0 !important;
             }
             .text-name {
-                font-size: 3.2vw !important;
-                margin-top: 10px !important;
-            }
-            .text-location {
-                font-size: 2.5vw !important;
-                margin-top: 5px !important;
+                font-size: 9px !important;
             }
         }
     </style>
@@ -155,34 +182,28 @@
 
     <!-- Label Card -->
     <div class="label-card">
-        <!-- Header: School Name / App Name -->
-        <div class="text-header">
-            SMKN 2 SURABAYA
+        <div class="label-logo">
+            <img src="{{ asset('image/smkn2sby.png') }}" alt="Logo SMKN 2 Surabaya">
         </div>
-        
-        <!-- QR Code Image -->
-        <div class="flex items-center justify-center my-0.5">
+
+        <div class="label-info">
+            <div class="label-row">
+                <div class="text-header">SMK NEGERI 2 SURABAYA</div>
+            </div>
+            <div class="label-row">
+                <div class="text-code">{{ $item->kode_inventaris }}</div>
+            </div>
+            <div class="label-row">
+                <div class="text-name">{{ $item->nama_barang }} | {{ $item->ruangan->nama_ruangan ?? '-' }}</div>
+            </div>
+        </div>
+
+        <div class="label-qr">
             @if ($item->qr_code_path && Storage::disk('public')->exists($item->qr_code_path))
                 <img src="{{ asset('storage/' . $item->qr_code_path) }}" alt="QR Code" class="qr-image">
             @else
                 <div class="qr-image bg-zinc-100 flex items-center justify-center text-xs text-zinc-400">QR Code Error</div>
             @endif
-        </div>
-
-        <!-- Details -->
-        <div class="w-full flex flex-col items-center gap-1.5">
-            <!-- Kode Inventaris -->
-            <div class="text-code">
-                {{ $item->kode_inventaris }}
-            </div>
-            <!-- Nama Barang -->
-            <div class="text-name">
-                {{ $item->nama_barang }}
-            </div>
-            <!-- Lokasi: Ruangan & Jurusan -->
-            <div class="text-location">
-                {{ $item->ruangan->nama_ruangan ?? '-' }} &bull; {{ $item->jurusan->nama_jurusan ?? '-' }}
-            </div>
         </div>
     </div>
 

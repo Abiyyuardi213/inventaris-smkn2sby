@@ -96,6 +96,19 @@
                     </span>
                 </div>
 
+                <!-- Harga -->
+                <div>
+                    <span class="text-xs font-semibold text-zinc-400 uppercase tracking-wider block mb-1">Harga Barang</span>
+                    <span class="text-sm text-zinc-700 block font-medium">Rp {{ number_format($inventaris->harga_satuan ?? 0, 0, ',', '.') }}</span>
+                    <span class="text-xs text-zinc-400">Total: Rp {{ number_format($inventaris->harga_total, 0, ',', '.') }}</span>
+                </div>
+
+                <!-- Sumber Dana -->
+                <div>
+                    <span class="text-xs font-semibold text-zinc-400 uppercase tracking-wider block mb-1">Sumber Dana</span>
+                    <span class="text-sm text-zinc-700 block font-medium">{{ $inventaris->sumber_dana ?: '-' }}</span>
+                </div>
+
                 <!-- Timestamps -->
                 <div>
                     <span class="text-xs font-semibold text-zinc-400 uppercase tracking-wider block mb-1">Terakhir Diperbarui</span>
@@ -124,8 +137,37 @@
             </div>
         </div>
 
-        <!-- QR Code Card -->
-        <div class="lg:col-span-1">
+        <!-- Media Cards -->
+        <div class="lg:col-span-1 space-y-6">
+            <div class="rounded-lg border border-zinc-200 bg-white p-6 shadow-sm space-y-4">
+                <div>
+                    <span class="text-xs font-bold text-zinc-400 uppercase tracking-wider">Foto Inventaris</span>
+                    <p class="text-xs text-zinc-500 mt-1">Sumber foto menggunakan link Google Drive.</p>
+                </div>
+
+                @if ($inventaris->foto_url)
+                    <a href="{{ $inventaris->foto_url }}" target="_blank" rel="noopener noreferrer"
+                       class="block overflow-hidden rounded-lg border border-zinc-200 bg-zinc-50 aspect-[4/3] group">
+                        <img src="{{ $inventaris->foto_preview_url }}" alt="Foto {{ $inventaris->nama_barang }}"
+                             class="h-full w-full object-cover transition-transform duration-200 group-hover:scale-[1.02]"
+                             loading="lazy"
+                             onerror="this.classList.add('hidden'); this.nextElementSibling.classList.remove('hidden'); this.nextElementSibling.classList.add('flex');">
+                        <div class="hidden h-full w-full items-center justify-center p-4 text-center text-xs font-medium text-zinc-500">
+                            Preview tidak tersedia. Klik untuk membuka foto.
+                        </div>
+                    </a>
+
+                    <a href="{{ $inventaris->foto_url }}" target="_blank" rel="noopener noreferrer"
+                       class="inline-flex h-9 w-full items-center justify-center rounded-md border border-zinc-200 bg-white px-3 text-xs font-semibold text-zinc-700 shadow-sm transition-colors hover:bg-zinc-50 hover:text-zinc-950">
+                        Buka Foto
+                    </a>
+                @else
+                    <div class="flex aspect-[4/3] items-center justify-center rounded-lg border border-dashed border-zinc-200 bg-zinc-50 p-4 text-center text-xs font-medium text-zinc-400">
+                        Belum ada link foto inventaris.
+                    </div>
+                @endif
+            </div>
+
             <div class="rounded-lg border border-zinc-200 bg-white p-6 shadow-sm flex flex-col items-center text-center space-y-4">
                 <span class="text-xs font-bold text-zinc-400 uppercase tracking-wider">QR Code Label</span>
                 

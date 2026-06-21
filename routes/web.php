@@ -43,6 +43,9 @@ Route::middleware('auth')->prefix('admin')->group(function () {
     Route::get('monitor-ruang', [RuanganController::class, 'monitor'])
         ->middleware('permission:monitor-ruang.view')
         ->name('ruangans.monitor');
+    Route::get('monitor-ruang/{ruangan}/print-aset', [RuanganController::class, 'printAssets'])
+        ->middleware('permission:monitor-ruang.view')
+        ->name('ruangans.monitor.print-assets');
     Route::resource('ruangans', RuanganController::class)->middleware('permission:ruangans.manage');
     Route::resource('kategoris', KategoriController::class)->middleware('permission:kategoris.manage');
     Route::middleware('permission:inventaris.manage')->group(function () {
@@ -59,6 +62,7 @@ Route::middleware('auth')->prefix('admin')->group(function () {
         Route::get('inventaris/export/{format}', [InventarisImportController::class, 'export'])
             ->whereIn('format', ['csv', 'xlsx'])
             ->name('inventaris.export');
+        Route::get('inventaris/print-pdf', [InventarisController::class, 'printPdf'])->name('inventaris.print-pdf');
         Route::get('inventaris/print-label-bulk', [InventarisController::class, 'printLabelBulk'])->name('inventaris.print-label-bulk');
         Route::get('inventaris/{inventari}/print-label', [InventarisController::class, 'printLabel'])->name('inventaris.print-label');
         Route::post('inventaris/{inventari}/regenerate-qr', [InventarisController::class, 'regenerateQr'])->name('inventaris.regenerate-qr');

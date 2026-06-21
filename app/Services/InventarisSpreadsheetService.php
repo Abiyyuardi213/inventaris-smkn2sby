@@ -19,8 +19,28 @@ class InventarisSpreadsheetService
         'jurusan_id',
         'ruangan_id',
         'jumlah_total',
+        'harga_satuan',
+        'sumber_dana',
         'kondisi',
         'tanggal_pengadaan',
+        'foto_url',
+    ];
+
+    public const EXPORT_HEADERS = [
+        'kode_inventaris',
+        'nama_barang',
+        'merek',
+        'spesifikasi',
+        'kategori_id',
+        'jurusan_id',
+        'ruangan_id',
+        'jumlah_total',
+        'harga_satuan',
+        'sumber_dana',
+        'harga_total',
+        'kondisi',
+        'tanggal_pengadaan',
+        'foto_url',
     ];
 
     public function parse(string $path, string $extension): array
@@ -44,8 +64,11 @@ class InventarisSpreadsheetService
                 'isi-dengan-jurusan_id',
                 'isi-dengan-ruangan_id',
                 1,
+                8500000,
+                'BOS',
                 'baik',
                 now()->toDateString(),
+                'https://drive.google.com/file/d/FILE_ID/view',
             ],
         ];
 
@@ -56,8 +79,7 @@ class InventarisSpreadsheetService
 
     public function downloadInventaris(string $format, Collection $inventaris): Response
     {
-        $headers = array_merge(['kode_inventaris'], self::HEADERS);
-        $rows = [$headers];
+        $rows = [self::EXPORT_HEADERS];
 
         foreach ($inventaris as $item) {
             $rows[] = [
@@ -69,8 +91,12 @@ class InventarisSpreadsheetService
                 $item->jurusan_id,
                 $item->ruangan_id,
                 $item->jumlah_total,
+                $item->harga_satuan ?? 0,
+                $item->sumber_dana,
+                $item->harga_total,
                 $item->kondisi,
                 optional($item->tanggal_pengadaan)->format('Y-m-d'),
+                $item->foto_url,
             ];
         }
 

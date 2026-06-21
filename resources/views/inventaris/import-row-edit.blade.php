@@ -60,6 +60,13 @@
                     @error('spesifikasi') <p class="text-xs text-red-500">{{ $message }}</p> @enderror
                 </div>
 
+                <div class="space-y-2">
+                    <label for="foto_url" class="text-sm font-medium text-zinc-900">Link Foto Google Drive</label>
+                    <input id="foto_url" name="foto_url" type="url" value="{{ old('foto_url', $payload['foto_url'] ?? '') }}" class="h-10 w-full rounded-md border border-zinc-200 px-3 text-sm" placeholder="https://drive.google.com/file/d/FILE_ID/view">
+                    <p class="text-xs text-zinc-500">Opsional. Kosongkan jika belum ada foto.</p>
+                    @error('foto_url') <p class="text-xs text-red-500">{{ $message }}</p> @enderror
+                </div>
+
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div class="space-y-2">
                         <label for="kategori_id" class="text-sm font-medium text-zinc-900">Kategori</label>
@@ -103,11 +110,21 @@
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
                     <div class="space-y-2">
                         <label for="jumlah_total" class="text-sm font-medium text-zinc-900">Jumlah Total</label>
                         <input id="jumlah_total" name="jumlah_total" type="number" min="0" value="{{ old('jumlah_total', $payload['jumlah_total'] ?? 0) }}" class="h-10 w-full rounded-md border border-zinc-200 px-3 text-sm" required>
                         @error('jumlah_total') <p class="text-xs text-red-500">{{ $message }}</p> @enderror
+                    </div>
+                    <div class="space-y-2">
+                        <label for="harga_satuan" class="text-sm font-medium text-zinc-900">Harga Barang</label>
+                        <input id="harga_satuan" name="harga_satuan" type="number" min="0" value="{{ old('harga_satuan', $payload['harga_satuan'] ?? 0) }}" class="h-10 w-full rounded-md border border-zinc-200 px-3 text-sm" required>
+                        @error('harga_satuan') <p class="text-xs text-red-500">{{ $message }}</p> @enderror
+                    </div>
+                    <div class="space-y-2">
+                        <label for="sumber_dana" class="text-sm font-medium text-zinc-900">Sumber Dana</label>
+                        <input id="sumber_dana" name="sumber_dana" value="{{ old('sumber_dana', $payload['sumber_dana'] ?? '') }}" class="h-10 w-full rounded-md border border-zinc-200 px-3 text-sm" placeholder="BOS">
+                        @error('sumber_dana') <p class="text-xs text-red-500">{{ $message }}</p> @enderror
                     </div>
                     <div class="space-y-2">
                         <label for="kondisi" class="text-sm font-medium text-zinc-900">Kondisi</label>

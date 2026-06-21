@@ -33,6 +33,7 @@ class RuanganController extends Controller
                 'kodeUnit' => $ruangan->jurusan?->kode_jurusan ?? 'Unit Kerja',
                 'totalJenis' => $ruangan->inventaris_count,
                 'totalUnit' => $ruangan->total_unit ?? 0,
+                'printUrl' => route('ruangans.monitor.print-assets', $ruangan->id),
                 'assets' => $ruangan->inventaris->map(fn ($item) => [
                     'kode' => $item->kode_inventaris,
                     'nama' => $item->nama_barang,
@@ -45,6 +46,20 @@ class RuanganController extends Controller
         ]);
 
         return view('ruangans.monitor', compact('ruangans', 'jurusans', 'roomAssets'));
+    }
+
+    public function printAssets(Ruangan $ruangan): View
+    {
+        $ruangan->load([
+            'jurusan',
+            'inventaris' => fn ($query) => $query
+                ->with('kategori')
+                ->orderBy('nama_barang'),
+        ]);
+
+        $totalUnit = $ruangan->inventaris->sum('jumlah_total');
+
+        return view('ruangans.print-assets', compact('ruangan', 'totalUnit'));
     }
 
     public function index(): View

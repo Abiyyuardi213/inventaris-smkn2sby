@@ -124,6 +124,25 @@
                 @enderror
             </div>
 
+            <!-- Link Foto Google Drive -->
+            <div class="space-y-2">
+                <label for="foto_url" class="text-sm font-medium leading-none text-zinc-900">
+                    Link Foto Google Drive
+                </label>
+                <input
+                    type="url"
+                    id="foto_url"
+                    name="foto_url"
+                    value="{{ old('foto_url') }}"
+                    placeholder="Contoh: https://drive.google.com/file/d/FILE_ID/view"
+                    class="flex h-10 w-full rounded-md border {{ $errors->has('foto_url') ? 'border-red-500 focus:ring-red-500' : 'border-zinc-200 focus:ring-zinc-950' }} bg-transparent px-3 py-2 text-sm ring-offset-white placeholder:text-zinc-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 text-zinc-900"
+                >
+                <p class="text-xs text-zinc-500">Gunakan link foto dari Google Drive agar gambar tidak tersimpan di server.</p>
+                @error('foto_url')
+                    <p class="text-xs font-medium text-red-500">{{ $message }}</p>
+                @enderror
+            </div>
+
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 border-t border-zinc-100 pt-4">
                 <!-- Unit Kerja -->
                 <div class="space-y-2">
@@ -173,7 +192,7 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 border-t border-zinc-100 pt-4">
+            <div class="grid grid-cols-1 md:grid-cols-5 gap-4 border-t border-zinc-100 pt-4">
                 <!-- Jumlah Total -->
                 <div class="space-y-2">
                     <label for="jumlah_total" class="text-sm font-medium leading-none text-zinc-900">
@@ -190,6 +209,44 @@
                         required
                     >
                     @error('jumlah_total')
+                        <p class="text-xs font-medium text-red-500">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Harga Satuan -->
+                <div class="space-y-2">
+                    <label for="harga_satuan" class="text-sm font-medium leading-none text-zinc-900">
+                        Harga Barang <span class="text-red-500">*</span>
+                    </label>
+                    <input
+                        type="number"
+                        id="harga_satuan"
+                        name="harga_satuan"
+                        value="{{ old('harga_satuan', 0) }}"
+                        min="0"
+                        placeholder="Harga satuan"
+                        class="flex h-10 w-full rounded-md border {{ $errors->has('harga_satuan') ? 'border-red-500 focus:ring-red-500' : 'border-zinc-200 focus:ring-zinc-950' }} bg-transparent px-3 py-2 text-sm ring-offset-white placeholder:text-zinc-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 text-zinc-900"
+                        required
+                    >
+                    @error('harga_satuan')
+                        <p class="text-xs font-medium text-red-500">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Sumber Dana -->
+                <div class="space-y-2">
+                    <label for="sumber_dana" class="text-sm font-medium leading-none text-zinc-900">
+                        Sumber Dana
+                    </label>
+                    <input
+                        type="text"
+                        id="sumber_dana"
+                        name="sumber_dana"
+                        value="{{ old('sumber_dana') }}"
+                        placeholder="Contoh: BOS"
+                        class="flex h-10 w-full rounded-md border {{ $errors->has('sumber_dana') ? 'border-red-500 focus:ring-red-500' : 'border-zinc-200 focus:ring-zinc-950' }} bg-transparent px-3 py-2 text-sm ring-offset-white placeholder:text-zinc-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 text-zinc-900"
+                    >
+                    @error('sumber_dana')
                         <p class="text-xs font-medium text-red-500">{{ $message }}</p>
                     @enderror
                 </div>
