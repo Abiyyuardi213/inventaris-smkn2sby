@@ -196,7 +196,26 @@
         return config;
     }
 
-    function stopScanner() {
+    async function preferredCameraId() {
+        const cameras = await Html5Qrcode.getCameras();
+
+        if (!cameras.length) {
+            throw new Error('Tidak ada kamera yang terdeteksi pada perangkat ini.');
+        }
+
+        const rearCamera = cameras.find((camera) => {
+            const label = (camera.label || '').toLowerCase();
+
+            return label.includes('back') ||
+                label.includes('rear') ||
+                label.includes('environment') ||
+                label.includes('belakang');
+        });
+
+        return (rearCamera ?? cameras[0]).id;
+    }
+
+    function stopScanner(resetState = true) {
         if (html5QrCode && html5ScannerActive) {
             html5QrCode.stop()
                 .then(() => html5QrCode.clear())
@@ -221,7 +240,10 @@
         placeholder.classList.remove('hidden');
         startButton.disabled = false;
         stopButton.disabled = true;
-        setScannerState('Kamera belum aktif.', 'Siap');
+
+        if (resetState) {
+            setScannerState('Kamera belum aktif.', 'Siap');
+        }
     }
 
     async function resolveInventaris(value) {
@@ -317,13 +339,10 @@
                 lastValue = '';
                 setScannerState('Kamera aktif. Arahkan QR code ke kotak tengah.', 'Scanning', 'border-emerald-200 bg-emerald-50 text-emerald-700');
                 showMessage('Scanner aktif. QR yang berhasil dibaca akan dicocokkan otomatis.', 'info');
+                const cameraId = await preferredCameraId();
 
                 await html5QrCode.start(
-                    {
-                        facingMode: { ideal: 'environment' },
-                        width: { ideal: 1280 },
-                        height: { ideal: 720 },
-                    },
+                    cameraId,
                     scannerConfig(),
                     (decodedText) => resolveInventaris(decodedText),
                     () => {}
@@ -342,7 +361,6 @@
             detector = new BarcodeDetector({ formats: ['qr_code'] });
             stream = await navigator.mediaDevices.getUserMedia({
                 video: {
-                    facingMode: { ideal: 'environment' },
                     width: { ideal: 1280 },
                     height: { ideal: 720 },
                 },
@@ -360,9 +378,9 @@
             showMessage('Scanner aktif. QR yang berhasil dibaca akan dicocokkan otomatis.', 'info');
             scanLoop = requestAnimationFrame(tick);
         } catch (error) {
-            showMessage('Kamera tidak dapat diakses. Pastikan izin kamera diberikan dan halaman berjalan di HTTPS atau localhost.', 'error');
+            showMessage(`Kamera tidak dapat diakses. Pastikan izin kamera diizinkan di browser. Detail: ${error?.message ?? error}`, 'error');
             setScannerState('Kamera tidak dapat diakses.', 'Ditolak', 'border-red-200 bg-red-50 text-red-700');
-            stopScanner();
+            stopScanner(false);
         }
     }
 
