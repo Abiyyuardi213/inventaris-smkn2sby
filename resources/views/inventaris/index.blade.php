@@ -377,11 +377,22 @@
 
     // Fungsi untuk cetak label massal berdasarkan checkbox terpilih
     function submitBulkPrint() {
+        const selectAllCheckbox = document.getElementById('select_all');
+        const baseUrl = "{{ route('inventaris.print-label-bulk') }}";
+
+        if (selectAllCheckbox?.checked) {
+            const params = new URLSearchParams(window.location.search);
+            params.set('all', '1');
+
+            window.open(baseUrl + '?' + params.toString(), '_blank');
+            return;
+        }
+
         const checkboxes = document.querySelectorAll('.item-checkbox:checked');
         if (checkboxes.length === 0) {
             Swal.fire({
                 title: 'Pilih Barang',
-                text: 'Silakan pilih minimal satu barang untuk mencetak label.',
+                text: 'Silakan pilih minimal satu barang atau centang checkbox header untuk memilih semua data.',
                 icon: 'warning',
                 confirmButtonColor: '#18181b',
             });
@@ -391,7 +402,7 @@
         const ids = Array.from(checkboxes).map(cb => cb.value);
         
         // Buat url cetak massal: route('inventaris.print-label-bulk')?ids=uuid1,uuid2
-        const url = "{{ route('inventaris.print-label-bulk') }}?ids=" + ids.join(',');
+        const url = baseUrl + "?ids=" + ids.join(',');
         window.open(url, '_blank');
     }
 

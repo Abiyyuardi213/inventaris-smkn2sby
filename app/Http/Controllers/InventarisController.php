@@ -203,25 +203,37 @@ class InventarisController extends Controller
      */
     public function printLabelBulk(Request $request)
     {
-        // Mendapatkan array ID dari input (misal 'ids' query string atau form array)
-        $ids = $request->input('ids');
- 
-        if (empty($ids)) {
-            return redirect()->back()->with('error', 'Pilih minimal satu barang untuk mencetak label.');
+        $itemsQuery = Inventaris::with(['kategori', 'jurusan', 'ruangan']);
+
+        if ($request->boolean('all')) {
+            $itemsQuery
+                ->when($request->filled('kategori_id'), fn ($query) => $query->where('kategori_id', $request->kategori_id))
+                ->when($request->filled('jurusan_id'), fn ($query) => $query->where('jurusan_id', $request->jurusan_id))
+                ->when($request->filled('ruangan_id'), fn ($query) => $query->where('ruangan_id', $request->ruangan_id))
+                ->when($request->filled('tahun_pengadaan'), fn ($query) => $query->whereYear('tanggal_pengadaan', $request->tahun_pengadaan))
+                ->when($request->filled('kondisi'), fn ($query) => $query->where('kondisi', $request->kondisi));
+        } else {
+            // Mendapatkan array ID dari input (misal 'ids' query string atau form array)
+            $ids = $request->input('ids');
+
+            if (empty($ids)) {
+                return redirect()->back()->with('error', 'Pilih minimal satu barang untuk mencetak label.');
+            }
+
+            // Jika dikirim sebagai string terpisah koma (misal ?ids=uuid1,uuid2)
+            if (is_string($ids)) {
+                $ids = explode(',', $ids);
+            }
+
+            $itemsQuery->whereIn('id', $ids);
         }
- 
-        // Jika dikirim sebagai string terpisah koma (misal ?ids=uuid1,uuid2)
-        if (is_string($ids)) {
-            $ids = explode(',', $ids);
-        }
- 
-        // Fetch all matching items with necessary relations
-        $items = Inventaris::with(['kategori', 'jurusan', 'ruangan'])
-            ->whereIn('id', $ids)
+
+        $items = $itemsQuery
+            ->orderBy('nama_barang')
             ->get();
- 
+
         if ($items->isEmpty()) {
-            return redirect()->back()->with('error', 'Barang inventaris tidak ditemukan.');
+            return redirect()->back()->with('error', 'Pilih minimal satu barang untuk mencetak label.');
         }
  
         // Pastikan QR code masing-masing item sudah ter-generate (jika data lama belum ada atau bukan format svg)
