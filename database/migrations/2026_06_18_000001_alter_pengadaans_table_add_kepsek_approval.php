@@ -14,7 +14,9 @@ return new class extends Migration
     {
         // 1. Ubah kolom status_usulan dari enum lama ke enum baru dengan 5 nilai menggunakan raw SQL.
         // default tetap 'pending'.
-        DB::statement("ALTER TABLE pengadaans MODIFY COLUMN status_usulan ENUM('pending', 'disetujui_admin', 'disetujui_kepsek', 'ditolak', 'ditolak_kepsek') NOT NULL DEFAULT 'pending'");
+        if (DB::getDriverName() !== 'sqlite') {
+            DB::statement("ALTER TABLE pengadaans MODIFY COLUMN status_usulan ENUM('pending', 'disetujui_admin', 'disetujui_kepsek', 'ditolak', 'ditolak_kepsek') NOT NULL DEFAULT 'pending'");
+        }
 
         // 2. Tambahkan 5 kolom baru untuk audit trail persetujuan Admin & Kepsek.
         Schema::table('pengadaans', function (Blueprint $table) {
@@ -69,6 +71,8 @@ return new class extends Migration
             ->update(['status_usulan' => 'ditolak']);
 
         // Kembalikan enum status_usulan ke 3 nilai asli menggunakan raw SQL
-        DB::statement("ALTER TABLE pengadaans MODIFY COLUMN status_usulan ENUM('pending', 'disetujui', 'ditolak') NOT NULL DEFAULT 'pending'");
+        if (DB::getDriverName() !== 'sqlite') {
+            DB::statement("ALTER TABLE pengadaans MODIFY COLUMN status_usulan ENUM('pending', 'disetujui', 'ditolak') NOT NULL DEFAULT 'pending'");
+        }
     }
 };

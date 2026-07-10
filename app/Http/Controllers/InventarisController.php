@@ -12,6 +12,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 
 class InventarisController extends Controller
 {
@@ -22,15 +23,25 @@ class InventarisController extends Controller
         $ruangans = Ruangan::when(request('jurusan_id'), fn ($query) => $query->where('jurusan_id', request('jurusan_id')))
             ->orderBy('nama_ruangan')
             ->get();
+        $isSqlite = DB::getDriverName() === 'sqlite';
+        $yearExpression = $isSqlite ? "strftime('%Y', tanggal_pengadaan)" : "YEAR(tanggal_pengadaan)";
+
         $tahunPengadaans = Inventaris::query()
-            ->selectRaw('YEAR(tanggal_pengadaan) as tahun')
+            ->selectRaw("{$yearExpression} as tahun")
             ->whereNotNull('tanggal_pengadaan')
             ->distinct()
             ->orderByDesc('tahun')
             ->pluck('tahun');
 
-        // Filter opsional by kategori, jurusan, ruangan, tahun pengadaan, atau kondisi
+        // Filter opsional by kategori, jurusan, ruangan, tahun pengadaan, kondisi, atau search (nama dan merk)
         $inventaris = Inventaris::with(['kategori', 'jurusan', 'ruangan'])
+            ->when(request('search'), function($q) {
+                $search = request('search');
+                $q->where(function($q) use ($search) {
+                    $q->where('nama_barang', 'like', "%{$search}%")
+                      ->orWhere('merek', 'like', "%{$search}%");
+                });
+            })
             ->when(request('kategori_id'), fn($q) => $q->where('kategori_id', request('kategori_id')))
             ->when(request('jurusan_id'), fn($q) => $q->where('jurusan_id', request('jurusan_id')))
             ->when(request('ruangan_id'), fn($q) => $q->where('ruangan_id', request('ruangan_id')))
@@ -104,7 +115,15 @@ class InventarisController extends Controller
                 'kode_inventaris' => $inventaris->kode_inventaris,
                 'nama_barang' => $inventaris->nama_barang,
                 'merek' => $inventaris->merek,
+                'spesifikasi' => $inventaris->spesifikasi,
+                'bahan' => $inventaris->bahan ?? '-',
+                'warna' => $inventaris->warna ?? '-',
                 'jumlah_total' => $inventaris->jumlah_total,
+                'harga_satuan' => 'Rp ' . number_format($inventaris->harga_satuan ?? 0, 0, ',', '.'),
+                'harga_total' => 'Rp ' . number_format($inventaris->harga_total ?? 0, 0, ',', '.'),
+                'sumber_dana' => $inventaris->sumber_dana ?? '-',
+                'nama_penyedia' => $inventaris->nama_penyedia ?? '-',
+                'nomor_surat_bast' => $inventaris->nomor_surat_bast ?? '-',
                 'kondisi' => $inventaris->kondisi,
                 'kategori' => $inventaris->kategori?->nama_kategori,
                 'jurusan' => $inventaris->jurusan?->nama_jurusan,
@@ -148,6 +167,8 @@ class InventarisController extends Controller
             'nama_barang' => 'required|string|max:255',
             'merek' => 'required|string|max:100',
             'spesifikasi' => 'required|string',
+            'bahan' => 'nullable|string|max:255',
+            'warna' => 'nullable|string|max:255',
             'kategori_id' => 'required|exists:kategoris,id',
             'jurusan_id' => 'required|exists:jurusans,id',
             'ruangan_id' => [
@@ -164,6 +185,8 @@ class InventarisController extends Controller
             'jumlah_total' => 'required|integer|min:0',
             'harga_satuan' => 'required|integer|min:0',
             'sumber_dana' => 'nullable|string|max:255',
+            'nama_penyedia' => 'nullable|string|max:255',
+            'nomor_surat_bast' => 'nullable|string|max:255',
             'kondisi' => 'required|in:baik,layak,rusak',
             'tanggal_pengadaan' => 'required|date',
             'foto_url' => 'nullable|url|max:2048',
@@ -206,6 +229,8 @@ class InventarisController extends Controller
             'nama_barang' => 'required|string|max:255',
             'merek' => 'required|string|max:100',
             'spesifikasi' => 'required|string',
+            'bahan' => 'nullable|string|max:255',
+            'warna' => 'nullable|string|max:255',
             'kategori_id' => 'required|exists:kategoris,id',
             'jurusan_id' => 'required|exists:jurusans,id',
             'ruangan_id' => [
@@ -222,6 +247,8 @@ class InventarisController extends Controller
             'jumlah_total' => 'required|integer|min:0',
             'harga_satuan' => 'required|integer|min:0',
             'sumber_dana' => 'nullable|string|max:255',
+            'nama_penyedia' => 'nullable|string|max:255',
+            'nomor_surat_bast' => 'nullable|string|max:255',
             'kondisi' => 'required|in:baik,layak,rusak',
             'tanggal_pengadaan' => 'required|date',
             'foto_url' => 'nullable|url|max:2048',
@@ -277,6 +304,13 @@ class InventarisController extends Controller
 
         if ($request->boolean('all')) {
             $itemsQuery
+                ->when($request->filled('search'), function ($query) use ($request) {
+                    $search = $request->search;
+                    $query->where(function ($q) use ($search) {
+                        $q->where('nama_barang', 'like', "%{$search}%")
+                          ->orWhere('merek', 'like', "%{$search}%");
+                    });
+                })
                 ->when($request->filled('kategori_id'), fn ($query) => $query->where('kategori_id', $request->kategori_id))
                 ->when($request->filled('jurusan_id'), fn ($query) => $query->where('jurusan_id', $request->jurusan_id))
                 ->when($request->filled('ruangan_id'), fn ($query) => $query->where('ruangan_id', $request->ruangan_id))

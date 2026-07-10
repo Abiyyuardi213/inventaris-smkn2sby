@@ -109,6 +109,30 @@
                     <span class="text-sm text-zinc-700 block font-medium">{{ $inventaris->sumber_dana ?: '-' }}</span>
                 </div>
 
+                <!-- Bahan -->
+                <div>
+                    <span class="text-xs font-semibold text-zinc-400 uppercase tracking-wider block mb-1">Bahan</span>
+                    <span class="text-sm text-zinc-700 block font-medium">{{ $inventaris->bahan ?: '-' }}</span>
+                </div>
+
+                <!-- Warna -->
+                <div>
+                    <span class="text-xs font-semibold text-zinc-400 uppercase tracking-wider block mb-1">Warna</span>
+                    <span class="text-sm text-zinc-700 block font-medium">{{ $inventaris->warna ?: '-' }}</span>
+                </div>
+
+                <!-- Nama Penyedia -->
+                <div>
+                    <span class="text-xs font-semibold text-zinc-400 uppercase tracking-wider block mb-1">Nama Penyedia</span>
+                    <span class="text-sm text-zinc-700 block font-medium">{{ $inventaris->nama_penyedia ?: '-' }}</span>
+                </div>
+
+                <!-- Nomor Surat BAST -->
+                <div>
+                    <span class="text-xs font-semibold text-zinc-400 uppercase tracking-wider block mb-1">Nomor Surat BAST</span>
+                    <span class="text-sm text-zinc-700 block font-medium">{{ $inventaris->nomor_surat_bast ?: '-' }}</span>
+                </div>
+
                 <!-- Timestamps -->
                 <div>
                     <span class="text-xs font-semibold text-zinc-400 uppercase tracking-wider block mb-1">Terakhir Diperbarui</span>

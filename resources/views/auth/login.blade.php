@@ -155,7 +155,7 @@
                             </form>
 
                             <div class="mt-7 text-center text-xs text-zinc-500">
-                                &copy; {{ date('Y') }} SMKN 2 Surabaya. Sistem Inventaris.
+                                &copy; {{ date('Y') }} Teknik Informatika ITATS. Sistem Inventaris.
                             </div>
                         </div>
                     </div>

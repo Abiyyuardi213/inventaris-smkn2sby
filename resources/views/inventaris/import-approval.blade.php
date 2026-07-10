@@ -75,11 +75,14 @@
                                 <div class="font-sans text-xs text-zinc-700">Kategori: {{ $kategoris[$payload['kategori_id'] ?? ''] ?? 'Tidak ditemukan' }}</div>
                                 <div class="font-sans text-xs text-zinc-700">Unit Kerja: {{ $jurusans[$payload['jurusan_id'] ?? ''] ?? 'Tidak ditemukan' }}</div>
                                 <div class="font-sans text-xs text-zinc-700">Ruangan: {{ $ruangans[$payload['ruangan_id'] ?? ''] ?? 'Tidak ditemukan' }}</div>
+                                <div class="font-sans text-xs text-zinc-500">Bahan/Warna: {{ $payload['bahan'] ?? '-' }} / {{ $payload['warna'] ?? '-' }}</div>
                             </td>
                             <td class="px-4 py-3 font-semibold text-zinc-900">{{ $payload['jumlah_total'] ?? '-' }}</td>
                             <td class="px-4 py-3 text-right text-xs font-semibold text-zinc-700">
                                 Rp {{ number_format((int) ($payload['harga_satuan'] ?? 0), 0, ',', '.') }}
                                 <span class="block text-[10px] font-medium text-zinc-400">{{ $payload['sumber_dana'] ?? '-' }}</span>
+                                <span class="block text-[10px] font-medium text-zinc-400">{{ $payload['nama_penyedia'] ?? '-' }}</span>
+                                <span class="block text-[10px] font-medium text-zinc-400">{{ $payload['nomor_surat_bast'] ?? '-' }}</span>
                             </td>
                             <td class="px-4 py-3">{{ $payload['kondisi'] ?? '-' }}</td>
                             <td class="px-4 py-3">{{ $payload['tanggal_pengadaan'] ?? '-' }}</td>

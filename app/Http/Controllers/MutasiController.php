@@ -93,12 +93,19 @@ class MutasiController extends Controller
                         'nama_barang' => $original->nama_barang,
                         'merek' => $original->merek,
                         'spesifikasi' => $original->spesifikasi,
+                        'bahan' => $original->bahan,
+                        'warna' => $original->warna,
                         'kategori_id' => $original->kategori_id,
                         'jurusan_id' => $targetJurusanId,
                         'ruangan_id' => $validated['ruangan_tujuan_id'],
                         'jumlah_total' => $validated['jumlah_dipindah'],
+                        'harga_satuan' => $original->harga_satuan,
+                        'sumber_dana' => $original->sumber_dana,
+                        'nama_penyedia' => $original->nama_penyedia,
+                        'nomor_surat_bast' => $original->nomor_surat_bast,
                         'kondisi' => $original->kondisi,
                         'tanggal_pengadaan' => $original->tanggal_pengadaan,
+                        'foto_url' => $original->foto_url,
                     ]);
                     $inventarisIdForLog = $newInventaris->id;
                 }

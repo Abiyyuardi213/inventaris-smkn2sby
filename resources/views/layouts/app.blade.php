@@ -34,17 +34,19 @@
         </div>
 
         <!-- Main Content Area -->
-        <div class="flex flex-col flex-1 overflow-y-auto">
+        <div class="flex flex-col flex-1 overflow-hidden">
             <!-- Navbar Component -->
             @include('components.navbar')
 
             <!-- Page Content -->
-            <main class="flex-1 p-6 md:p-8">
-                @yield('content')
-            </main>
+            <div class="flex-1 overflow-y-auto flex flex-col">
+                <main class="flex-1 p-6 md:p-8">
+                    @yield('content')
+                </main>
 
-            <!-- Footer Component -->
-            @include('components.footer')
+                <!-- Footer Component -->
+                @include('components.footer')
+            </div>
         </div>
     </div>
 
