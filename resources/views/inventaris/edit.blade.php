@@ -144,6 +144,44 @@
                 @enderror
             </div>
 
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Bahan -->
+                <div class="space-y-2">
+                    <label for="bahan" class="text-sm font-medium leading-none text-zinc-900">
+                        Bahan
+                    </label>
+                    <input
+                        type="text"
+                        id="bahan"
+                        name="bahan"
+                        value="{{ old('bahan', $inventaris->bahan) }}"
+                        placeholder="Contoh: Kayu, plastik, logam"
+                        class="flex h-10 w-full rounded-md border {{ $errors->has('bahan') ? 'border-red-500 focus:ring-red-500' : 'border-zinc-200 focus:ring-zinc-950' }} bg-transparent px-3 py-2 text-sm ring-offset-white placeholder:text-zinc-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 text-zinc-900"
+                    >
+                    @error('bahan')
+                        <p class="text-xs font-medium text-red-500">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Warna -->
+                <div class="space-y-2">
+                    <label for="warna" class="text-sm font-medium leading-none text-zinc-900">
+                        Warna
+                    </label>
+                    <input
+                        type="text"
+                        id="warna"
+                        name="warna"
+                        value="{{ old('warna', $inventaris->warna) }}"
+                        placeholder="Contoh: Hitam"
+                        class="flex h-10 w-full rounded-md border {{ $errors->has('warna') ? 'border-red-500 focus:ring-red-500' : 'border-zinc-200 focus:ring-zinc-950' }} bg-transparent px-3 py-2 text-sm ring-offset-white placeholder:text-zinc-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 text-zinc-900"
+                    >
+                    @error('warna')
+                        <p class="text-xs font-medium text-red-500">{{ $message }}</p>
+                    @enderror
+                </div>
+            </div>
+
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 border-t border-zinc-100 pt-4">
                 <!-- Unit Kerja -->
                 <div class="space-y-2">
@@ -248,6 +286,42 @@
                         class="flex h-10 w-full rounded-md border {{ $errors->has('sumber_dana') ? 'border-red-500 focus:ring-red-500' : 'border-zinc-200 focus:ring-zinc-950' }} bg-transparent px-3 py-2 text-sm ring-offset-white placeholder:text-zinc-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 text-zinc-900"
                     >
                     @error('sumber_dana')
+                        <p class="text-xs font-medium text-red-500">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Nama Penyedia -->
+                <div class="space-y-2">
+                    <label for="nama_penyedia" class="text-sm font-medium leading-none text-zinc-900">
+                        Nama Penyedia
+                    </label>
+                    <input
+                        type="text"
+                        id="nama_penyedia"
+                        name="nama_penyedia"
+                        value="{{ old('nama_penyedia', $inventaris->nama_penyedia) }}"
+                        placeholder="Contoh: PT Contoh Penyedia"
+                        class="flex h-10 w-full rounded-md border {{ $errors->has('nama_penyedia') ? 'border-red-500 focus:ring-red-500' : 'border-zinc-200 focus:ring-zinc-950' }} bg-transparent px-3 py-2 text-sm ring-offset-white placeholder:text-zinc-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 text-zinc-900"
+                    >
+                    @error('nama_penyedia')
+                        <p class="text-xs font-medium text-red-500">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Nomor Surat BAST -->
+                <div class="space-y-2">
+                    <label for="nomor_surat_bast" class="text-sm font-medium leading-none text-zinc-900">
+                        Nomor Surat BAST
+                    </label>
+                    <input
+                        type="text"
+                        id="nomor_surat_bast"
+                        name="nomor_surat_bast"
+                        value="{{ old('nomor_surat_bast', $inventaris->nomor_surat_bast) }}"
+                        placeholder="Contoh: BAST/001/2026"
+                        class="flex h-10 w-full rounded-md border {{ $errors->has('nomor_surat_bast') ? 'border-red-500 focus:ring-red-500' : 'border-zinc-200 focus:ring-zinc-950' }} bg-transparent px-3 py-2 text-sm ring-offset-white placeholder:text-zinc-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 text-zinc-900"
+                    >
+                    @error('nomor_surat_bast')
                         <p class="text-xs font-medium text-red-500">{{ $message }}</p>
                     @enderror
                 </div>

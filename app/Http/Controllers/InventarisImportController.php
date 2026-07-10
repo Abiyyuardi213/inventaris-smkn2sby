@@ -125,12 +125,16 @@ class InventarisImportController extends Controller
             'nama_barang' => 'required|string|max:255',
             'merek' => 'required|string|max:100',
             'spesifikasi' => 'required|string',
+            'bahan' => 'nullable|string|max:255',
+            'warna' => 'nullable|string|max:255',
             'kategori_id' => 'required|string',
             'jurusan_id' => 'required|string',
             'ruangan_id' => 'required|string',
             'jumlah_total' => 'required|integer|min:0',
             'harga_satuan' => 'required|integer|min:0',
             'sumber_dana' => 'nullable|string|max:255',
+            'nama_penyedia' => 'nullable|string|max:255',
+            'nomor_surat_bast' => 'nullable|string|max:255',
             'kondisi' => 'required|in:baik,layak,rusak',
             'tanggal_pengadaan' => 'required|date',
             'foto_url' => 'nullable|url|max:2048',
@@ -179,12 +183,16 @@ class InventarisImportController extends Controller
                     'nama_barang' => $payload['nama_barang'],
                     'merek' => $payload['merek'],
                     'spesifikasi' => $payload['spesifikasi'],
+                    'bahan' => $payload['bahan'] ?? null,
+                    'warna' => $payload['warna'] ?? null,
                     'kategori_id' => $payload['kategori_id'],
                     'jurusan_id' => $payload['jurusan_id'],
                     'ruangan_id' => $payload['ruangan_id'],
                     'jumlah_total' => (int) $payload['jumlah_total'],
                     'harga_satuan' => (int) $payload['harga_satuan'],
                     'sumber_dana' => $payload['sumber_dana'] ?? null,
+                    'nama_penyedia' => $payload['nama_penyedia'] ?? null,
+                    'nomor_surat_bast' => $payload['nomor_surat_bast'] ?? null,
                     'kondisi' => $payload['kondisi'],
                     'tanggal_pengadaan' => $payload['tanggal_pengadaan'],
                     'foto_url' => $payload['foto_url'] ?? null,
@@ -251,7 +259,14 @@ class InventarisImportController extends Controller
     private function validatePayload(array $payload): array
     {
         $errors = [];
-        $required = array_values(array_diff(InventarisSpreadsheetService::HEADERS, ['foto_url']));
+        $required = array_values(array_diff(InventarisSpreadsheetService::HEADERS, [
+            'foto_url',
+            'bahan',
+            'warna',
+            'sumber_dana',
+            'nama_penyedia',
+            'nomor_surat_bast',
+        ]));
 
         foreach ($required as $field) {
             if (!isset($payload[$field]) || trim((string) $payload[$field]) === '') {

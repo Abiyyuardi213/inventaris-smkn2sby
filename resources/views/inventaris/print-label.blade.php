@@ -98,13 +98,26 @@
         }
         .text-name {
             font-size: 9px;
-            font-weight: 650;
-            color: #27272a;
-            line-height: 1.15;
+            font-weight: 700;
+            color: #18181b;
+            line-height: 1.25;
             width: 100%;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            margin-bottom: 1px;
+        }
+        .text-room {
+            font-size: 8px;
+            font-weight: 500;
+            color: #71717a;
+            line-height: 1.2;
+            width: 100%;
+            white-space: normal;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
         }
 
         /* CSS for Printing (Will automatically scale to fill the printed page) */
@@ -158,6 +171,9 @@
             .text-name {
                 font-size: 9px !important;
             }
+            .text-room {
+                font-size: 8px !important;
+            }
         }
     </style>
 </head>
@@ -194,7 +210,10 @@
                 <div class="text-code">{{ $item->kode_inventaris }}</div>
             </div>
             <div class="label-row">
-                <div class="text-name">{{ $item->nama_barang }} | {{ $item->ruangan->nama_ruangan ?? '-' }}</div>
+                <div class="w-full">
+                    <div class="text-name">{{ $item->nama_barang }}</div>
+                    <div class="text-room">{{ $item->ruangan->nama_ruangan ?? '-' }}</div>
+                </div>
             </div>
         </div>
 

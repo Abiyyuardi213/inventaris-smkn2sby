@@ -67,6 +67,19 @@
                     @error('foto_url') <p class="text-xs text-red-500">{{ $message }}</p> @enderror
                 </div>
 
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="space-y-2">
+                        <label for="bahan" class="text-sm font-medium text-zinc-900">Bahan</label>
+                        <input id="bahan" name="bahan" value="{{ old('bahan', $payload['bahan'] ?? '') }}" class="h-10 w-full rounded-md border border-zinc-200 px-3 text-sm" placeholder="Kayu, plastik, logam">
+                        @error('bahan') <p class="text-xs text-red-500">{{ $message }}</p> @enderror
+                    </div>
+                    <div class="space-y-2">
+                        <label for="warna" class="text-sm font-medium text-zinc-900">Warna</label>
+                        <input id="warna" name="warna" value="{{ old('warna', $payload['warna'] ?? '') }}" class="h-10 w-full rounded-md border border-zinc-200 px-3 text-sm" placeholder="Hitam">
+                        @error('warna') <p class="text-xs text-red-500">{{ $message }}</p> @enderror
+                    </div>
+                </div>
+
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div class="space-y-2">
                         <label for="kategori_id" class="text-sm font-medium text-zinc-900">Kategori</label>
@@ -125,6 +138,16 @@
                         <label for="sumber_dana" class="text-sm font-medium text-zinc-900">Sumber Dana</label>
                         <input id="sumber_dana" name="sumber_dana" value="{{ old('sumber_dana', $payload['sumber_dana'] ?? '') }}" class="h-10 w-full rounded-md border border-zinc-200 px-3 text-sm" placeholder="BOS">
                         @error('sumber_dana') <p class="text-xs text-red-500">{{ $message }}</p> @enderror
+                    </div>
+                    <div class="space-y-2">
+                        <label for="nama_penyedia" class="text-sm font-medium text-zinc-900">Nama Penyedia</label>
+                        <input id="nama_penyedia" name="nama_penyedia" value="{{ old('nama_penyedia', $payload['nama_penyedia'] ?? '') }}" class="h-10 w-full rounded-md border border-zinc-200 px-3 text-sm" placeholder="PT Contoh Penyedia">
+                        @error('nama_penyedia') <p class="text-xs text-red-500">{{ $message }}</p> @enderror
+                    </div>
+                    <div class="space-y-2">
+                        <label for="nomor_surat_bast" class="text-sm font-medium text-zinc-900">Nomor Surat BAST</label>
+                        <input id="nomor_surat_bast" name="nomor_surat_bast" value="{{ old('nomor_surat_bast', $payload['nomor_surat_bast'] ?? '') }}" class="h-10 w-full rounded-md border border-zinc-200 px-3 text-sm" placeholder="BAST/001/2026">
+                        @error('nomor_surat_bast') <p class="text-xs text-red-500">{{ $message }}</p> @enderror
                     </div>
                     <div class="space-y-2">
                         <label for="kondisi" class="text-sm font-medium text-zinc-900">Kondisi</label>

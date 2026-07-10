@@ -68,11 +68,24 @@
 
     {{-- Filters Card --}}
     <div class="rounded-lg border border-zinc-200 bg-white p-5 shadow-sm">
-        <form method="GET" action="{{ route('inventaris.index') }}" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4">
+        <form id="filter-form" method="GET" action="{{ route('inventaris.index') }}" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
+            {{-- Cari Barang --}}
+            <div class="space-y-1.5 sm:col-span-2 lg:col-span-2">
+                <label for="search" class="text-xs font-semibold text-zinc-500 uppercase tracking-wider">Cari Barang</label>
+                <div class="relative">
+                    <input type="text" id="search" name="search" value="{{ request('search') }}" placeholder="Cari nama atau merek..." class="flex h-9 w-full rounded-md border border-zinc-200 bg-transparent pl-8 pr-3 py-1 text-xs text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:ring-1 focus:ring-zinc-950">
+                    <div class="absolute inset-y-0 left-0 flex items-center pl-2.5 pointer-events-none text-zinc-400">
+                        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.637 10.637Z" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
             {{-- Kategori --}}
             <div class="space-y-1.5">
                 <label for="kategori_id" class="text-xs font-semibold text-zinc-500 uppercase tracking-wider">Kategori</label>
-                <select id="kategori_id" name="kategori_id" class="flex h-9 w-full rounded-md border border-zinc-200 bg-transparent px-3 py-1 text-xs text-zinc-900 focus:outline-none focus:ring-1 focus:ring-zinc-950" onchange="this.form.submit()">
+                <select id="kategori_id" name="kategori_id" class="flex h-9 w-full rounded-md border border-zinc-200 bg-transparent px-3 py-1 text-xs text-zinc-900 focus:outline-none focus:ring-1 focus:ring-zinc-950">
                     <option value="">Semua Kategori</option>
                     @foreach($kategoris as $kategori)
                         <option value="{{ $kategori->id }}" {{ request('kategori_id') == $kategori->id ? 'selected' : '' }}>
@@ -85,7 +98,7 @@
             {{-- Unit Kerja --}}
             <div class="space-y-1.5">
                 <label for="jurusan_id" class="text-xs font-semibold text-zinc-500 uppercase tracking-wider">Unit Kerja</label>
-                <select id="jurusan_id" name="jurusan_id" class="flex h-9 w-full rounded-md border border-zinc-200 bg-transparent px-3 py-1 text-xs text-zinc-900 focus:outline-none focus:ring-1 focus:ring-zinc-950" onchange="filterRuanganByJurusan(true); this.form.submit();">
+                <select id="jurusan_id" name="jurusan_id" class="flex h-9 w-full rounded-md border border-zinc-200 bg-transparent px-3 py-1 text-xs text-zinc-900 focus:outline-none focus:ring-1 focus:ring-zinc-950">
                     <option value="">Semua Unit Kerja</option>
                     @foreach($jurusans as $jurusan)
                         <option value="{{ $jurusan->id }}" {{ request('jurusan_id') == $jurusan->id ? 'selected' : '' }}>
@@ -98,7 +111,7 @@
             {{-- Ruangan --}}
             <div class="space-y-1.5">
                 <label for="ruangan_id" class="text-xs font-semibold text-zinc-500 uppercase tracking-wider">Ruangan</label>
-                <select id="ruangan_id" name="ruangan_id" class="flex h-9 w-full rounded-md border border-zinc-200 bg-transparent px-3 py-1 text-xs text-zinc-900 focus:outline-none focus:ring-1 focus:ring-zinc-950" onchange="this.form.submit()">
+                <select id="ruangan_id" name="ruangan_id" class="flex h-9 w-full rounded-md border border-zinc-200 bg-transparent px-3 py-1 text-xs text-zinc-900 focus:outline-none focus:ring-1 focus:ring-zinc-950">
                     <option value="">Semua Ruangan</option>
                     @foreach($ruangans as $ruangan)
                         <option value="{{ $ruangan->id }}" data-jurusan-id="{{ $ruangan->jurusan_id }}" {{ request('ruangan_id') == $ruangan->id ? 'selected' : '' }}>
@@ -111,7 +124,7 @@
             {{-- Kondisi --}}
             <div class="space-y-1.5">
                 <label for="kondisi" class="text-xs font-semibold text-zinc-500 uppercase tracking-wider">Kondisi</label>
-                <select id="kondisi" name="kondisi" class="flex h-9 w-full rounded-md border border-zinc-200 bg-transparent px-3 py-1 text-xs text-zinc-900 focus:outline-none focus:ring-1 focus:ring-zinc-950" onchange="this.form.submit()">
+                <select id="kondisi" name="kondisi" class="flex h-9 w-full rounded-md border border-zinc-200 bg-transparent px-3 py-1 text-xs text-zinc-900 focus:outline-none focus:ring-1 focus:ring-zinc-950">
                     <option value="">Semua Kondisi</option>
                     <option value="baik" {{ request('kondisi') == 'baik' ? 'selected' : '' }}>Baik</option>
                     <option value="layak" {{ request('kondisi') == 'layak' ? 'selected' : '' }}>Layak Pakai</option>
@@ -122,7 +135,7 @@
             {{-- Tahun Pengadaan --}}
             <div class="space-y-1.5">
                 <label for="tahun_pengadaan" class="text-xs font-semibold text-zinc-500 uppercase tracking-wider">Tahun</label>
-                <select id="tahun_pengadaan" name="tahun_pengadaan" class="flex h-9 w-full rounded-md border border-zinc-200 bg-transparent px-3 py-1 text-xs text-zinc-900 focus:outline-none focus:ring-1 focus:ring-zinc-950" onchange="this.form.submit()">
+                <select id="tahun_pengadaan" name="tahun_pengadaan" class="flex h-9 w-full rounded-md border border-zinc-200 bg-transparent px-3 py-1 text-xs text-zinc-900 focus:outline-none focus:ring-1 focus:ring-zinc-950">
                     <option value="">Semua Tahun</option>
                     @foreach($tahunPengadaans as $tahun)
                         <option value="{{ $tahun }}" {{ request('tahun_pengadaan') == $tahun ? 'selected' : '' }}>
@@ -145,7 +158,7 @@
     </div>
 
     {{-- Table Card --}}
-    <div class="rounded-lg border border-zinc-200 bg-white shadow-sm overflow-hidden">
+    <div id="inventaris-table-container" class="rounded-lg border border-zinc-200 bg-white shadow-sm overflow-hidden">
         <div class="overflow-x-auto">
             <table class="w-full text-sm text-left">
                 <thead class="text-xs uppercase bg-zinc-50 text-zinc-500 border-b border-zinc-200">
@@ -406,20 +419,156 @@
         window.open(url, '_blank');
     }
 
-    // Jalankan penyaringan saat halaman dimuat pertama kali untuk mempertahankan state filter dari URL
+    // Submit form via AJAX
+    function submitFormAjax() {
+        const filterForm = document.getElementById('filter-form');
+        if (!filterForm) return;
+
+        const formData = new FormData(filterForm);
+        const params = new URLSearchParams();
+
+        for (const [key, value] of formData.entries()) {
+            if (value !== '') {
+                params.append(key, value);
+            }
+        }
+
+        const baseUrl = filterForm.getAttribute('action');
+        const url = baseUrl + (params.toString() ? '?' + params.toString() : '');
+        fetchFilteredData(url);
+    }
+
+    // Fetch filtered data via AJAX
+    function fetchFilteredData(url, shouldPushState = true) {
+        const container = document.getElementById('inventaris-table-container');
+        if (!container) return;
+
+        // Visual loading feedback
+        container.classList.add('opacity-50', 'transition-opacity', 'duration-200');
+
+        fetch(url, {
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => {
+            if (!response.ok) throw new Error('Network response was not ok');
+            return response.text();
+        })
+        .then(html => {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            const newContainer = doc.getElementById('inventaris-table-container');
+
+            if (newContainer) {
+                container.innerHTML = newContainer.innerHTML;
+            }
+            container.classList.remove('opacity-50');
+
+            // Sync the form values with the new URL parameters
+            syncFormWithUrl(url);
+
+            if (shouldPushState) {
+                window.history.pushState({ path: url }, '', url);
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching filtered data:', error);
+            container.classList.remove('opacity-50');
+        });
+    }
+
+    // Sync form inputs with URL parameters (for browser back/forward and AJAX pagination)
+    function syncFormWithUrl(url) {
+        const filterForm = document.getElementById('filter-form');
+        if (!filterForm) return;
+
+        const urlObj = new URL(url, window.location.origin);
+        const params = urlObj.searchParams;
+
+        // Sync search input
+        const searchInput = document.getElementById('search');
+        if (searchInput) {
+            searchInput.value = params.get('search') || '';
+        }
+
+        // Sync selects
+        filterForm.querySelectorAll('select').forEach(select => {
+            select.value = params.get(select.name) || '';
+        });
+
+        // Re-run room filtering based on current unit kerja selection
+        filterRuanganByJurusan();
+    }
+
+    // Initial setup on DOMContentLoaded
     document.addEventListener('DOMContentLoaded', function() {
         filterRuanganByJurusan();
 
-        // Handle select all checkbox
-        const selectAllCheckbox = document.getElementById('select_all');
-        if (selectAllCheckbox) {
-            selectAllCheckbox.addEventListener('change', function() {
-                const checkboxes = document.querySelectorAll('.item-checkbox');
-                checkboxes.forEach(cb => {
-                    cb.checked = selectAllCheckbox.checked;
+        const filterForm = document.getElementById('filter-form');
+        if (filterForm) {
+            // Handle select changes via event listener instead of onchange attribute
+            filterForm.querySelectorAll('select').forEach(select => {
+                select.addEventListener('change', function() {
+                    if (this.id === 'jurusan_id') {
+                        filterRuanganByJurusan(true);
+                    }
+                    submitFormAjax();
                 });
             });
+
+            // Handle search input typing with 300ms debounce
+            const searchInput = document.getElementById('search');
+            if (searchInput) {
+                let debounceTimeout;
+                searchInput.addEventListener('input', function() {
+                    clearTimeout(debounceTimeout);
+                    debounceTimeout = setTimeout(() => {
+                        submitFormAjax();
+                    }, 300);
+                });
+            }
+
+            // Intercept Reset Filter button click
+            const resetBtn = filterForm.querySelector('a[href*="inventaris"]');
+            if (resetBtn) {
+                resetBtn.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    filterForm.reset();
+                    filterForm.querySelectorAll('select').forEach(select => select.value = "");
+                    if (searchInput) searchInput.value = "";
+                    filterRuanganByJurusan(true);
+                    submitFormAjax();
+                });
+            }
         }
+
+        // Intercept pagination links click (AJAX pagination)
+        document.addEventListener('click', function(event) {
+            const paginationLink = event.target.closest('#inventaris-table-container .pagination-sm a');
+            if (paginationLink) {
+                event.preventDefault();
+                const url = paginationLink.getAttribute('href');
+                if (url) {
+                    fetchFilteredData(url);
+                }
+            }
+        });
+
+        // Handle select all checkbox change using event delegation
+        document.addEventListener('change', function(event) {
+            if (event.target && event.target.id === 'select_all') {
+                const checkboxes = document.querySelectorAll('.item-checkbox');
+                checkboxes.forEach(cb => {
+                    cb.checked = event.target.checked;
+                });
+            }
+        });
+    });
+
+    // Handle browser back/forward buttons
+    window.addEventListener('popstate', function() {
+        fetchFilteredData(window.location.href, false);
     });
 </script>
 @endsection

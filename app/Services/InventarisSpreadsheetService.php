@@ -15,32 +15,41 @@ class InventarisSpreadsheetService
         'nama_barang',
         'merek',
         'spesifikasi',
+        'bahan',
+        'warna',
         'kategori_id',
         'jurusan_id',
         'ruangan_id',
         'jumlah_total',
         'harga_satuan',
         'sumber_dana',
+        'nama_penyedia',
+        'nomor_surat_bast',
         'kondisi',
         'tanggal_pengadaan',
         'foto_url',
     ];
 
     public const EXPORT_HEADERS = [
-        'kode_inventaris',
-        'nama_barang',
-        'merek',
-        'spesifikasi',
-        'kategori_id',
-        'jurusan_id',
-        'ruangan_id',
-        'jumlah_total',
-        'harga_satuan',
-        'sumber_dana',
-        'harga_total',
-        'kondisi',
-        'tanggal_pengadaan',
-        'foto_url',
+        'No.',
+        'Jenis Barang Modal',
+        'Kode Barang',
+        'Kategori Barang',
+        'Nama Barang',
+        'Merk',
+        'Type',
+        'Bahan',
+        'Warna',
+        'Volume',
+        'Satuan',
+        'Harga Satuan',
+        'Jumlah',
+        'Lokasi Barang',
+        'Nama Penyedia',
+        'Tanggal Pembayaran',
+        'Nomor Surat BAST',
+        'Tanggal BAST',
+        'Link Drive Dokumen',
     ];
 
     public function parse(string $path, string $extension): array
@@ -60,12 +69,16 @@ class InventarisSpreadsheetService
                 'Laptop Praktikum',
                 'Asus',
                 'Intel Core i5, RAM 8GB, SSD 512GB',
+                'Plastik dan logam',
+                'Hitam',
                 'isi-dengan-kategori_id',
                 'isi-dengan-jurusan_id',
                 'isi-dengan-ruangan_id',
                 1,
                 8500000,
                 'BOS',
+                'PT Contoh Penyedia',
+                'BAST/001/2026',
                 'baik',
                 now()->toDateString(),
                 'https://drive.google.com/file/d/FILE_ID/view',
@@ -81,20 +94,25 @@ class InventarisSpreadsheetService
     {
         $rows = [self::EXPORT_HEADERS];
 
-        foreach ($inventaris as $item) {
+        foreach ($inventaris as $index => $item) {
             $rows[] = [
+                $index + 1,
+                'Modal Peralatan dan Mesin',
                 $item->kode_inventaris,
+                $item->kategori?->nama_kategori ?? '',
                 $item->nama_barang,
                 $item->merek,
                 $item->spesifikasi,
-                $item->kategori_id,
-                $item->jurusan_id,
-                $item->ruangan_id,
+                $item->bahan,
+                $item->warna,
                 $item->jumlah_total,
+                'Unit',
                 $item->harga_satuan ?? 0,
-                $item->sumber_dana,
                 $item->harga_total,
-                $item->kondisi,
+                trim(($item->ruangan?->nama_ruangan ?? '') . (($item->jurusan?->nama_jurusan ?? '') !== '' ? ' - ' . $item->jurusan->nama_jurusan : '')),
+                $item->nama_penyedia,
+                optional($item->tanggal_pengadaan)->format('Y-m-d'),
+                $item->nomor_surat_bast,
                 optional($item->tanggal_pengadaan)->format('Y-m-d'),
                 $item->foto_url,
             ];
@@ -266,6 +284,7 @@ class InventarisSpreadsheetService
         $zip->addFromString('_rels/.rels', $this->relsXml());
         $zip->addFromString('xl/workbook.xml', $this->workbookXml());
         $zip->addFromString('xl/_rels/workbook.xml.rels', $this->workbookRelsXml());
+        $zip->addFromString('xl/styles.xml', $this->stylesXml());
         $zip->addFromString('xl/worksheets/sheet1.xml', $this->sheetXml($rows));
         $zip->close();
 
@@ -282,18 +301,60 @@ class InventarisSpreadsheetService
     {
         $xmlRows = '';
         foreach ($rows as $rowIndex => $row) {
-            $xmlRows .= '<row r="' . ($rowIndex + 1) . '">';
+            $rowNumber = $rowIndex + 1;
+            $style = $rowIndex === 0 ? '1' : '2';
+            $xmlRows .= '<row r="' . $rowNumber . '">';
             foreach (array_values($row) as $columnIndex => $value) {
-                $cell = $this->columnName($columnIndex) . ($rowIndex + 1);
-                $xmlRows .= '<c r="' . $cell . '" t="inlineStr"><is><t>' . e((string) $value) . '</t></is></c>';
+                $cell = $this->columnName($columnIndex) . $rowNumber;
+                $xmlRows .= '<c r="' . $cell . '" s="' . $style . '" t="inlineStr"><is><t>' . e((string) $value) . '</t></is></c>';
             }
             $xmlRows .= '</row>';
         }
 
+        $lastColumn = $this->columnName(count($rows[0] ?? []) - 1);
+        $lastRow = max(count($rows), 1);
+        $columns = $this->exportColumnWidthsXml();
+
         return '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
             . '<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">'
+            . '<dimension ref="A1:' . $lastColumn . $lastRow . '"/>'
+            . '<sheetViews><sheetView workbookViewId="0"><pane ySplit="1" topLeftCell="A2" activePane="bottomLeft" state="frozen"/></sheetView></sheetViews>'
+            . $columns
             . '<sheetData>' . $xmlRows . '</sheetData>'
             . '</worksheet>';
+    }
+
+    private function exportColumnWidthsXml(): string
+    {
+        $widths = [
+            4,
+            24,
+            14,
+            18,
+            22,
+            12,
+            18,
+            12,
+            10,
+            10,
+            10,
+            15,
+            15,
+            24,
+            18,
+            20,
+            28,
+            16,
+            28,
+        ];
+
+        $cols = '<cols>';
+        foreach ($widths as $index => $width) {
+            $column = $index + 1;
+            $cols .= '<col min="' . $column . '" max="' . $column . '" width="' . $width . '" customWidth="1"/>';
+        }
+
+        return $cols . '</cols>';
     }
 
     private function contentTypesXml(): string
@@ -304,6 +365,7 @@ class InventarisSpreadsheetService
             . '<Default Extension="xml" ContentType="application/xml"/>'
             . '<Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/>'
             . '<Override PartName="/xl/worksheets/sheet1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>'
+            . '<Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/>'
             . '</Types>';
     }
 
@@ -328,7 +390,35 @@ class InventarisSpreadsheetService
         return '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
             . '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'
             . '<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet1.xml"/>'
+            . '<Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/>'
             . '</Relationships>';
+    }
+
+    private function stylesXml(): string
+    {
+        return '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
+            . '<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">'
+            . '<fonts count="2">'
+            . '<font><sz val="11"/><name val="Calibri"/></font>'
+            . '<font><b/><sz val="11"/><name val="Calibri"/><color rgb="FF000000"/></font>'
+            . '</fonts>'
+            . '<fills count="3">'
+            . '<fill><patternFill patternType="none"/></fill>'
+            . '<fill><patternFill patternType="gray125"/></fill>'
+            . '<fill><patternFill patternType="solid"><fgColor rgb="FFD9EAF7"/><bgColor indexed="64"/></patternFill></fill>'
+            . '</fills>'
+            . '<borders count="2">'
+            . '<border><left/><right/><top/><bottom/><diagonal/></border>'
+            . '<border><left style="thin"><color rgb="FF000000"/></left><right style="thin"><color rgb="FF000000"/></right><top style="thin"><color rgb="FF000000"/></top><bottom style="thin"><color rgb="FF000000"/></bottom><diagonal/></border>'
+            . '</borders>'
+            . '<cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs>'
+            . '<cellXfs count="3">'
+            . '<xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/>'
+            . '<xf numFmtId="0" fontId="1" fillId="2" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment horizontal="center" vertical="center" wrapText="1"/></xf>'
+            . '<xf numFmtId="0" fontId="0" fillId="0" borderId="1" xfId="0" applyBorder="1" applyAlignment="1"><alignment vertical="center" wrapText="1"/></xf>'
+            . '</cellXfs>'
+            . '<cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles>'
+            . '</styleSheet>';
     }
 
     private function columnIndex(string $cellRef): int
