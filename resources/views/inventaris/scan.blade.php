@@ -62,14 +62,14 @@
 
                 <div class="flex flex-col sm:flex-row gap-2">
                     <button type="button" id="start-scan"
-                        class="inline-flex h-10 flex-1 items-center justify-center gap-2 rounded-md bg-zinc-900 px-4 text-sm font-semibold text-white shadow-sm hover:bg-zinc-800">
+                        class="inline-flex h-11 sm:h-10 sm:flex-1 shrink-0 items-center justify-center gap-2 rounded-md bg-zinc-900 px-4 text-sm font-semibold text-white shadow-sm hover:bg-zinc-800 transition-colors">
                         <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M6.827 6.175A2.31 2.31 0 0 1 5.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574v7.302A2.25 2.25 0 0 0 4.5 19.126h15a2.25 2.25 0 0 0 2.25-2.25V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 0 0-1.134-.175 2.31 2.31 0 0 1-1.64-1.055l-.822-1.316A2.25 2.25 0 0 0 14.444 3.75H9.556a2.25 2.25 0 0 0-1.908 1.059l-.821 1.316Z" />
                         </svg>
                         Mulai Scan
                     </button>
                     <button type="button" id="stop-scan"
-                        class="inline-flex h-10 items-center justify-center gap-2 rounded-md border border-zinc-200 bg-white px-4 text-sm font-semibold text-zinc-700 shadow-sm hover:bg-zinc-50 disabled:cursor-not-allowed disabled:opacity-50"
+                        class="inline-flex h-11 sm:h-10 sm:flex-1 shrink-0 items-center justify-center gap-2 rounded-md border border-zinc-200 bg-white px-4 text-sm font-semibold text-zinc-700 shadow-sm hover:bg-zinc-50 disabled:cursor-not-allowed disabled:opacity-50 transition-colors"
                         disabled>
                         Berhenti
                     </button>
@@ -84,10 +84,10 @@
                 <p class="mt-1 text-xs text-zinc-500">Gunakan jika kamera tidak tersedia. Masukkan kode inventaris atau tempel URL hasil QR.</p>
                 <form id="manual-form" class="mt-4 space-y-3">
                     <input id="manual-value" type="text" autocomplete="off"
-                        class="h-10 w-full rounded-md border border-zinc-200 bg-white px-3 text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-zinc-950"
+                        class="h-11 sm:h-10 w-full rounded-md border border-zinc-200 bg-white px-3 text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-zinc-950"
                         placeholder="Contoh: INV-PC-RPL-001">
                     <button type="submit"
-                        class="inline-flex h-10 w-full items-center justify-center rounded-md bg-zinc-900 px-4 text-sm font-semibold text-white shadow-sm hover:bg-zinc-800">
+                        class="inline-flex h-11 sm:h-10 w-full items-center justify-center rounded-md bg-zinc-900 px-4 text-sm font-semibold text-white shadow-sm hover:bg-zinc-800 transition-colors">
                         Cari Inventaris
                     </button>
                 </form>
@@ -187,14 +187,14 @@
             <!-- Action Buttons Footer -->
             <div class="pt-5 border-t border-zinc-100 flex flex-col sm:flex-row gap-3">
                 <button type="button" id="btn-scan-ulang"
-                    class="inline-flex h-10 flex-1 items-center justify-center gap-2 rounded-md bg-emerald-600 px-4 text-sm font-semibold text-white shadow-sm hover:bg-emerald-700 cursor-pointer transition-colors">
+                    class="inline-flex h-11 sm:h-10 sm:flex-1 shrink-0 items-center justify-center gap-2 rounded-md bg-emerald-600 px-4 text-sm font-semibold text-white shadow-sm hover:bg-emerald-700 cursor-pointer transition-colors">
                     <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
                     </svg>
                     Cek Aset Lain (Scan Ulang)
                 </button>
                 <a id="result-link" href="#"
-                    class="inline-flex h-10 flex-1 items-center justify-center gap-2 rounded-md border border-zinc-200 bg-white px-4 text-sm font-semibold text-zinc-700 shadow-sm hover:bg-zinc-50 transition-colors">
+                    class="inline-flex h-11 sm:h-10 sm:flex-1 shrink-0 items-center justify-center gap-2 rounded-md border border-zinc-200 bg-white px-4 text-sm font-semibold text-zinc-700 shadow-sm hover:bg-zinc-50 transition-colors">
                     <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
                     </svg>
