@@ -31,7 +31,9 @@
         </a>
     </div>
 
-    <div class="grid grid-cols-1 xl:grid-cols-[minmax(320px,460px)_minmax(0,1fr)] gap-6 items-start">
+    <!-- Wrapper for Scanner View -->
+    <div id="scanner-view-wrapper" class="grid grid-cols-1 xl:grid-cols-[minmax(320px,460px)_minmax(0,1fr)] gap-6 items-start">
+        <!-- Camera Scanner Card -->
         <section class="rounded-lg border border-zinc-200 bg-white shadow-sm overflow-hidden w-full max-w-[460px] mx-auto xl:mx-0">
             <div class="border-b border-zinc-100 px-5 py-4 flex items-center justify-between gap-3">
                 <div>
@@ -75,7 +77,8 @@
             </div>
         </section>
 
-        <aside class="space-y-4">
+        <!-- Right Side: Manual Input & Helper -->
+        <div class="space-y-4 w-full">
             <section class="rounded-lg border border-zinc-200 bg-white p-5 shadow-sm">
                 <h3 class="text-sm font-semibold text-zinc-900">Input Manual</h3>
                 <p class="mt-1 text-xs text-zinc-500">Gunakan jika kamera tidak tersedia. Masukkan kode inventaris atau tempel URL hasil QR.</p>
@@ -90,93 +93,115 @@
                 </form>
             </section>
 
-            <section id="result-card" class="hidden rounded-lg border border-zinc-200 bg-white p-6 shadow-sm space-y-6">
-                <!-- Main Header (Nama Barang & Tempat) -->
-                <div class="border-b border-zinc-100 pb-4">
-                    <p class="text-[11px] font-bold uppercase tracking-widest text-emerald-600">Inventaris Ditemukan</p>
-                    <h3 id="result-name" class="mt-1.5 text-xl font-extrabold text-zinc-900 leading-tight"></h3>
-                    
-                    <div class="mt-2 flex items-center gap-2 text-sm text-zinc-600">
-                        <svg class="w-4 h-4 text-zinc-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25s-7.5-4.108-7.5-11.25a7.5 7.5 0 1 1 15 0Z" />
-                        </svg>
-                        <span id="result-main-location" class="font-semibold text-zinc-800"></span>
-                    </div>
-
-                    <div class="mt-3.5 flex flex-wrap gap-2 items-center">
-                        <span id="result-code" class="inline-flex items-center rounded-md bg-zinc-100 px-2.5 py-1 text-xs font-mono font-semibold text-zinc-800 border border-zinc-200"></span>
-                        <span id="result-condition" class="rounded-full px-2.5 py-1 text-[11px] font-bold"></span>
-                    </div>
-                </div>
-
-                <!-- Detail Grid -->
-                <div class="space-y-4">
-                    <h4 class="text-xs font-bold text-zinc-400 uppercase tracking-wider">Rincian Informasi Aset</h4>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
-                        <div class="rounded-md border border-zinc-100 bg-zinc-50/50 p-3">
-                            <span class="text-[10px] font-bold uppercase tracking-wider text-zinc-400 block">Kategori</span>
-                            <span id="result-kategori" class="mt-1 font-semibold text-zinc-800 block"></span>
-                        </div>
-                        <div class="rounded-md border border-zinc-100 bg-zinc-50/50 p-3">
-                            <span class="text-[10px] font-bold uppercase tracking-wider text-zinc-400 block">Merek</span>
-                            <span id="result-brand" class="mt-1 font-semibold text-zinc-800 block"></span>
-                        </div>
-                        <div class="rounded-md border border-zinc-100 bg-zinc-50/50 p-3">
-                            <span class="text-[10px] font-bold uppercase tracking-wider text-zinc-400 block">Bahan</span>
-                            <span id="result-bahan" class="mt-1 font-semibold text-zinc-800 block"></span>
-                        </div>
-                        <div class="rounded-md border border-zinc-100 bg-zinc-50/50 p-3">
-                            <span class="text-[10px] font-bold uppercase tracking-wider text-zinc-400 block">Warna</span>
-                            <span id="result-warna" class="mt-1 font-semibold text-zinc-800 block"></span>
-                        </div>
-                        <div class="rounded-md border border-zinc-100 bg-zinc-50/50 p-3">
-                            <span class="text-[10px] font-bold uppercase tracking-wider text-zinc-400 block">Jumlah Unit</span>
-                            <span id="result-qty" class="mt-1 font-semibold text-zinc-800 block"></span>
-                        </div>
-                        <div class="rounded-md border border-zinc-100 bg-zinc-50/50 p-3">
-                            <span class="text-[10px] font-bold uppercase tracking-wider text-zinc-400 block">Tanggal Pengadaan</span>
-                            <span id="result-tanggal" class="mt-1 font-semibold text-zinc-800 block"></span>
-                        </div>
-                        <div class="rounded-md border border-zinc-100 bg-zinc-50/50 p-3">
-                            <span class="text-[10px] font-bold uppercase tracking-wider text-zinc-400 block">Harga Satuan</span>
-                            <span id="result-harga-satuan" class="mt-1 font-semibold text-zinc-800 block"></span>
-                        </div>
-                        <div class="rounded-md border border-zinc-100 bg-zinc-50/50 p-3">
-                            <span class="text-[10px] font-bold uppercase tracking-wider text-zinc-400 block">Harga Total</span>
-                            <span id="result-harga-total" class="mt-1 font-semibold text-zinc-800 block"></span>
-                        </div>
-                        <div class="rounded-md border border-zinc-100 bg-zinc-50/50 p-3">
-                            <span class="text-[10px] font-bold uppercase tracking-wider text-zinc-400 block">Sumber Dana</span>
-                            <span id="result-sumber-dana" class="mt-1 font-semibold text-zinc-800 block"></span>
-                        </div>
-                        <div class="rounded-md border border-zinc-100 bg-zinc-50/50 p-3">
-                            <span class="text-[10px] font-bold uppercase tracking-wider text-zinc-400 block">Nama Penyedia</span>
-                            <span id="result-nama-penyedia" class="mt-1 font-semibold text-zinc-800 block"></span>
-                        </div>
-                        <div class="rounded-md border border-zinc-100 bg-zinc-50/50 p-3 sm:col-span-2">
-                            <span class="text-[10px] font-bold uppercase tracking-wider text-zinc-400 block">Nomor Surat BAST</span>
-                            <span id="result-nomor-bast" class="mt-1 font-semibold text-zinc-800 block"></span>
-                        </div>
-                        <div class="rounded-md border border-zinc-100 bg-zinc-50/50 p-3 sm:col-span-2">
-                            <span class="text-[10px] font-bold uppercase tracking-wider text-zinc-400 block">Spesifikasi Detail</span>
-                            <span id="result-spec" class="mt-1 font-medium text-zinc-700 block whitespace-pre-line leading-relaxed"></span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="pt-4 border-t border-zinc-100">
-                    <a id="result-link" href="#"
-                        class="inline-flex h-10 w-full items-center justify-center rounded-md bg-zinc-900 px-4 text-sm font-semibold text-white shadow-sm hover:bg-zinc-800">
-                        Buka Detail Aset (Edit/Ubah)
-                    </a>
-                </div>
-            </section>
-
             <section id="message-card" class="rounded-lg border border-zinc-200 bg-zinc-50 p-5 text-sm text-zinc-600">
                 Hasil scan akan tampil di sini.
             </section>
-        </aside>
+        </div>
+    </div>
+
+    <!-- Wrapper for Scanned Result (Different screen view, separated) -->
+    <div id="result-view-wrapper" class="hidden max-w-4xl mx-auto space-y-4">
+        <!-- Success Alert/Notification -->
+        <div class="rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3.5 flex items-center gap-2.5 text-emerald-800 shadow-sm">
+            <svg class="h-5 w-5 shrink-0 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+            </svg>
+            <span class="text-sm font-semibold">Pencarian Aset Berhasil! Rincian data ditemukan di bawah ini.</span>
+        </div>
+
+        <section id="result-card" class="rounded-lg border border-zinc-200 bg-white p-6 shadow-sm space-y-6">
+            <!-- Main Header (Nama Barang & Tempat) -->
+            <div class="border-b border-zinc-100 pb-4">
+                <p class="text-[11px] font-bold uppercase tracking-widest text-emerald-600">Inventaris Ditemukan</p>
+                <h3 id="result-name" class="mt-1.5 text-xl font-extrabold text-zinc-900 leading-tight"></h3>
+                
+                <div class="mt-2 flex items-center gap-2 text-sm text-zinc-600">
+                    <svg class="w-4 h-4 text-zinc-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25s-7.5-4.108-7.5-11.25a7.5 7.5 0 1 1 15 0Z" />
+                    </svg>
+                    <span id="result-main-location" class="font-semibold text-zinc-800"></span>
+                </div>
+
+                <div class="mt-3.5 flex flex-wrap gap-2 items-center">
+                    <span id="result-code" class="inline-flex items-center rounded-md bg-zinc-100 px-2.5 py-1 text-xs font-mono font-semibold text-zinc-800 border border-zinc-200"></span>
+                    <span id="result-condition" class="rounded-full px-2.5 py-1 text-[11px] font-bold"></span>
+                </div>
+            </div>
+
+            <!-- Detail Grid -->
+            <div class="space-y-4">
+                <h4 class="text-xs font-bold text-zinc-400 uppercase tracking-wider">Rincian Informasi Aset</h4>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+                    <div class="rounded-md border border-zinc-100 bg-zinc-50/50 p-3">
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-zinc-400 block">Kategori</span>
+                        <span id="result-kategori" class="mt-1 font-semibold text-zinc-800 block"></span>
+                    </div>
+                    <div class="rounded-md border border-zinc-100 bg-zinc-50/50 p-3">
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-zinc-400 block">Merek</span>
+                        <span id="result-brand" class="mt-1 font-semibold text-zinc-800 block"></span>
+                    </div>
+                    <div class="rounded-md border border-zinc-100 bg-zinc-50/50 p-3">
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-zinc-400 block">Bahan</span>
+                        <span id="result-bahan" class="mt-1 font-semibold text-zinc-800 block"></span>
+                    </div>
+                    <div class="rounded-md border border-zinc-100 bg-zinc-50/50 p-3">
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-zinc-400 block">Warna</span>
+                        <span id="result-warna" class="mt-1 font-semibold text-zinc-800 block"></span>
+                    </div>
+                    <div class="rounded-md border border-zinc-100 bg-zinc-50/50 p-3">
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-zinc-400 block">Jumlah Unit</span>
+                        <span id="result-qty" class="mt-1 font-semibold text-zinc-800 block"></span>
+                    </div>
+                    <div class="rounded-md border border-zinc-100 bg-zinc-50/50 p-3">
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-zinc-400 block">Tanggal Pengadaan</span>
+                        <span id="result-tanggal" class="mt-1 font-semibold text-zinc-800 block"></span>
+                    </div>
+                    <div class="rounded-md border border-zinc-100 bg-zinc-50/50 p-3">
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-zinc-400 block">Harga Satuan</span>
+                        <span id="result-harga-satuan" class="mt-1 font-semibold text-zinc-800 block"></span>
+                    </div>
+                    <div class="rounded-md border border-zinc-100 bg-zinc-50/50 p-3">
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-zinc-400 block">Harga Total</span>
+                        <span id="result-harga-total" class="mt-1 font-semibold text-zinc-800 block"></span>
+                    </div>
+                    <div class="rounded-md border border-zinc-100 bg-zinc-50/50 p-3">
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-zinc-400 block">Sumber Dana</span>
+                        <span id="result-sumber-dana" class="mt-1 font-semibold text-zinc-800 block"></span>
+                    </div>
+                    <div class="rounded-md border border-zinc-100 bg-zinc-50/50 p-3">
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-zinc-400 block">Nama Penyedia</span>
+                        <span id="result-nama-penyedia" class="mt-1 font-semibold text-zinc-800 block"></span>
+                    </div>
+                    <div class="rounded-md border border-zinc-100 bg-zinc-50/50 p-3 sm:col-span-2">
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-zinc-400 block">Nomor Surat BAST</span>
+                        <span id="result-nomor-bast" class="mt-1 font-semibold text-zinc-800 block"></span>
+                    </div>
+                    <div class="rounded-md border border-zinc-100 bg-zinc-50/50 p-3 sm:col-span-2">
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-zinc-400 block">Spesifikasi Detail</span>
+                        <span id="result-spec" class="mt-1 font-medium text-zinc-700 block whitespace-pre-line leading-relaxed"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons Footer -->
+            <div class="pt-5 border-t border-zinc-100 flex flex-col sm:flex-row gap-3">
+                <button type="button" id="btn-scan-ulang"
+                    class="inline-flex h-10 flex-1 items-center justify-center gap-2 rounded-md bg-emerald-600 px-4 text-sm font-semibold text-white shadow-sm hover:bg-emerald-700 cursor-pointer transition-colors">
+                    <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                    </svg>
+                    Cek Aset Lain (Scan Ulang)
+                </button>
+                <a id="result-link" href="#"
+                    class="inline-flex h-10 flex-1 items-center justify-center gap-2 rounded-md border border-zinc-200 bg-white px-4 text-sm font-semibold text-zinc-700 shadow-sm hover:bg-zinc-50 transition-colors">
+                    <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+                    </svg>
+                    Ubah/Edit Aset Ini
+                </a>
+            </div>
+        </section>
     </div>
 </div>
 
@@ -193,6 +218,9 @@
     const messageCard = document.getElementById('message-card');
     const manualForm = document.getElementById('manual-form');
     const manualValue = document.getElementById('manual-value');
+    const scannerViewWrapper = document.getElementById('scanner-view-wrapper');
+    const resultViewWrapper = document.getElementById('result-view-wrapper');
+    const btnScanUlang = document.getElementById('btn-scan-ulang');
 
     let stream = null;
     let detector = null;
@@ -353,15 +381,13 @@
                         : 'bg-amber-50 text-amber-700 border border-amber-200'
             );
 
-            resultCard.classList.remove('hidden');
-            showMessage('Data inventaris berhasil ditemukan. Berikut rincian data lengkap aset.', 'success');
-            setScannerState('Data inventaris ditemukan.', 'Berhasil', 'border-emerald-200 bg-emerald-50 text-emerald-700');
+            // Hide scanner wrapper and show result wrapper instead of just card
+            scannerViewWrapper.classList.add('hidden');
+            resultViewWrapper.classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
 
-            if (html5QrCode && html5ScannerActive) {
-                try {
-                    html5QrCode.pause(true);
-                } catch (error) {}
-            }
+            // Stop the camera stream instead of pausing to avoid frozen frame camera lock
+            stopScanner(false);
         } catch (error) {
             showMessage('Terjadi kesalahan saat membaca hasil scan.', 'error');
             setScannerState('Gagal memproses hasil scan.', 'Error', 'border-red-200 bg-red-50 text-red-700');
@@ -448,6 +474,13 @@
 
     startButton.addEventListener('click', startScanner);
     stopButton.addEventListener('click', stopScanner);
+
+    btnScanUlang.addEventListener('click', async () => {
+        resultViewWrapper.classList.add('hidden');
+        scannerViewWrapper.classList.remove('hidden');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        await startScanner();
+    });
 
     manualForm.addEventListener('submit', async (event) => {
         event.preventDefault();
