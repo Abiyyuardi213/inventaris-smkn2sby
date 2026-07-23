@@ -84,4 +84,26 @@ class PeminjamanController extends Controller
         $peminjaman->load(['inventaris.kategori', 'user']);
         return view('peminjamans.show', compact('peminjaman'));
     }
+
+    public function kembalikan(Peminjaman $peminjaman): RedirectResponse
+    {
+        if ($peminjaman->status === 'Dikembalikan') {
+            return back()->with('error', 'Barang ini sudah dikembalikan.');
+        }
+
+        try {
+            DB::transaction(function () use ($peminjaman) {
+                if ($peminjaman->inventaris) {
+                    $peminjaman->inventaris->increment('jumlah_total', $peminjaman->jumlah_pinjam);
+                }
+                $peminjaman->update([
+                    'status' => 'Dikembalikan'
+                ]);
+            });
+
+            return redirect()->route('peminjamans.show', $peminjaman->id)->with('success', 'Barang berhasil dikembalikan.');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Terjadi kesalahan saat mengembalikan barang: ' . $e->getMessage());
+        }
+    }
 }

@@ -29,7 +29,7 @@
     }
 </style>
 
-<div class="space-y-6 max-w-2xl">
+<div class="max-w-2xl mx-auto space-y-6">
 
     {{-- Breadcrumb --}}
     <nav class="flex items-center gap-1.5 text-sm text-zinc-500 print:hidden">

@@ -71,6 +71,7 @@ Route::middleware('auth')->prefix('admin')->group(function () {
         Route::resource('inventaris', InventarisController::class);
     });
     Route::resource('mutasis', MutasiController::class)->middleware('permission:mutasis.manage');
+    Route::post('peminjamans/{peminjaman}/kembalikan', [PeminjamanController::class, 'kembalikan'])->name('peminjamans.kembalikan')->middleware('permission:peminjamans.manage');
     Route::resource('peminjamans', PeminjamanController::class)->middleware('permission:peminjamans.manage');
 
     // Route pengadaan — semua user yang sudah login

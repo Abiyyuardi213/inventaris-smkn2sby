@@ -16,6 +16,9 @@ class InventarisSearchTest extends TestCase
         // Seed database
         $this->seed(DatabaseSeeder::class);
 
+        // Clear peminjamans to avoid notifications appearing in the global navbar bell
+        \App\Models\Peminjaman::query()->delete();
+
         // Get super-admin user
         $user = User::where('email', 'adminutama@example.com')->first();
 
@@ -32,6 +35,9 @@ class InventarisSearchTest extends TestCase
     {
         // Seed database
         $this->seed(DatabaseSeeder::class);
+
+        // Clear peminjamans to avoid notifications appearing in the global navbar bell
+        \App\Models\Peminjaman::query()->delete();
 
         // Get super-admin user
         $user = User::where('email', 'adminutama@example.com')->first();
