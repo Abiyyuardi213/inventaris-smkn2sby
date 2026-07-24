@@ -3,7 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\User;
-use App\Models\Kategori;
+use App\Models\JenisModal;
 use App\Models\Jurusan;
 use App\Models\Ruangan;
 use App\Models\Inventaris;
@@ -20,7 +20,7 @@ class InventarisColumnsTest extends TestCase
         $this->seed(DatabaseSeeder::class);
 
         $user = User::where('email', 'adminutama@example.com')->first();
-        $kategori = Kategori::first();
+        $jenisModal = JenisModal::first();
         $jurusan = Jurusan::first();
         $ruangan = Ruangan::where('jurusan_id', $jurusan->id)->first();
 
@@ -28,10 +28,11 @@ class InventarisColumnsTest extends TestCase
             'kode_inventaris' => 'INV-TEST-999',
             'nama_barang' => 'Kursi Ergonomis Premium',
             'merek' => 'Steelcase',
+            'type' => 'Leap V2',
             'spesifikasi' => 'Gas lift class 4, armrest 4D',
             'bahan' => 'Mesh dan Aluminium',
             'warna' => 'Abu-abu',
-            'kategori_id' => $kategori->id,
+            'jenis_modal_id' => $jenisModal->id,
             'jurusan_id' => $jurusan->id,
             'ruangan_id' => $ruangan->id,
             'jumlah_total' => 10,
@@ -52,6 +53,7 @@ class InventarisColumnsTest extends TestCase
         // Verify stored in database
         $this->assertDatabaseHas('inventaris', [
             'kode_inventaris' => 'INV-TEST-999',
+            'type' => 'Leap V2',
             'bahan' => 'Mesh dan Aluminium',
             'warna' => 'Abu-abu',
             'nama_penyedia' => 'PT Ergo Jaya',
@@ -63,6 +65,7 @@ class InventarisColumnsTest extends TestCase
         $response = $this->actingAs($user)
             ->get(route('inventaris.show', $item->id));
 
+        $response->assertSee('Leap V2');
         $response->assertSee('Mesh dan Aluminium');
         $response->assertSee('Abu-abu');
         $response->assertSee('PT Ergo Jaya');
@@ -80,10 +83,11 @@ class InventarisColumnsTest extends TestCase
             'kode_inventaris' => $item->kode_inventaris,
             'nama_barang' => $item->nama_barang,
             'merek' => $item->merek,
+            'type' => 'New Type V2',
             'spesifikasi' => $item->spesifikasi,
             'bahan' => 'Kayu Jati Grade A',
             'warna' => 'Coklat Tua',
-            'kategori_id' => $item->kategori_id,
+            'jenis_modal_id' => $item->jenis_modal_id,
             'jurusan_id' => $item->jurusan_id,
             'ruangan_id' => $item->ruangan_id,
             'jumlah_total' => $item->jumlah_total,
@@ -104,6 +108,7 @@ class InventarisColumnsTest extends TestCase
         // Verify updated in database
         $this->assertDatabaseHas('inventaris', [
             'id' => $item->id,
+            'type' => 'New Type V2',
             'bahan' => 'Kayu Jati Grade A',
             'warna' => 'Coklat Tua',
             'nama_penyedia' => 'CV Jati Agung',
@@ -118,6 +123,7 @@ class InventarisColumnsTest extends TestCase
         $user = User::where('email', 'adminutama@example.com')->first();
         $item = Inventaris::first();
         $item->update([
+            'type' => 'Scanner Type 1',
             'bahan' => 'Baja Ringan',
             'warna' => 'Hitam Pekat',
             'nama_penyedia' => 'PT Baja Bersama',
@@ -133,11 +139,80 @@ class InventarisColumnsTest extends TestCase
             'item' => [
                 'kode_inventaris' => $item->kode_inventaris,
                 'nama_barang' => $item->nama_barang,
+                'type' => 'Scanner Type 1',
                 'bahan' => 'Baja Ringan',
                 'warna' => 'Hitam Pekat',
                 'nama_penyedia' => 'PT Baja Bersama',
                 'nomor_surat_bast' => 'BAST-BAJA-123',
             ],
         ]);
+    }
+
+    public function test_can_delete_selected_inventaris_in_bulk(): void
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $user = User::where('email', 'adminutama@example.com')->first();
+        $jenisModal = JenisModal::first();
+        $jurusan = Jurusan::first();
+        $ruangan = Ruangan::where('jurusan_id', $jurusan->id)->first();
+
+        // Create 2 fresh inventaris items that are not referenced by anything
+        $item1 = Inventaris::create([
+            'kode_inventaris' => 'INV-TEST-DEL-1',
+            'nama_barang' => 'Test Del 1',
+            'merek' => 'Test',
+            'spesifikasi' => 'Test Spesifikasi',
+            'jenis_modal_id' => $jenisModal->id,
+            'jurusan_id' => $jurusan->id,
+            'ruangan_id' => $ruangan->id,
+            'jumlah_total' => 1,
+            'harga_satuan' => 1000,
+            'kondisi' => 'baik',
+            'tanggal_pengadaan' => '2026-07-10',
+        ]);
+
+        $item2 = Inventaris::create([
+            'kode_inventaris' => 'INV-TEST-DEL-2',
+            'nama_barang' => 'Test Del 2',
+            'merek' => 'Test',
+            'spesifikasi' => 'Test Spesifikasi',
+            'jenis_modal_id' => $jenisModal->id,
+            'jurusan_id' => $jurusan->id,
+            'ruangan_id' => $ruangan->id,
+            'jumlah_total' => 1,
+            'harga_satuan' => 1000,
+            'kondisi' => 'baik',
+            'tanggal_pengadaan' => '2026-07-10',
+        ]);
+
+        $ids = [$item1->id, $item2->id];
+
+        $response = $this->actingAs($user)
+            ->delete(route('inventaris.destroy-bulk'), ['ids' => implode(',', $ids)]);
+
+        $response->assertRedirect(route('inventaris.index'));
+        $this->assertDatabaseMissing('inventaris', ['id' => $item1->id]);
+        $this->assertDatabaseMissing('inventaris', ['id' => $item2->id]);
+    }
+
+    public function test_can_delete_all_inventaris(): void
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $user = User::where('email', 'adminutama@example.com')->first();
+
+        // Delete dependencies first to avoid foreign key restrict errors
+        \App\Models\Peminjaman::query()->delete();
+        \App\Models\Mutasi::query()->delete();
+
+        // Ensure there are items
+        $this->assertGreaterThan(0, Inventaris::count());
+
+        $response = $this->actingAs($user)
+            ->delete(route('inventaris.destroy-all'));
+
+        $response->assertRedirect(route('inventaris.index'));
+        $this->assertEquals(0, Inventaris::count());
     }
 }

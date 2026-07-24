@@ -17,7 +17,7 @@ class RuanganController extends Controller
         $ruangans = Ruangan::with([
                 'jurusan',
                 'inventaris' => fn ($query) => $query
-                    ->with('kategori')
+                    ->with('jenisModal')
                     ->orderBy('nama_barang'),
             ])
             ->withCount('inventaris')
@@ -38,7 +38,8 @@ class RuanganController extends Controller
                     'kode' => $item->kode_inventaris,
                     'nama' => $item->nama_barang,
                     'merek' => $item->merek,
-                    'kategori' => $item->kategori?->nama_kategori ?? '-',
+                    'type' => $item->type,
+                    'jenis_modal' => $item->jenisModal?->nama_jenis_modal ?? '-',
                     'jumlah' => $item->jumlah_total,
                     'kondisi' => $item->kondisi,
                 ])->values(),
@@ -53,7 +54,7 @@ class RuanganController extends Controller
         $ruangan->load([
             'jurusan',
             'inventaris' => fn ($query) => $query
-                ->with('kategori')
+                ->with('jenisModal')
                 ->orderBy('nama_barang'),
         ]);
 

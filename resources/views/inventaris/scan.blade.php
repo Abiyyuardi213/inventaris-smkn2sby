@@ -134,12 +134,16 @@
                 <h4 class="text-xs font-bold text-zinc-400 uppercase tracking-wider">Rincian Informasi Aset</h4>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
                     <div class="rounded-md border border-zinc-100 bg-zinc-50/50 p-3">
-                        <span class="text-[10px] font-bold uppercase tracking-wider text-zinc-400 block">Kategori</span>
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-zinc-400 block">Jenis Modal</span>
                         <span id="result-kategori" class="mt-1 font-semibold text-zinc-800 block"></span>
                     </div>
                     <div class="rounded-md border border-zinc-100 bg-zinc-50/50 p-3">
                         <span class="text-[10px] font-bold uppercase tracking-wider text-zinc-400 block">Merek</span>
                         <span id="result-brand" class="mt-1 font-semibold text-zinc-800 block"></span>
+                    </div>
+                    <div class="rounded-md border border-zinc-100 bg-zinc-50/50 p-3">
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-zinc-400 block">Tipe</span>
+                        <span id="result-type" class="mt-1 font-semibold text-zinc-800 block"></span>
                     </div>
                     <div class="rounded-md border border-zinc-100 bg-zinc-50/50 p-3">
                         <span class="text-[10px] font-bold uppercase tracking-wider text-zinc-400 block">Bahan</span>
@@ -358,6 +362,7 @@
             document.getElementById('result-code').textContent = item.kode_inventaris ?? '-';
             document.getElementById('result-kategori').textContent = item.kategori ?? '-';
             document.getElementById('result-brand').textContent = item.merek ?? '-';
+            document.getElementById('result-type').textContent = item.type ?? '-';
             document.getElementById('result-bahan').textContent = item.bahan ?? '-';
             document.getElementById('result-warna').textContent = item.warna ?? '-';
             document.getElementById('result-qty').textContent = `${item.jumlah_total ?? 0} Unit`;

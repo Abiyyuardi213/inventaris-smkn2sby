@@ -99,11 +99,16 @@
                         <p class="text-xs text-zinc-500 font-mono mt-0.5">{{ $mutasi->inventaris->kode_inventaris }}</p>
                         <div class="flex flex-wrap items-center gap-2 mt-2">
                             <span class="inline-flex items-center text-[10px] font-medium text-zinc-500 bg-zinc-100 rounded px-1.5 py-0.5 border border-zinc-200">
-                                Kategori: {{ $mutasi->inventaris->kategori->nama_kategori }}
+                                Jenis Modal: {{ $mutasi->inventaris->jenisModal->nama_jenis_modal }}
                             </span>
                             <span class="inline-flex items-center text-[10px] font-medium text-zinc-500 bg-zinc-100 rounded px-1.5 py-0.5 border border-zinc-200">
                                 Merek: {{ $mutasi->inventaris->merek }}
                             </span>
+                            @if($mutasi->inventaris->type)
+                            <span class="inline-flex items-center text-[10px] font-medium text-zinc-500 bg-zinc-100 rounded px-1.5 py-0.5 border border-zinc-200">
+                                Tipe: {{ $mutasi->inventaris->type }}
+                            </span>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -206,8 +211,12 @@
                     <td class="px-4 py-2 font-mono font-semibold">{{ $mutasi->inventaris->kode_inventaris }}</td>
                 </tr>
                 <tr class="border border-zinc-950">
-                    <td class="px-4 py-2 font-bold border-r border-zinc-950 bg-zinc-50">Merek / Kategori</td>
-                    <td class="px-4 py-2 font-sans">{{ $mutasi->inventaris->merek }} ({{ $mutasi->inventaris->kategori->nama_kategori }})</td>
+                    <td class="px-4 py-2 font-bold border-r border-zinc-950 bg-zinc-50">Merek / Tipe / Jenis Modal</td>
+                    <td class="px-4 py-2 font-sans">
+                        {{ $mutasi->inventaris->merek }} 
+                        @if($mutasi->inventaris->type) &middot; {{ $mutasi->inventaris->type }} @endif 
+                        ({{ $mutasi->inventaris->jenisModal->nama_jenis_modal }})
+                    </td>
                 </tr>
                 <tr class="border border-zinc-950">
                     <td class="px-4 py-2 font-bold border-r border-zinc-950 bg-zinc-50">Spesifikasi</td>

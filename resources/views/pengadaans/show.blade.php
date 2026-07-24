@@ -105,12 +105,12 @@
             </div>
 
             <div>
-                <span class="text-xs font-semibold text-zinc-400 uppercase tracking-wider block mb-1 font-sans">Kategori</span>
-                @if ($pengadaan->kategori)
+                <span class="text-xs font-semibold text-zinc-400 uppercase tracking-wider block mb-1 font-sans">Jenis Modal</span>
+                @if ($pengadaan->jenisModal)
                     <div class="flex items-center gap-2">
-                        <span class="text-sm text-zinc-800 font-sans">{{ $pengadaan->kategori->nama_kategori }}</span>
+                        <span class="text-sm text-zinc-800 font-sans">{{ $pengadaan->jenisModal->nama_jenis_modal }}</span>
                         <span class="inline-flex items-center rounded bg-teal-50 px-1.5 py-0.5 text-xs font-mono font-semibold text-teal-700 border border-teal-200/60">
-                            {{ $pengadaan->kategori->kode_kategori }}
+                            {{ $pengadaan->jenisModal->kode_jenis_modal }}
                         </span>
                     </div>
                 @else

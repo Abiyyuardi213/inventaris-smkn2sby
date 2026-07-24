@@ -33,7 +33,7 @@
             <form action="{{ route('inventaris.imports.store') }}" method="POST" enctype="multipart/form-data" class="space-y-5">
                 @csrf
                 <div class="rounded-md border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
-                    Kolom relasi wajib diisi memakai ID: <strong>kategori_id</strong>, <strong>jurusan_id</strong>, dan <strong>ruangan_id</strong>. Kolom <strong>kode_inventaris</strong> tidak perlu diisi karena akan dibuat otomatis dari nama barang saat import disetujui. Kolom <strong>harga_total</strong> tidak diimport karena dihitung otomatis dari <strong>harga_satuan x jumlah_total</strong>. Kolom <strong>sumber_dana</strong> dan <strong>foto_url</strong> opsional.
+                    Kolom relasi wajib diisi memakai ID: <strong>jenis_modal_id</strong>, <strong>jurusan_id</strong>, dan <strong>ruangan_id</strong>. Kolom <strong>kode_inventaris</strong> tidak perlu diisi karena akan dibuat otomatis dari nama barang saat import disetujui. Kolom <strong>harga_total</strong> tidak diimport karena dihitung otomatis dari <strong>harga_satuan x jumlah_total</strong>. Kolom <strong>sumber_dana</strong> dan <strong>foto_url</strong> opsional.
                 </div>
 
                 <div class="space-y-2">
@@ -68,13 +68,13 @@
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
         <div class="rounded-lg border border-zinc-200 bg-white shadow-sm overflow-hidden">
             <div class="border-b border-zinc-100 bg-zinc-50 px-4 py-3">
-                <h3 class="text-sm font-semibold text-zinc-900">Referensi Kategori ID</h3>
+                <h3 class="text-sm font-semibold text-zinc-900">Referensi Jenis Modal ID</h3>
             </div>
             <div class="max-h-72 overflow-auto">
-                @foreach($kategoris as $kategori)
+                @foreach($jenisModals as $jenisModal)
                     <div class="border-b border-zinc-100 px-4 py-3">
-                        <p class="text-sm font-medium text-zinc-900">{{ $kategori->nama_kategori }}</p>
-                        <p class="mt-1 text-xs font-mono text-zinc-500">{{ $kategori->id }}</p>
+                        <p class="text-sm font-medium text-zinc-900">{{ $jenisModal->nama_jenis_modal }}</p>
+                        <p class="mt-1 text-xs font-mono text-zinc-500">{{ $jenisModal->id }}</p>
                     </div>
                 @endforeach
             </div>

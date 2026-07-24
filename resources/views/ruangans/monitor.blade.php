@@ -217,9 +217,9 @@
                     </td>
                     <td class="px-4 py-3">
                         <p class="text-sm font-semibold text-zinc-900">${escapeHtml(asset.nama)}</p>
-                        <p class="text-xs text-zinc-500">${escapeHtml(asset.merek || '-')}</p>
+                        <p class="text-xs text-zinc-500">${escapeHtml(asset.merek || '-')} ${asset.type ? `&middot; ${escapeHtml(asset.type)}` : ''}</p>
                     </td>
-                    <td class="px-4 py-3 text-sm text-zinc-600">${escapeHtml(asset.kategori)}</td>
+                    <td class="px-4 py-3 text-sm text-zinc-600">${escapeHtml(asset.jenis_modal)}</td>
                     <td class="px-4 py-3 text-center text-sm font-extrabold text-zinc-900">${escapeHtml(asset.jumlah)}</td>
                     <td class="px-4 py-3 text-right">
                         <span class="inline-flex rounded-md border px-2 py-1 text-xs font-bold ${badgeClass}">${escapeHtml(badgeLabel)}</span>
@@ -237,7 +237,7 @@
                                 <th class="px-4 py-3 font-bold">No</th>
                                 <th class="px-4 py-3 font-bold">Kode</th>
                                 <th class="px-4 py-3 font-bold">Barang</th>
-                                <th class="px-4 py-3 font-bold">Kategori</th>
+                                <th class="px-4 py-3 font-bold">Jenis Modal</th>
                                 <th class="px-4 py-3 text-center font-bold">Qty</th>
                                 <th class="px-4 py-3 text-right font-bold">Kondisi</th>
                             </tr>

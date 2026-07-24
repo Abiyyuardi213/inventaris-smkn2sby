@@ -70,7 +70,7 @@
                         <th scope="col" class="px-4 py-4 font-semibold w-10">No</th>
                         <th scope="col" class="px-4 py-4 font-semibold">Nama Barang</th>
                         <th scope="col" class="px-4 py-4 font-semibold">Jurusan</th>
-                        <th scope="col" class="px-4 py-4 font-semibold">Kategori</th>
+                        <th scope="col" class="px-4 py-4 font-semibold">Jenis Modal</th>
                         <th scope="col" class="px-4 py-4 font-semibold text-center">Jumlah</th>
                         <th scope="col" class="px-4 py-4 font-semibold">Perkiraan Harga</th>
                         <th scope="col" class="px-4 py-4 font-semibold">Pengusul</th>
@@ -90,7 +90,7 @@
                             <td class="px-4 py-3.5 text-zinc-600 text-xs">{{ $pengadaan->jurusan->nama_jurusan ?? '-' }}</td>
                             <td class="px-4 py-3.5">
                                 <span class="inline-flex items-center rounded-md bg-teal-50 px-2 py-0.5 text-xs font-mono font-semibold text-teal-700 border border-teal-200/60">
-                                    {{ $pengadaan->kategori->kode_kategori ?? '-' }}
+                                    {{ $pengadaan->jenisModal->kode_jenis_modal ?? '-' }}
                                 </span>
                             </td>
                             <td class="px-4 py-3.5 text-center font-semibold text-zinc-800">{{ $pengadaan->jumlah }}</td>

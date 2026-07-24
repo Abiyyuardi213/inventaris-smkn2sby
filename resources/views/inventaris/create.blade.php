@@ -62,7 +62,7 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <!-- Merek -->
                 <div class="space-y-2">
                     <label for="merek" class="text-sm font-medium leading-none text-zinc-900">
@@ -82,25 +82,43 @@
                     @enderror
                 </div>
 
-                <!-- Kategori -->
+                <!-- Tipe -->
                 <div class="space-y-2">
-                    <label for="kategori_id" class="text-sm font-medium leading-none text-zinc-900">
-                        Kategori <span class="text-red-500">*</span>
+                    <label for="type" class="text-sm font-medium leading-none text-zinc-900">
+                        Tipe Barang
+                    </label>
+                    <input 
+                        type="text" 
+                        id="type" 
+                        name="type" 
+                        value="{{ old('type') }}"
+                        placeholder="Contoh: Zephyrus GL 532 GD"
+                        class="flex h-10 w-full rounded-md border {{ $errors->has('type') ? 'border-red-500 focus:ring-red-500' : 'border-zinc-200 focus:ring-zinc-950' }} bg-transparent px-3 py-2 text-sm ring-offset-white placeholder:text-zinc-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                    >
+                    @error('type')
+                        <p class="text-xs font-medium text-red-500">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Jenis Modal -->
+                <div class="space-y-2">
+                    <label for="jenis_modal_id" class="text-sm font-medium leading-none text-zinc-900">
+                        Jenis Modal <span class="text-red-500">*</span>
                     </label>
                     <select 
-                        id="kategori_id" 
-                        name="kategori_id" 
-                        class="flex h-10 w-full rounded-md border {{ $errors->has('kategori_id') ? 'border-red-500 focus:ring-red-500' : 'border-zinc-200 focus:ring-zinc-950' }} bg-transparent px-3 py-2 text-sm ring-offset-white placeholder:text-zinc-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 text-zinc-900"
+                        id="jenis_modal_id" 
+                        name="jenis_modal_id" 
+                        class="flex h-10 w-full rounded-md border {{ $errors->has('jenis_modal_id') ? 'border-red-500 focus:ring-red-500' : 'border-zinc-200 focus:ring-zinc-950' }} bg-transparent px-3 py-2 text-sm ring-offset-white placeholder:text-zinc-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 text-zinc-900"
                         required
                     >
-                        <option value="" disabled {{ old('kategori_id') == '' ? 'selected' : '' }}>Pilih Kategori...</option>
-                        @foreach ($kategoris as $kategori)
-                            <option value="{{ $kategori->id }}" {{ old('kategori_id') == $kategori->id ? 'selected' : '' }}>
-                                {{ $kategori->nama_kategori }}
+                        <option value="" disabled {{ old('jenis_modal_id') == '' ? 'selected' : '' }}>Pilih Jenis Modal...</option>
+                        @foreach ($jenisModals as $jenisModal)
+                            <option value="{{ $jenisModal->id }}" {{ old('jenis_modal_id') == $jenisModal->id ? 'selected' : '' }}>
+                                {{ $jenisModal->nama_jenis_modal }}
                             </option>
                         @endforeach
                     </select>
-                    @error('kategori_id')
+                    @error('jenis_modal_id')
                         <p class="text-xs font-medium text-red-500">{{ $message }}</p>
                     @enderror
                 </div>

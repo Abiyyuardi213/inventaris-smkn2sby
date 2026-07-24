@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Pengadaan;
-use App\Models\Kategori;
+use App\Models\JenisModal;
 use App\Models\Jurusan;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
@@ -15,7 +15,7 @@ class PengadaanController extends Controller
     {
         // Eager load semua relasi untuk menghindari query N+1 di view
         // Filter opsional by status_usulan via GET parameter ?status=pending|disetujui|ditolak
-        $pengadaans = Pengadaan::with(['kategori', 'jurusan', 'pengusul'])
+        $pengadaans = Pengadaan::with(['jenisModal', 'jurusan', 'pengusul'])
             ->when(request('status'), fn($q) => $q->where('status_usulan', request('status')))
             ->latest()
             ->get();
@@ -26,17 +26,17 @@ class PengadaanController extends Controller
 
     public function create(): View
     {
-        $kategoris = Kategori::orderBy('nama_kategori')->get();
+        $jenisModals = JenisModal::orderBy('nama_jenis_modal')->get();
         $jurusans  = Jurusan::orderBy('nama_jurusan')->get();
 
-        return view('pengadaans.create', compact('kategoris', 'jurusans'));
+        return view('pengadaans.create', compact('jenisModals', 'jurusans'));
     }
 
     public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
             'nama_barang_usulan' => 'required|string|max:255',
-            'kategori_id'        => 'required|exists:kategoris,id',
+            'jenis_modal_id'     => 'required|exists:jenis_modals,id',
             'jurusan_id'         => 'required|exists:jurusans,id',
             'jumlah'             => 'required|integer|min:1',
             'perkiraan_harga'    => 'required|integer|min:0',
@@ -56,7 +56,7 @@ class PengadaanController extends Controller
 
     public function show(Pengadaan $pengadaan): View
     {
-        $pengadaan->load(['kategori', 'jurusan', 'pengusul']);
+        $pengadaan->load(['jenisModal', 'jurusan', 'pengusul']);
 
         return view('pengadaans.show', compact('pengadaan'));
     }
@@ -70,10 +70,10 @@ class PengadaanController extends Controller
                 ->with('error', 'Usulan yang sudah diproses tidak dapat diedit.');
         }
 
-        $kategoris = Kategori::orderBy('nama_kategori')->get();
+        $jenisModals = JenisModal::orderBy('nama_jenis_modal')->get();
         $jurusans  = Jurusan::orderBy('nama_jurusan')->get();
 
-        return view('pengadaans.edit', compact('pengadaan', 'kategoris', 'jurusans'));
+        return view('pengadaans.edit', compact('pengadaan', 'jenisModals', 'jurusans'));
     }
 
     public function update(Request $request, Pengadaan $pengadaan): RedirectResponse
@@ -87,7 +87,7 @@ class PengadaanController extends Controller
 
         $validated = $request->validate([
             'nama_barang_usulan' => 'required|string|max:255',
-            'kategori_id'        => 'required|exists:kategoris,id',
+            'jenis_modal_id'     => 'required|exists:jenis_modals,id',
             'jurusan_id'         => 'required|exists:jurusans,id',
             'jumlah'             => 'required|integer|min:1',
             'perkiraan_harga'    => 'required|integer|min:0',

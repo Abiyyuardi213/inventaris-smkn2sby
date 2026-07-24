@@ -15,10 +15,11 @@ use App\Models\Peminjaman;
     'kode_inventaris',
     'nama_barang',
     'merek',
+    'type',
     'spesifikasi',
     'bahan',
     'warna',
-    'kategori_id',
+    'jenis_modal_id',
     'jurusan_id',
     'ruangan_id',
     'jumlah_total',
@@ -140,11 +141,11 @@ class Inventaris extends Model
     }
 
     /**
-     * Relasi ke model Kategori.
+     * Relasi ke model Jenis Modal.
      */
-    public function kategori(): BelongsTo
+    public function jenisModal(): BelongsTo
     {
-        return $this->belongsTo(Kategori::class);
+        return $this->belongsTo(JenisModal::class, 'jenis_modal_id');
     }
 
     /**

@@ -52,7 +52,7 @@
         @endif
 
         {{-- ── Master Data ────────────────────────────── --}}
-        @if($currentUser?->canAccessAny(['jurusans.manage', 'monitor-ruang.view', 'ruangans.manage', 'kategoris.manage']))
+        @if($currentUser?->canAccessAny(['jurusans.manage', 'monitor-ruang.view', 'ruangans.manage', 'jenis_modals.manage']))
             <p class="mt-4 mb-1 px-3 text-[10px] font-semibold uppercase tracking-widest text-zinc-400">
                 Master Data
             </p>
@@ -85,13 +85,13 @@
             </a>
         @endif
 
-        @if($currentUser?->canAccess('kategoris.manage'))
-            <a href="{{ route('kategoris.index') }}" class="flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md {{ request()->routeIs('kategoris.*') ? 'bg-zinc-100 text-zinc-900 font-semibold' : 'text-zinc-500 hover:text-zinc-950 hover:bg-zinc-100' }} transition-colors">
+        @if($currentUser?->canAccess('jenis_modals.manage'))
+            <a href="{{ route('jenis-modals.index') }}" class="flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md {{ request()->routeIs('jenis-modals.*') ? 'bg-zinc-100 text-zinc-900 font-semibold' : 'text-zinc-500 hover:text-zinc-950 hover:bg-zinc-100' }} transition-colors">
             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M9.568 3H5.25A2.25 2.25 0 0 0 3 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 0 0 5.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 0 0 9.568 3Z" />
                 <path stroke-linecap="round" stroke-linejoin="round" d="M6 6h.008v.008H6V6Z" />
             </svg>
-            Kategori
+            Jenis Modal
             </a>
         @endif
 

@@ -64,7 +64,7 @@
                             </td>
                             <td class="px-4 py-3">
                                 <p class="font-medium text-zinc-900">{{ $payload['nama_barang'] ?? '-' }}</p>
-                                <p class="text-xs text-zinc-500">{{ $payload['merek'] ?? '-' }}</p>
+                                <p class="text-xs text-zinc-500">{{ $payload['merek'] ?? '-' }} &middot; Tipe: {{ $payload['type'] ?? '-' }}</p>
                                 @if(!empty($payload['foto_url']))
                                     <a href="{{ $payload['foto_url'] }}" target="_blank" rel="noopener noreferrer" class="mt-1 inline-flex text-xs font-medium text-sky-700 hover:underline">
                                         Foto
@@ -72,7 +72,7 @@
                                 @endif
                             </td>
                             <td class="px-4 py-3 text-xs font-mono text-zinc-500">
-                                <div class="font-sans text-xs text-zinc-700">Kategori: {{ $kategoris[$payload['kategori_id'] ?? ''] ?? 'Tidak ditemukan' }}</div>
+                                <div class="font-sans text-xs text-zinc-700">Jenis Modal: {{ $jenisModals[$payload['jenis_modal_id'] ?? ''] ?? 'Tidak ditemukan' }}</div>
                                 <div class="font-sans text-xs text-zinc-700">Unit Kerja: {{ $jurusans[$payload['jurusan_id'] ?? ''] ?? 'Tidak ditemukan' }}</div>
                                 <div class="font-sans text-xs text-zinc-700">Ruangan: {{ $ruangans[$payload['ruangan_id'] ?? ''] ?? 'Tidak ditemukan' }}</div>
                                 <div class="font-sans text-xs text-zinc-500">Bahan/Warna: {{ $payload['bahan'] ?? '-' }} / {{ $payload['warna'] ?? '-' }}</div>

@@ -29,13 +29,23 @@
                 </svg>
                 Cetak Label Terpilih
             </button>
+            <button id="btn-delete-bulk" onclick="submitBulkDelete()"
+                class="inline-flex items-center justify-center gap-2 rounded-md border border-red-200 bg-red-50 text-red-700 hover:bg-red-100 px-3 py-2 text-sm font-medium shadow-sm transition-all duration-150 cursor-pointer">
+                <svg class="w-4 h-4 text-red-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                </svg>
+                Hapus Terpilih
+            </button>
+            <button id="btn-delete-all" onclick="submitDeleteAll()"
+                class="inline-flex items-center justify-center gap-2 rounded-md border border-red-300 bg-red-600 text-white hover:bg-red-700 px-3 py-2 text-sm font-medium shadow-sm transition-all duration-150 cursor-pointer">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                </svg>
+                Hapus Seluruh Barang
+            </button>
             <a href="{{ route('inventaris.template', 'xlsx') }}"
                 class="inline-flex items-center justify-center gap-2 rounded-md border border-zinc-200 bg-white text-zinc-700 hover:bg-zinc-50 px-3 py-2 text-sm font-medium shadow-sm transition-all duration-150">
                 Template XLSX
-            </a>
-            <a href="{{ route('inventaris.template', 'csv') }}"
-                class="inline-flex items-center justify-center gap-2 rounded-md border border-zinc-200 bg-white text-zinc-700 hover:bg-zinc-50 px-3 py-2 text-sm font-medium shadow-sm transition-all duration-150">
-                Template CSV
             </a>
             <a href="{{ route('inventaris.imports.create') }}"
                 class="inline-flex items-center justify-center gap-2 rounded-md border border-emerald-200 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 px-3 py-2 text-sm font-medium shadow-sm transition-all duration-150">
@@ -45,14 +55,10 @@
                 class="inline-flex items-center justify-center gap-2 rounded-md border border-zinc-200 bg-white text-zinc-700 hover:bg-zinc-50 px-3 py-2 text-sm font-medium shadow-sm transition-all duration-150">
                 Export XLSX
             </a>
-            <a href="{{ route('inventaris.export', 'csv') }}"
-                class="inline-flex items-center justify-center gap-2 rounded-md border border-zinc-200 bg-white text-zinc-700 hover:bg-zinc-50 px-3 py-2 text-sm font-medium shadow-sm transition-all duration-150">
-                Export CSV
-            </a>
             <a href="{{ route('inventaris.print-pdf') }}" target="_blank"
                 class="inline-flex items-center justify-center gap-2 rounded-md border border-sky-200 bg-sky-50 text-sky-700 hover:bg-sky-100 px-3 py-2 text-sm font-medium shadow-sm transition-all duration-150">
-                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0 1 10.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096a42.415 42.415 0 0 0-10.56 0m10.56 0L17.66 18" />
+                <svg class="h-4 w-4 text-sky-600" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0 1 10.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096a42.415 42.415 0 0 0-10.56 0m10.56 0L17.66 18m0 0a2.25 2.25 0 0 1-2.25 2.25H8.59A2.25 2.25 0 0 1 6.34 18m11.318-5.318a4.5 4.5 0 1 0-6.364-6.364 4.5 4.5 0 0 0 6.364 6.364Z" />
                 </svg>
                 Cetak PDF
             </a>
@@ -82,14 +88,14 @@
                 </div>
             </div>
 
-            {{-- Kategori --}}
+            {{-- Jenis Modal --}}
             <div class="space-y-1.5">
-                <label for="kategori_id" class="text-xs font-semibold text-zinc-500 uppercase tracking-wider">Kategori</label>
-                <select id="kategori_id" name="kategori_id" class="flex h-9 w-full rounded-md border border-zinc-200 bg-transparent px-3 py-1 text-xs text-zinc-900 focus:outline-none focus:ring-1 focus:ring-zinc-950">
-                    <option value="">Semua Kategori</option>
-                    @foreach($kategoris as $kategori)
-                        <option value="{{ $kategori->id }}" {{ request('kategori_id') == $kategori->id ? 'selected' : '' }}>
-                            {{ $kategori->nama_kategori }}
+                <label for="jenis_modal_id" class="text-xs font-semibold text-zinc-500 uppercase tracking-wider">Jenis Modal</label>
+                <select id="jenis_modal_id" name="jenis_modal_id" class="flex h-9 w-full rounded-md border border-zinc-200 bg-transparent px-3 py-1 text-xs text-zinc-900 focus:outline-none focus:ring-1 focus:ring-zinc-950">
+                    <option value="">Semua Jenis Modal</option>
+                    @foreach($jenisModals as $jenisModal)
+                        <option value="{{ $jenisModal->id }}" {{ request('jenis_modal_id') == $jenisModal->id ? 'selected' : '' }}>
+                            {{ $jenisModal->nama_jenis_modal }}
                         </option>
                     @endforeach
                 </select>
@@ -171,6 +177,7 @@
                         <th scope="col" class="px-6 py-4 font-semibold">Kode</th>
                         <th scope="col" class="px-6 py-4 font-semibold">Nama Barang</th>
                         <th scope="col" class="px-6 py-4 font-semibold">Merek</th>
+                        <th scope="col" class="px-6 py-4 font-semibold">Tipe</th>
                         <th scope="col" class="px-6 py-4 font-semibold text-center">Jumlah</th>
                         <th scope="col" class="px-6 py-4 font-semibold text-right">Harga Satuan</th>
                         <th scope="col" class="px-6 py-4 font-semibold text-right">Harga Total</th>
@@ -211,8 +218,11 @@
                                 </div>
                                 <div class="text-xs text-zinc-400">{{ $item->spesifikasi }}</div>
                             </td>
-                            <td class="px-6 py-4 text-zinc-700">
+                            <td class="px-6 py-4 text-zinc-700 font-medium">
                                 {{ $item->merek }}
+                            </td>
+                            <td class="px-6 py-4 text-zinc-600 text-xs font-mono">
+                                {{ $item->type ?: '-' }}
                             </td>
                             <td class="px-6 py-4 text-center font-semibold text-zinc-800">
                                 {{ $item->jumlah_total }}
@@ -317,9 +327,76 @@
             </div>
         @endif
     </div>
+
+    {{-- Hidden forms for bulk actions --}}
+    <form id="bulk-delete-form" action="{{ route('inventaris.destroy-bulk') }}" method="POST" class="hidden">
+        @csrf
+        @method('DELETE')
+        <input type="hidden" name="ids" id="bulk-delete-ids">
+    </form>
+
+    <form id="delete-all-form" action="{{ route('inventaris.destroy-all') }}" method="POST" class="hidden">
+        @csrf
+        @method('DELETE')
+    </form>
 </div>
 
 <script>
+    // Fungsi untuk hapus massal berdasarkan checkbox terpilih
+    function submitBulkDelete() {
+        const checkboxes = document.querySelectorAll('.item-checkbox:checked');
+        if (checkboxes.length === 0) {
+            Swal.fire({
+                title: 'Pilih Barang',
+                text: 'Silakan pilih minimal satu barang untuk dihapus.',
+                icon: 'warning',
+                confirmButtonColor: '#18181b',
+            });
+            return;
+        }
+
+        Swal.fire({
+            title: 'Hapus Barang Terpilih?',
+            html: `Anda akan menghapus <strong>${checkboxes.length}</strong> data inventaris yang terpilih.<br>
+                   <span class="text-sm text-gray-500">Tindakan ini tidak dapat dibatalkan.</span>`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#ef4444',
+            cancelButtonColor: '#6b7280',
+            confirmButtonText: 'Ya, Hapus',
+            cancelButtonText: 'Batal',
+            reverseButtons: true,
+            focusCancel: true,
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const ids = Array.from(checkboxes).map(cb => cb.value);
+                document.getElementById('bulk-delete-ids').value = ids.join(',');
+                document.getElementById('bulk-delete-form').submit();
+            }
+        });
+    }
+
+    // Fungsi untuk hapus seluruh barang
+    function submitDeleteAll() {
+        Swal.fire({
+            title: 'Hapus Seluruh Barang?',
+            html: `<span class="text-red-600 font-bold">PERINGATAN!</span> Anda akan menghapus <strong>SELURUH</strong> data inventaris sekolah.<br>
+                   <span class="text-sm text-gray-500">Tindakan ini tidak dapat dibatalkan dan akan menghapus semua aset.</span>`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#ef4444',
+            cancelButtonColor: '#6b7280',
+            confirmButtonText: 'Ya, Hapus Semua',
+            cancelButtonText: 'Batal',
+            reverseButtons: true,
+            focusCancel: true,
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('delete-all-form').submit();
+            }
+        });
+    }
+
     function confirmDelete(id, nama) {
         Swal.fire({
             title: 'Hapus Barang?',

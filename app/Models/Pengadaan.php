@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 
 #[Fillable([
     'nama_barang_usulan',
-    'kategori_id',
+    'jenis_modal_id',
     'jurusan_id',
     'jumlah',
     'perkiraan_harga',
@@ -106,11 +106,11 @@ class Pengadaan extends Model
     // =========================================================================
 
     /**
-     * Relasi ke model Kategori.
+     * Relasi ke model Jenis Modal.
      */
-    public function kategori(): BelongsTo
+    public function jenisModal(): BelongsTo
     {
-        return $this->belongsTo(Kategori::class);
+        return $this->belongsTo(JenisModal::class, 'jenis_modal_id');
     }
 
     /**

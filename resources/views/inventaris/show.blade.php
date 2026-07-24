@@ -45,13 +45,13 @@
                 <div>
                     <span class="text-xs font-semibold text-zinc-400 uppercase tracking-wider block mb-1">Nama Barang</span>
                     <span class="text-lg font-medium text-zinc-900 block leading-tight">{{ $inventaris->nama_barang }}</span>
-                    <span class="text-xs text-zinc-400">Merek: {{ $inventaris->merek }}</span>
+                    <span class="text-xs text-zinc-400">Merek: {{ $inventaris->merek }} &bull; Tipe: {{ $inventaris->type ?: '-' }}</span>
                 </div>
 
-                <!-- Kategori -->
+                <!-- Jenis Modal -->
                 <div>
-                    <span class="text-xs font-semibold text-zinc-400 uppercase tracking-wider block mb-1">Kategori</span>
-                    <span class="text-sm text-zinc-700 block font-medium">{{ $inventaris->kategori->nama_kategori }}</span>
+                    <span class="text-xs font-semibold text-zinc-400 uppercase tracking-wider block mb-1">Jenis Modal</span>
+                    <span class="text-sm text-zinc-700 block font-medium">{{ $inventaris->jenisModal->nama_jenis_modal }}</span>
                 </div>
 
                 <!-- Qty & Kondisi -->

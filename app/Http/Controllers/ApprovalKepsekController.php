@@ -15,7 +15,7 @@ class ApprovalKepsekController extends Controller
     public function index(): View
     {
         // Ambil usulan yang berstatus 'disetujui_admin' (menunggu review Kepsek)
-        $menungguKepsekPengadaans = Pengadaan::with(['kategori', 'jurusan', 'pengusul', 'approvedByAdmin'])
+        $menungguKepsekPengadaans = Pengadaan::with(['jenisModal', 'jurusan', 'pengusul', 'approvedByAdmin'])
             ->where('status_usulan', 'disetujui_admin')
             ->latest()
             ->get();
@@ -85,7 +85,7 @@ class ApprovalKepsekController extends Controller
     public function riwayat(Request $request): View
     {
         // Query riwayat keputusan Kepala Sekolah (disetujui_kepsek atau ditolak_kepsek)
-        $query = Pengadaan::with(['kategori', 'jurusan', 'pengusul', 'approvedByAdmin', 'approvedByKepsek'])
+        $query = Pengadaan::with(['jenisModal', 'jurusan', 'pengusul', 'approvedByAdmin', 'approvedByKepsek'])
             ->whereIn('status_usulan', ['disetujui_kepsek', 'ditolak_kepsek']);
 
         // Filter opsional berdasarkan status dari query string (?status=...)

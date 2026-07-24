@@ -3,7 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\User;
-use App\Models\Kategori;
+use App\Models\JenisModal;
 use App\Models\Jurusan;
 use App\Models\Ruangan;
 use App\Models\Inventaris;
@@ -21,7 +21,7 @@ class PeminjamanNotificationsTest extends TestCase
         $this->seed(DatabaseSeeder::class);
 
         $user = User::where('email', 'adminutama@example.com')->first();
-        $kategori = Kategori::first();
+        $jenisModal = JenisModal::first();
         $jurusan = Jurusan::first();
         $ruangan = Ruangan::where('jurusan_id', $jurusan->id)->first();
 
@@ -31,7 +31,7 @@ class PeminjamanNotificationsTest extends TestCase
             'nama_barang' => 'Test Laptop',
             'merek' => 'HP',
             'spesifikasi' => 'Core i5',
-            'kategori_id' => $kategori->id,
+            'jenis_modal_id' => $jenisModal->id,
             'jurusan_id' => $jurusan->id,
             'ruangan_id' => $ruangan->id,
             'jumlah_total' => 10,
@@ -93,7 +93,7 @@ class PeminjamanNotificationsTest extends TestCase
         $this->seed(DatabaseSeeder::class);
 
         $user = User::where('email', 'adminutama@example.com')->first();
-        $kategori = Kategori::first();
+        $jenisModal = JenisModal::first();
         $jurusan = Jurusan::first();
         $ruangan = Ruangan::where('jurusan_id', $jurusan->id)->first();
 
@@ -103,7 +103,7 @@ class PeminjamanNotificationsTest extends TestCase
             'nama_barang' => 'Test Projector',
             'merek' => 'Epson',
             'spesifikasi' => '3000 lumens',
-            'kategori_id' => $kategori->id,
+            'jenis_modal_id' => $jenisModal->id,
             'jurusan_id' => $jurusan->id,
             'ruangan_id' => $ruangan->id,
             'jumlah_total' => 10,
@@ -146,6 +146,7 @@ class PeminjamanNotificationsTest extends TestCase
         ]);
 
         // Verify stock is restored to 10
-        $this->assertEquals(10, $item->fresh()->jumlah_total);
+        $this->freshCpu = $item->fresh();
+        $this->assertEquals(10, $this->freshCpu->jumlah_total);
     }
 }

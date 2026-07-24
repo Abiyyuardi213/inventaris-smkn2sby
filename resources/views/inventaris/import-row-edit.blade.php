@@ -41,7 +41,7 @@
 
                 @php($payload = $row->payload)
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div class="space-y-2">
                         <label for="nama_barang" class="text-sm font-medium text-zinc-900">Nama Barang</label>
                         <input id="nama_barang" name="nama_barang" value="{{ old('nama_barang', $payload['nama_barang'] ?? '') }}" class="h-10 w-full rounded-md border border-zinc-200 px-3 text-sm" required>
@@ -51,6 +51,11 @@
                         <label for="merek" class="text-sm font-medium text-zinc-900">Merek</label>
                         <input id="merek" name="merek" value="{{ old('merek', $payload['merek'] ?? '') }}" class="h-10 w-full rounded-md border border-zinc-200 px-3 text-sm" required>
                         @error('merek') <p class="text-xs text-red-500">{{ $message }}</p> @enderror
+                    </div>
+                    <div class="space-y-2">
+                        <label for="type" class="text-sm font-medium text-zinc-900">Tipe</label>
+                        <input id="type" name="type" value="{{ old('type', $payload['type'] ?? '') }}" class="h-10 w-full rounded-md border border-zinc-200 px-3 text-sm" placeholder="Contoh: Zephyrus GL 532 GD">
+                        @error('type') <p class="text-xs text-red-500">{{ $message }}</p> @enderror
                     </div>
                 </div>
 
@@ -82,16 +87,16 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div class="space-y-2">
-                        <label for="kategori_id" class="text-sm font-medium text-zinc-900">Kategori</label>
-                        <select id="kategori_id" name="kategori_id" class="h-10 w-full rounded-md border border-zinc-200 bg-white px-3 text-sm" required>
-                            <option value="">Pilih Kategori</option>
-                            @foreach($kategoris as $kategori)
-                                <option value="{{ $kategori->id }}" @selected(old('kategori_id', $payload['kategori_id'] ?? '') === $kategori->id)>
-                                    {{ $kategori->nama_kategori }}
+                        <label for="jenis_modal_id" class="text-sm font-medium text-zinc-900">Jenis Modal</label>
+                        <select id="jenis_modal_id" name="jenis_modal_id" class="h-10 w-full rounded-md border border-zinc-200 bg-white px-3 text-sm" required>
+                            <option value="">Pilih Jenis Modal</option>
+                            @foreach($jenisModals as $jenisModal)
+                                <option value="{{ $jenisModal->id }}" @selected(old('jenis_modal_id', $payload['jenis_modal_id'] ?? '') === $jenisModal->id)>
+                                    {{ $jenisModal->nama_jenis_modal }}
                                 </option>
                             @endforeach
                         </select>
-                        @error('kategori_id') <p class="text-xs text-red-500">{{ $message }}</p> @enderror
+                        @error('jenis_modal_id') <p class="text-xs text-red-500">{{ $message }}</p> @enderror
                     </div>
                     <div class="space-y-2">
                         <label for="jurusan_id" class="text-sm font-medium text-zinc-900">Unit Kerja</label>
