@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Inventaris;
 use App\Models\InventarisImportBatch;
 use App\Models\InventarisImportRow;
-use App\Models\Kategori;
+use App\Models\JenisModal;
 use App\Models\Jurusan;
 use App\Models\Ruangan;
 use App\Services\InventarisCodeGenerator;
@@ -23,11 +23,11 @@ class InventarisImportController extends Controller
             ->latest()
             ->limit(10)
             ->get();
-        $kategoris = Kategori::orderBy('nama_kategori')->get();
+        $jenisModals = JenisModal::orderBy('nama_jenis_modal')->get();
         $jurusans = Jurusan::orderBy('nama_jurusan')->get();
         $ruangans = Ruangan::with('jurusan')->orderBy('nama_ruangan')->get();
 
-        return view('inventaris.import', compact('batches', 'kategoris', 'jurusans', 'ruangans'));
+        return view('inventaris.import', compact('batches', 'jenisModals', 'jurusans', 'ruangans'));
     }
 
     public function store(Request $request, InventarisSpreadsheetService $spreadsheet): RedirectResponse
@@ -89,11 +89,11 @@ class InventarisImportController extends Controller
     public function show(InventarisImportBatch $batch): View
     {
         $batch->load(['creator', 'reviewer', 'rows' => fn ($query) => $query->orderBy('row_number')]);
-        $kategoris = Kategori::pluck('nama_kategori', 'id');
+        $jenisModals = JenisModal::pluck('nama_jenis_modal', 'id');
         $jurusans = Jurusan::pluck('nama_jurusan', 'id');
         $ruangans = Ruangan::pluck('nama_ruangan', 'id');
 
-        return view('inventaris.import-approval', compact('batch', 'kategoris', 'jurusans', 'ruangans'));
+        return view('inventaris.import-approval', compact('batch', 'jenisModals', 'jurusans', 'ruangans'));
     }
 
     public function editRow(InventarisImportBatch $batch, InventarisImportRow $row): View
@@ -104,11 +104,11 @@ class InventarisImportController extends Controller
             abort(403, 'Batch import sudah diproses dan tidak dapat diedit.');
         }
 
-        $kategoris = Kategori::orderBy('nama_kategori')->get();
+        $jenisModals = JenisModal::orderBy('nama_jenis_modal')->get();
         $jurusans = Jurusan::orderBy('nama_jurusan')->get();
         $ruangans = Ruangan::with('jurusan')->orderBy('nama_ruangan')->get();
 
-        return view('inventaris.import-row-edit', compact('batch', 'row', 'kategoris', 'jurusans', 'ruangans'));
+        return view('inventaris.import-row-edit', compact('batch', 'row', 'jenisModals', 'jurusans', 'ruangans'));
     }
 
     public function updateRow(Request $request, InventarisImportBatch $batch, InventarisImportRow $row): RedirectResponse
@@ -124,10 +124,11 @@ class InventarisImportController extends Controller
         $payload = $request->validate([
             'nama_barang' => 'required|string|max:255',
             'merek' => 'required|string|max:100',
+            'type' => 'nullable|string|max:255',
             'spesifikasi' => 'required|string',
             'bahan' => 'nullable|string|max:255',
             'warna' => 'nullable|string|max:255',
-            'kategori_id' => 'required|string',
+            'jenis_modal_id' => 'required|string',
             'jurusan_id' => 'required|string',
             'ruangan_id' => 'required|string',
             'jumlah_total' => 'required|integer|min:0',
@@ -182,10 +183,11 @@ class InventarisImportController extends Controller
                     'kode_inventaris' => $kodeInventaris,
                     'nama_barang' => $payload['nama_barang'],
                     'merek' => $payload['merek'],
+                    'type' => $payload['type'] ?? null,
                     'spesifikasi' => $payload['spesifikasi'],
                     'bahan' => $payload['bahan'] ?? null,
                     'warna' => $payload['warna'] ?? null,
-                    'kategori_id' => $payload['kategori_id'],
+                    'jenis_modal_id' => $payload['jenis_modal_id'],
                     'jurusan_id' => $payload['jurusan_id'],
                     'ruangan_id' => $payload['ruangan_id'],
                     'jumlah_total' => (int) $payload['jumlah_total'],
@@ -249,7 +251,7 @@ class InventarisImportController extends Controller
 
     public function export(string $format, InventarisSpreadsheetService $spreadsheet)
     {
-        $inventaris = Inventaris::with(['kategori', 'jurusan', 'ruangan'])
+        $inventaris = Inventaris::with(['jenisModal', 'jurusan', 'ruangan'])
             ->orderBy('nama_barang')
             ->get();
 
@@ -266,6 +268,7 @@ class InventarisImportController extends Controller
             'sumber_dana',
             'nama_penyedia',
             'nomor_surat_bast',
+            'type',
         ]));
 
         foreach ($required as $field) {
@@ -278,8 +281,8 @@ class InventarisImportController extends Controller
             return $errors;
         }
 
-        if (!Kategori::whereKey($payload['kategori_id'])->exists()) {
-            $errors[] = 'kategori_id tidak ditemukan.';
+        if (!JenisModal::whereKey($payload['jenis_modal_id'])->exists()) {
+            $errors[] = 'jenis_modal_id tidak ditemukan.';
         }
 
         if (!Jurusan::whereKey($payload['jurusan_id'])->exists()) {

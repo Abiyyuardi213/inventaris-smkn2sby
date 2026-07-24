@@ -76,7 +76,7 @@
 
                     {{-- Card Body --}}
                     <div class="px-5 py-4 flex-1 space-y-3">
-                        {{-- Jurusan & Kategori --}}
+                        {{-- Jurusan & Jenis Modal --}}
                         <div class="space-y-1.5">
                             <div class="flex items-center gap-2 text-xs text-zinc-600">
                                 <svg class="w-3.5 h-3.5 text-zinc-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -88,10 +88,10 @@
                                 <svg class="w-3.5 h-3.5 text-zinc-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M9.568 3H5.25A2.25 2.25 0 0 0 3 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 0 0 5.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 0 0 9.568 3Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M6 6h.008v.008H6V6Z" />
                                 </svg>
-                                <span class="font-sans">{{ $p->kategori->nama_kategori ?? '-' }}</span>
-                                @if ($p->kategori)
+                                <span class="font-sans">{{ $p->jenisModal->nama_jenis_modal ?? '-' }}</span>
+                                @if ($p->jenisModal)
                                     <span class="inline-flex rounded bg-teal-50 px-1.5 py-0.5 text-xs font-mono font-semibold text-teal-600 border border-teal-200/60">
-                                        {{ $p->kategori->kode_kategori }}
+                                        {{ $p->jenisModal->kode_jenis_modal }}
                                     </span>
                                 @endif
                             </div>

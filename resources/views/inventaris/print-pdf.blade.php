@@ -168,7 +168,7 @@
                 <p class="kicker">PEMERINTAH PROVINSI JAWA TIMUR</p>
                 <p class="kicker">DINAS PENDIDIKAN</p>
                 <h2 class="title">SMK NEGERI 2 SURABAYA</h2>
-                <h3 class="school">BIDANG KEAHLIAN TEKNOLOGI DAN REKAYASA</h3>
+                <h3 class="school">KARTU INVENTARIS RUANG</h3>
                 <p class="address">Jalan Tentara Genie Pelajar No. 26, Sawahan, Surabaya, Jawa Timur</p>
                 <p class="contact">Telepon (031) 5343208 | Email: smkn2surabaya@gmail.com</p>
             </div>
@@ -204,11 +204,10 @@
                             <th style="width: 96px;">Tgl. Catat Aset</th>
                             <th style="width: 138px;">Kode Barang</th>
                             <th>Nama Barang</th>
-                            <th style="width: 110px;">Merek</th>
+                            <th style="width: 90px;">Merek</th>
+                            <th style="width: 90px;">Tipe</th>
                             <th style="width: 58px;">Jumlah</th>
-                            <th style="width: 96px;">Harga Barang</th>
-                            <th style="width: 104px;">Harga Total</th>
-                            <th style="width: 128px;">Lokasi</th>
+                            <th style="width: 118px;">Lokasi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -224,9 +223,8 @@
                                     @endif
                                 </td>
                                 <td class="text-center">{{ $item->merek ?: '-' }}</td>
+                                <td class="text-center">{{ $item->type ?: '-' }}</td>
                                 <td class="text-center">{{ $item->jumlah_total }}</td>
-                                <td class="text-center">Rp {{ number_format($item->harga_satuan ?? 0, 0, ',', '.') }}</td>
-                                <td class="text-center">Rp {{ number_format($item->harga_total, 0, ',', '.') }}</td>
                                 <td>{{ $ruangan->nama_ruangan }}</td>
                             </tr>
                         @endforeach

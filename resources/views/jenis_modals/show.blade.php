@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'Detail Kategori - Inventaris SMKN 2 SBY')
-@section('page_title', 'Detail Kategori')
+@section('title', 'Detail Jenis Modal - Inventaris SMKN 2 SBY')
+@section('page_title', 'Detail Jenis Modal')
 
 @section('content')
 <div class="max-w-3xl mx-auto space-y-6">
@@ -12,24 +12,24 @@
         <svg class="w-3.5 h-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
         </svg>
-        <a href="{{ route('kategoris.index') }}" class="hover:text-zinc-900 transition-colors">Kategori</a>
+        <a href="{{ route('jenis-modals.index') }}" class="hover:text-zinc-900 transition-colors">Jenis Modal</a>
         <svg class="w-3.5 h-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
         </svg>
-        <span class="font-medium text-zinc-900">Detail Kategori</span>
+        <span class="font-medium text-zinc-900">Detail Jenis Modal</span>
     </nav>
 
     {{-- Page Heading --}}
     <div>
-        <a href="{{ route('kategoris.index') }}"
+        <a href="{{ route('jenis-modals.index') }}"
             class="inline-flex items-center gap-1.5 text-sm text-zinc-500 hover:text-zinc-950 transition-colors mb-2">
             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
             </svg>
-            Kembali ke Daftar Kategori
+            Kembali ke Daftar Jenis Modal
         </a>
-        <h2 class="text-2xl font-bold tracking-tight text-zinc-900">Detail Kategori</h2>
-        <p class="text-sm text-zinc-500">Informasi lengkap kategori dan inventaris yang terdaftar.</p>
+        <h2 class="text-2xl font-bold tracking-tight text-zinc-900">Detail Jenis Modal</h2>
+        <p class="text-sm text-zinc-500">Informasi lengkap jenis modal dan inventaris yang terdaftar.</p>
     </div>
 
     {{-- Info Card --}}
@@ -43,9 +43,9 @@
                 </svg>
             </div>
             <div>
-                <p class="font-semibold text-zinc-900 text-sm">{{ $kategori->nama_kategori }}</p>
+                <p class="font-semibold text-zinc-900 text-sm">{{ $jenisModal->nama_jenis_modal }}</p>
                 <span class="inline-flex items-center rounded-md bg-teal-50 px-2 py-0.5 text-xs font-mono font-semibold text-teal-700 border border-teal-200/60 tracking-wide">
-                    {{ $kategori->kode_kategori }}
+                    {{ $jenisModal->kode_jenis_modal }}
                 </span>
             </div>
         </div>
@@ -53,37 +53,37 @@
         {{-- Card Body: Info Grid --}}
         <div class="p-6 grid grid-cols-1 sm:grid-cols-2 gap-6">
             <div>
-                <span class="text-xs font-semibold text-zinc-400 uppercase tracking-wider block mb-1">Nama Kategori</span>
-                <span class="text-base font-semibold text-zinc-900">{{ $kategori->nama_kategori }}</span>
+                <span class="text-xs font-semibold text-zinc-400 uppercase tracking-wider block mb-1">Nama Jenis Modal</span>
+                <span class="text-base font-semibold text-zinc-900">{{ $jenisModal->nama_jenis_modal }}</span>
             </div>
             <div>
-                <span class="text-xs font-semibold text-zinc-400 uppercase tracking-wider block mb-1">Kode Kategori</span>
+                <span class="text-xs font-semibold text-zinc-400 uppercase tracking-wider block mb-1">Kode Jenis Modal</span>
                 <span class="inline-flex items-center rounded-md bg-teal-50 px-2.5 py-1 text-sm font-mono font-bold text-teal-700 border border-teal-200/60 tracking-widest">
-                    {{ $kategori->kode_kategori }}
+                    {{ $jenisModal->kode_jenis_modal }}
                 </span>
             </div>
             <div>
                 <span class="text-xs font-semibold text-zinc-400 uppercase tracking-wider block mb-1">Tanggal Dibuat</span>
-                <span class="text-sm text-zinc-700">{{ $kategori->created_at->format('d F Y, H:i') }} WIB</span>
+                <span class="text-sm text-zinc-700">{{ $jenisModal->created_at->format('d F Y, H:i') }} WIB</span>
             </div>
             <div>
                 <span class="text-xs font-semibold text-zinc-400 uppercase tracking-wider block mb-1">Terakhir Diperbarui</span>
-                <span class="text-sm text-zinc-700">{{ $kategori->updated_at->format('d F Y, H:i') }} WIB</span>
+                <span class="text-sm text-zinc-700">{{ $jenisModal->updated_at->format('d F Y, H:i') }} WIB</span>
             </div>
         </div>
 
         {{-- Action Buttons --}}
         <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-zinc-100 bg-zinc-50/40">
-            <a href="{{ route('kategoris.index') }}"
+            <a href="{{ route('jenis-modals.index') }}"
                 class="inline-flex items-center justify-center rounded-md border border-zinc-200 text-zinc-700 hover:text-zinc-950 bg-white hover:bg-zinc-50 h-10 px-4 py-2 text-sm font-medium shadow-sm transition-all duration-150">
                 Kembali ke Daftar
             </a>
-            <a href="{{ route('kategoris.edit', $kategori->id) }}"
+            <a href="{{ route('jenis-modals.edit', $jenisModal->id) }}"
                 class="inline-flex items-center justify-center gap-2 rounded-md bg-zinc-900 text-zinc-50 hover:bg-zinc-800 h-10 px-4 py-2 text-sm font-medium shadow-sm transition-all duration-150">
                 <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.83 20.013a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125" />
                 </svg>
-                Edit Kategori
+                Edit Jenis Modal
             </a>
         </div>
     </div>
@@ -96,7 +96,7 @@
                 <svg class="w-4 h-4 text-zinc-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" d="m20.25 7.5-.625 10.632a2.25 2.25 0 0 1-2.247 2.118H6.622a2.25 2.25 0 0 1-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z" />
                 </svg>
-                <h3 class="text-sm font-semibold text-zinc-900">Inventaris dalam Kategori Ini</h3>
+                <h3 class="text-sm font-semibold text-zinc-900">Inventaris dalam Jenis Modal Ini</h3>
             </div>
             <span class="inline-flex items-center gap-1 text-xs text-amber-600 bg-amber-50 border border-amber-200/60 px-2.5 py-1 rounded-full font-medium">
                 <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
@@ -117,7 +117,7 @@
                 <div>
                     <p class="font-semibold text-zinc-700 text-sm">Modul Inventaris Belum Tersedia</p>
                     <p class="text-xs text-zinc-400 mt-1 max-w-xs mx-auto">
-                        Daftar inventaris dalam kategori <strong class="text-zinc-600">{{ $kategori->nama_kategori }}</strong>
+                        Daftar inventaris dalam jenis modal <strong class="text-zinc-600">{{ $jenisModal->nama_jenis_modal }}</strong>
                         akan ditampilkan di sini setelah modul Inventaris selesai dibangun.
                     </p>
                 </div>

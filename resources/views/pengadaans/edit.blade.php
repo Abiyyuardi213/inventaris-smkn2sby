@@ -68,21 +68,21 @@
                 @enderror
             </div>
 
-            {{-- Kategori & Jurusan (2 kolom) --}}
+            {{-- Jenis Modal & Jurusan (2 kolom) --}}
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                {{-- Kategori --}}
+                {{-- Jenis Modal --}}
                 <div class="space-y-2">
-                    <label for="kategori_id" class="text-sm font-medium leading-none text-zinc-900">
-                        Kategori <span class="text-red-500">*</span>
+                    <label for="jenis_modal_id" class="text-sm font-medium leading-none text-zinc-900">
+                        Jenis Modal <span class="text-red-500">*</span>
                     </label>
                     <div class="relative">
-                        <select id="kategori_id" name="kategori_id"
-                            class="flex h-10 w-full rounded-md border {{ $errors->has('kategori_id') ? 'border-red-400' : 'border-zinc-200 focus:ring-zinc-950' }} bg-white pl-3 pr-8 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 transition-colors cursor-pointer appearance-none"
+                        <select id="jenis_modal_id" name="jenis_modal_id"
+                            class="flex h-10 w-full rounded-md border {{ $errors->has('jenis_modal_id') ? 'border-red-400' : 'border-zinc-200 focus:ring-zinc-950' }} bg-white pl-3 pr-8 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 transition-colors cursor-pointer appearance-none"
                             required>
-                            <option value="" disabled>-- Pilih Kategori --</option>
-                            @foreach ($kategoris as $kat)
-                                <option value="{{ $kat->id }}" {{ old('kategori_id', $pengadaan->kategori_id) == $kat->id ? 'selected' : '' }}>
-                                    {{ $kat->nama_kategori }} ({{ $kat->kode_kategori }})
+                            <option value="" disabled>-- Pilih Jenis Modal --</option>
+                            @foreach ($jenisModals as $kat)
+                                <option value="{{ $kat->id }}" {{ old('jenis_modal_id', $pengadaan->jenis_modal_id) == $kat->id ? 'selected' : '' }}>
+                                    {{ $kat->nama_jenis_modal }} ({{ $kat->kode_jenis_modal }})
                                 </option>
                             @endforeach
                         </select>
@@ -92,7 +92,7 @@
                             </svg>
                         </div>
                     </div>
-                    @error('kategori_id')
+                    @error('jenis_modal_id')
                         <p class="text-xs font-medium text-red-500 flex items-center gap-1">
                             <svg class="w-3.5 h-3.5 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0Zm-8-5a.75.75 0 0 1 .75.75v4.5a.75.75 0 0 1-1.5 0v-4.5A.75.75 0 0 1 10 5Zm0 10a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z" clip-rule="evenodd" /></svg>
                             {{ $message }}

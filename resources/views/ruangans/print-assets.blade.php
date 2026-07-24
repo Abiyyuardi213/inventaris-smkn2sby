@@ -342,7 +342,7 @@
                 <p class="kicker">PEMERINTAH PROVINSI JAWA TIMUR</p>
                 <p class="kicker">DINAS PENDIDIKAN</p>
                 <h2 class="title">SMK NEGERI 2 SURABAYA</h2>
-                <h3 class="school">BIDANG KEAHLIAN TEKNOLOGI DAN REKAYASA</h3>
+                <h3 class="school">KARTU INVENTARIS RUANG</h3>
                 <p class="address">Jalan Tentara Genie Pelajar No. 26, Sawahan, Surabaya, Jawa Timur</p>
                 <p class="contact">Telepon (031) 5343208 | Email: smkn2surabaya@gmail.com</p>
             </div>
@@ -378,16 +378,14 @@
                 <tr>
                     <th style="width: 34px;">No.</th>
                     <th style="width: 90px;">Tgl. Catat Aset</th>
-                    <th style="width: 132px;">Kode Barang<br>(Lap. Inventaris)</th>
-                    <th style="width: 150px;">Kode Aset Sekolah</th>
+                    <th style="width: 130px;">Kode Barang<br>(Lap. Inventaris)</th>
                     <th>Nama Barang</th>
-                    <th style="width: 98px;">Merek</th>
+                    <th style="width: 85px;">Merek</th>
+                    <th style="width: 85px;">Tipe</th>
                     <th style="width: 50px;">Jumlah</th>
-                    <th style="width: 90px;">Hrg. Barang</th>
-                    <th style="width: 96px;">Harga Total</th>
-                    <th style="width: 78px;">Kondisi</th>
-                    <th style="width: 120px;">Kategori</th>
-                    <th style="width: 120px;">Keterangan</th>
+                    <th style="width: 70px;">Kondisi</th>
+                    <th style="width: 110px;">Jenis Modal</th>
+                    <th style="width: 100px;">Keterangan</th>
                 </tr>
             </thead>
             <tbody>
@@ -396,7 +394,6 @@
                         <td class="text-center">{{ $loop->iteration }}</td>
                         <td class="text-center nowrap">{{ $item->created_at?->format('d F Y') ?? '-' }}</td>
                         <td class="text-center">{{ $item->kode_inventaris }}</td>
-                        <td class="text-center">{{ $item->kode_inventaris }}</td>
                         <td>
                             <strong>{{ $item->nama_barang }}</strong>
                             @if ($item->spesifikasi)
@@ -404,16 +401,15 @@
                             @endif
                         </td>
                         <td class="text-center">{{ $item->merek ?: '-' }}</td>
+                        <td class="text-center">{{ $item->type ?: '-' }}</td>
                         <td class="text-center">{{ $item->jumlah_total }}</td>
-                        <td class="text-center">Rp {{ number_format($item->harga_satuan ?? 0, 0, ',', '.') }}</td>
-                        <td class="text-center">Rp {{ number_format($item->harga_total, 0, ',', '.') }}</td>
                         <td class="text-center">{{ ucfirst($item->kondisi) }}</td>
-                        <td>{{ $item->kategori?->nama_kategori ?? '-' }}</td>
+                        <td>{{ $item->jenisModal?->nama_jenis_modal ?? '-' }}</td>
                         <td>{{ $item->ruangan?->nama_ruangan ?? $ruangan->nama_ruangan }}</td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="12" class="text-center">Belum ada aset di ruangan ini.</td>
+                        <td colspan="10" class="text-center">Belum ada aset di ruangan ini.</td>
                     </tr>
                 @endforelse
             </tbody>

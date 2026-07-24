@@ -3,7 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\JurusanController;
-use App\Http\Controllers\KategoriController;
+use App\Http\Controllers\JenisModalController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\RuanganController;
 use App\Http\Controllers\UserController;
@@ -47,7 +47,7 @@ Route::middleware('auth')->prefix('admin')->group(function () {
         ->middleware('permission:monitor-ruang.view')
         ->name('ruangans.monitor.print-assets');
     Route::resource('ruangans', RuanganController::class)->middleware('permission:ruangans.manage');
-    Route::resource('kategoris', KategoriController::class)->middleware('permission:kategoris.manage');
+    Route::resource('jenis-modals', JenisModalController::class)->middleware('permission:jenis_modals.manage');
     Route::middleware('permission:inventaris.manage')->group(function () {
         Route::get('inventaris/import', [InventarisImportController::class, 'create'])->name('inventaris.imports.create');
         Route::post('inventaris/import', [InventarisImportController::class, 'store'])->name('inventaris.imports.store');
@@ -57,10 +57,10 @@ Route::middleware('auth')->prefix('admin')->group(function () {
         Route::patch('inventaris/import/{batch}/approve', [InventarisImportController::class, 'approve'])->name('inventaris.imports.approve');
         Route::patch('inventaris/import/{batch}/reject', [InventarisImportController::class, 'reject'])->name('inventaris.imports.reject');
         Route::get('inventaris/template/{format}', [InventarisImportController::class, 'template'])
-            ->whereIn('format', ['csv', 'xlsx'])
+            ->whereIn('format', ['xlsx'])
             ->name('inventaris.template');
         Route::get('inventaris/export/{format}', [InventarisImportController::class, 'export'])
-            ->whereIn('format', ['csv', 'xlsx'])
+            ->whereIn('format', ['xlsx'])
             ->name('inventaris.export');
         Route::get('inventaris/print-pdf', [InventarisController::class, 'printPdf'])->name('inventaris.print-pdf');
         Route::get('inventaris/print-label-bulk', [InventarisController::class, 'printLabelBulk'])->name('inventaris.print-label-bulk');
@@ -68,6 +68,8 @@ Route::middleware('auth')->prefix('admin')->group(function () {
         Route::get('inventaris/scan/resolve', [InventarisController::class, 'resolveScan'])->name('inventaris.scan.resolve');
         Route::get('inventaris/{inventari}/print-label', [InventarisController::class, 'printLabel'])->name('inventaris.print-label');
         Route::post('inventaris/{inventari}/regenerate-qr', [InventarisController::class, 'regenerateQr'])->name('inventaris.regenerate-qr');
+        Route::delete('inventaris/destroy-bulk', [InventarisController::class, 'destroyBulk'])->name('inventaris.destroy-bulk');
+        Route::delete('inventaris/destroy-all', [InventarisController::class, 'destroyAll'])->name('inventaris.destroy-all');
         Route::resource('inventaris', InventarisController::class);
     });
     Route::resource('mutasis', MutasiController::class)->middleware('permission:mutasis.manage');

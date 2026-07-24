@@ -12,7 +12,7 @@ class ApprovalController extends Controller
     {
         // Hanya tampilkan usulan yang masih pending di halaman approval Super Admin
         // Eager load relasi untuk menghindari query N+1 di view
-        $pendingPengadaans = Pengadaan::with(['kategori', 'jurusan', 'pengusul'])
+        $pendingPengadaans = Pengadaan::with(['jenisModal', 'jurusan', 'pengusul'])
             ->where('status_usulan', 'pending')
             ->latest()
             ->get();
