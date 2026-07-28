@@ -136,6 +136,8 @@
             .sheet::before { display: none; }
             .meta-item { border-radius: 0; background: #ffffff; }
             .room-heading { background: #ffffff; }
+            tr { page-break-inside: avoid !important; break-inside: avoid !important; }
+            .room-section { page-break-inside: avoid !important; break-inside: avoid !important; }
         }
     </style>
 </head>

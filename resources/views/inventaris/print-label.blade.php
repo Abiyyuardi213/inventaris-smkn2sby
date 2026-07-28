@@ -145,6 +145,8 @@
             .label-card {
                 border: 1.5px solid #111827 !important;
                 box-shadow: none !important;
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
                 width: 8.8cm !important;
                 height: 3.1cm !important;
                 max-width: none !important;

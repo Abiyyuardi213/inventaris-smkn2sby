@@ -129,34 +129,41 @@
             overflow: hidden;
         }
 
-        /* CSS for Printing (Each card automatically occupies its own page) */
+        /* CSS for Printing (Each card avoids breaking across pages) */
         @media print {
             @page {
                 size: A4 landscape;
-                margin: 8mm;
+                margin: 8mm 6mm;
             }
             .no-print {
                 display: none !important;
             }
-            body {
+            html, body {
                 background-color: white !important;
                 color: black !important;
                 font-family: "Geist", Arial, Helvetica, sans-serif !important;
                 margin: 0 !important;
                 padding: 0 !important;
+                width: 100% !important;
+                height: auto !important;
+                overflow: visible !important;
             }
             .grid-container {
                 display: grid !important;
                 grid-template-columns: repeat(3, 8.8cm) !important;
-                gap: 4mm !important;
+                gap: 3.5mm 4mm !important;
                 align-items: start !important;
                 justify-content: start !important;
                 max-width: none !important;
-                width: auto !important;
+                width: 100% !important;
+                height: auto !important;
+                overflow: visible !important;
             }
             .label-card {
                 box-shadow: none !important;
                 border: 1.5px solid #111827 !important;
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
                 page-break-after: auto !important;
                 break-after: auto !important;
                 width: 8.8cm !important;
@@ -164,6 +171,8 @@
                 padding: 0 !important;
                 display: grid !important;
                 grid-template-columns: 1.55cm 1fr 2.25cm !important;
+                box-sizing: border-box !important;
+                overflow: hidden !important;
             }
             .text-header {
                 font-size: 10px !important;
