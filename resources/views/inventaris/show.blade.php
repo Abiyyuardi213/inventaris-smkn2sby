@@ -51,7 +51,13 @@
                 <!-- Jenis Modal -->
                 <div>
                     <span class="text-xs font-semibold text-zinc-400 uppercase tracking-wider block mb-1">Jenis Modal</span>
-                    <span class="text-sm text-zinc-700 block font-medium">{{ $inventaris->jenisModal->nama_jenis_modal }}</span>
+                    <span class="text-sm text-zinc-700 block font-medium">{{ $inventaris->jenisModal->nama_jenis_modal ?? '-' }}</span>
+                </div>
+
+                <!-- Kategori Barang -->
+                <div>
+                    <span class="text-xs font-semibold text-zinc-400 uppercase tracking-wider block mb-1">Kategori Barang</span>
+                    <span class="text-sm text-zinc-700 block font-medium">{{ $inventaris->kategori->nama_kategori ?? '-' }}</span>
                 </div>
 
                 <!-- Qty & Kondisi -->
@@ -92,7 +98,15 @@
                 <div>
                     <span class="text-xs font-semibold text-zinc-400 uppercase tracking-wider block mb-1">Tanggal Pengadaan</span>
                     <span class="text-sm text-zinc-700 block font-medium">
-                        {{ $inventaris->tanggal_pengadaan->format('d F Y') }}
+                        {{ $inventaris->tanggal_pengadaan ? $inventaris->tanggal_pengadaan->format('d F Y') : '-' }}
+                    </span>
+                </div>
+
+                <!-- Tanggal Pembayaran -->
+                <div>
+                    <span class="text-xs font-semibold text-zinc-400 uppercase tracking-wider block mb-1">Tanggal Pembayaran</span>
+                    <span class="text-sm text-zinc-700 block font-medium">
+                        {{ $inventaris->tanggal_pembayaran ? $inventaris->tanggal_pembayaran->format('d F Y') : '-' }}
                     </span>
                 </div>
 

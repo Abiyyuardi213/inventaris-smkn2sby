@@ -15,7 +15,7 @@ class PengadaanController extends Controller
     {
         // Eager load semua relasi untuk menghindari query N+1 di view
         // Filter opsional by status_usulan via GET parameter ?status=pending|disetujui|ditolak
-        $pengadaans = Pengadaan::with(['jenisModal', 'jurusan', 'pengusul'])
+        $pengadaans = Pengadaan::with(['jenisModal', 'kategori', 'jurusan', 'pengusul'])
             ->when(request('status'), fn($q) => $q->where('status_usulan', request('status')))
             ->latest()
             ->get();
@@ -27,9 +27,10 @@ class PengadaanController extends Controller
     public function create(): View
     {
         $jenisModals = JenisModal::orderBy('nama_jenis_modal')->get();
-        $jurusans  = Jurusan::orderBy('nama_jurusan')->get();
+        $kategoris   = Kategori::orderBy('nama_kategori')->get();
+        $jurusans    = Jurusan::orderBy('nama_jurusan')->get();
 
-        return view('pengadaans.create', compact('jenisModals', 'jurusans'));
+        return view('pengadaans.create', compact('jenisModals', 'kategoris', 'jurusans'));
     }
 
     public function store(Request $request): RedirectResponse
@@ -37,6 +38,7 @@ class PengadaanController extends Controller
         $validated = $request->validate([
             'nama_barang_usulan' => 'required|string|max:255',
             'jenis_modal_id'     => 'required|exists:jenis_modals,id',
+            'kategori_id'        => 'nullable|exists:kategoris,id',
             'jurusan_id'         => 'required|exists:jurusans,id',
             'jumlah'             => 'required|integer|min:1',
             'perkiraan_harga'    => 'required|integer|min:0',
@@ -56,7 +58,7 @@ class PengadaanController extends Controller
 
     public function show(Pengadaan $pengadaan): View
     {
-        $pengadaan->load(['jenisModal', 'jurusan', 'pengusul']);
+        $pengadaan->load(['jenisModal', 'kategori', 'jurusan', 'pengusul']);
 
         return view('pengadaans.show', compact('pengadaan'));
     }
@@ -71,9 +73,10 @@ class PengadaanController extends Controller
         }
 
         $jenisModals = JenisModal::orderBy('nama_jenis_modal')->get();
-        $jurusans  = Jurusan::orderBy('nama_jurusan')->get();
+        $kategoris   = Kategori::orderBy('nama_kategori')->get();
+        $jurusans    = Jurusan::orderBy('nama_jurusan')->get();
 
-        return view('pengadaans.edit', compact('pengadaan', 'jenisModals', 'jurusans'));
+        return view('pengadaans.edit', compact('pengadaan', 'jenisModals', 'kategoris', 'jurusans'));
     }
 
     public function update(Request $request, Pengadaan $pengadaan): RedirectResponse
@@ -88,6 +91,7 @@ class PengadaanController extends Controller
         $validated = $request->validate([
             'nama_barang_usulan' => 'required|string|max:255',
             'jenis_modal_id'     => 'required|exists:jenis_modals,id',
+            'kategori_id'        => 'nullable|exists:kategoris,id',
             'jurusan_id'         => 'required|exists:jurusans,id',
             'jumlah'             => 'required|integer|min:1',
             'perkiraan_harga'    => 'required|integer|min:0',

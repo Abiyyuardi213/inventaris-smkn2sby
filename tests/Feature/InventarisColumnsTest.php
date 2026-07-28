@@ -40,6 +40,7 @@ class InventarisColumnsTest extends TestCase
             'sumber_dana' => 'BOS Kinerja',
             'nama_penyedia' => 'PT Ergo Jaya',
             'nomor_surat_bast' => 'BAST-ERG-2026',
+            'tanggal_pembayaran' => '2026-07-12',
             'kondisi' => 'baik',
             'tanggal_pengadaan' => '2026-07-10',
             'foto_url' => 'https://drive.google.com/file/d/test/view',
@@ -62,6 +63,8 @@ class InventarisColumnsTest extends TestCase
 
         // Verify detail page shows values
         $item = Inventaris::where('kode_inventaris', 'INV-TEST-999')->first();
+        $this->assertEquals('2026-07-12', $item->tanggal_pembayaran->toDateString());
+
         $response = $this->actingAs($user)
             ->get(route('inventaris.show', $item->id));
 
@@ -70,6 +73,7 @@ class InventarisColumnsTest extends TestCase
         $response->assertSee('Abu-abu');
         $response->assertSee('PT Ergo Jaya');
         $response->assertSee('BAST-ERG-2026');
+        $response->assertSee('12 July 2026');
     }
 
     public function test_can_update_inventaris_with_bast_and_materials(): void
@@ -95,8 +99,9 @@ class InventarisColumnsTest extends TestCase
             'sumber_dana' => $item->sumber_dana,
             'nama_penyedia' => 'CV Jati Agung',
             'nomor_surat_bast' => 'BAST-JATI-11',
+            'tanggal_pembayaran' => '2026-07-18',
             'kondisi' => $item->kondisi,
-            'tanggal_pengadaan' => $item->tanggal_pengadaan->toDateString(),
+            'tanggal_pengadaan' => $item->tanggal_pengadaan?->toDateString(),
             'foto_url' => $item->foto_url,
         ];
 
@@ -106,6 +111,8 @@ class InventarisColumnsTest extends TestCase
         $response->assertRedirect(route('inventaris.index'));
 
         // Verify updated in database
+        $item->refresh();
+        $this->assertEquals('2026-07-18', $item->tanggal_pembayaran->toDateString());
         $this->assertDatabaseHas('inventaris', [
             'id' => $item->id,
             'type' => 'New Type V2',
@@ -128,6 +135,7 @@ class InventarisColumnsTest extends TestCase
             'warna' => 'Hitam Pekat',
             'nama_penyedia' => 'PT Baja Bersama',
             'nomor_surat_bast' => 'BAST-BAJA-123',
+            'tanggal_pembayaran' => '2026-07-20',
         ]);
 
         $response = $this->actingAs($user)
@@ -144,6 +152,7 @@ class InventarisColumnsTest extends TestCase
                 'warna' => 'Hitam Pekat',
                 'nama_penyedia' => 'PT Baja Bersama',
                 'nomor_surat_bast' => 'BAST-BAJA-123',
+                'tanggal_pembayaran' => '20 Jul 2026',
             ],
         ]);
     }

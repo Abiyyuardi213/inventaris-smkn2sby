@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Inventaris;
 use App\Models\JenisModal;
+use App\Models\Kategori;
 use App\Models\Jurusan;
 use App\Models\Ruangan;
 use Illuminate\Http\RedirectResponse;
@@ -19,6 +20,7 @@ class InventarisController extends Controller
     public function index(): View
     {
         $jenisModals = JenisModal::orderBy('nama_jenis_modal')->get();
+        $kategoris = Kategori::orderBy('nama_kategori')->get();
         $jurusans = Jurusan::orderBy('nama_jurusan')->get();
         $ruangans = Ruangan::when(request('jurusan_id'), fn ($query) => $query->where('jurusan_id', request('jurusan_id')))
             ->orderBy('nama_ruangan')
@@ -33,8 +35,8 @@ class InventarisController extends Controller
             ->orderByDesc('tahun')
             ->pluck('tahun');
 
-        // Filter opsional by jenis modal, jurusan, ruangan, tahun pengadaan, kondisi, atau search (nama, merk, atau type)
-        $inventaris = Inventaris::with(['jenisModal', 'jurusan', 'ruangan'])
+        // Filter opsional by jenis modal, kategori, jurusan, ruangan, tahun pengadaan, kondisi, atau search (nama, merk, atau type)
+        $inventaris = Inventaris::with(['jenisModal', 'kategori', 'jurusan', 'ruangan'])
             ->when(request('search'), function($q) {
                 $search = request('search');
                 $q->where(function($q) use ($search) {
@@ -44,6 +46,7 @@ class InventarisController extends Controller
                 });
             })
             ->when(request('jenis_modal_id'), fn($q) => $q->where('jenis_modal_id', request('jenis_modal_id')))
+            ->when(request('kategori_id'), fn($q) => $q->where('kategori_id', request('kategori_id')))
             ->when(request('jurusan_id'), fn($q) => $q->where('jurusan_id', request('jurusan_id')))
             ->when(request('ruangan_id'), fn($q) => $q->where('ruangan_id', request('ruangan_id')))
             ->when(request('tahun_pengadaan'), fn($q) => $q->whereYear('tanggal_pengadaan', request('tahun_pengadaan')))
@@ -52,7 +55,7 @@ class InventarisController extends Controller
             ->paginate(10)
             ->withQueryString();
 
-        return view('inventaris.index', compact('inventaris', 'jenisModals', 'jurusans', 'ruangans', 'tahunPengadaans'));
+        return view('inventaris.index', compact('inventaris', 'jenisModals', 'kategoris', 'jurusans', 'ruangans', 'tahunPengadaans'));
     }
 
     public function printPdf(): View
@@ -89,13 +92,13 @@ class InventarisController extends Controller
         $scanValue = trim($validated['value']);
         $candidate = $this->extractInventarisIdentifier($scanValue);
 
-        $inventaris = Inventaris::with(['jenisModal', 'jurusan', 'ruangan'])
+        $inventaris = Inventaris::with(['jenisModal', 'kategori', 'jurusan', 'ruangan'])
             ->where('id', $candidate)
             ->orWhere('kode_inventaris', $candidate)
             ->first();
 
         if (! $inventaris && $candidate !== $scanValue) {
-            $inventaris = Inventaris::with(['jenisModal', 'jurusan', 'ruangan'])
+            $inventaris = Inventaris::with(['jenisModal', 'kategori', 'jurusan', 'ruangan'])
                 ->where('id', $scanValue)
                 ->orWhere('kode_inventaris', $scanValue)
                 ->first();
@@ -126,11 +129,13 @@ class InventarisController extends Controller
                 'sumber_dana' => $inventaris->sumber_dana ?? '-',
                 'nama_penyedia' => $inventaris->nama_penyedia ?? '-',
                 'nomor_surat_bast' => $inventaris->nomor_surat_bast ?? '-',
+                'tanggal_pembayaran' => $inventaris->tanggal_pembayaran?->format('d M Y') ?? '-',
                 'kondisi' => $inventaris->kondisi,
-                'kategori' => $inventaris->jenisModal?->nama_jenis_modal,
+                'jenis_modal' => $inventaris->jenisModal?->nama_jenis_modal ?? '-',
+                'kategori' => $inventaris->kategori?->nama_kategori ?? '-',
                 'jurusan' => $inventaris->jurusan?->nama_jurusan,
                 'ruangan' => $inventaris->ruangan?->nama_ruangan,
-                'tanggal_pengadaan' => $inventaris->tanggal_pengadaan?->format('d M Y'),
+                'tanggal_pengadaan' => $inventaris->tanggal_pengadaan?->format('d M Y') ?? '-',
             ],
         ]);
     }
@@ -156,10 +161,11 @@ class InventarisController extends Controller
     public function create(): View
     {
         $jenisModals = JenisModal::orderBy('nama_jenis_modal')->get();
+        $kategoris = Kategori::orderBy('nama_kategori')->get();
         $jurusans = Jurusan::orderBy('nama_jurusan')->get();
         $ruangans = Ruangan::with('jurusan')->orderBy('nama_ruangan')->get();
 
-        return view('inventaris.create', compact('jenisModals', 'jurusans', 'ruangans'));
+        return view('inventaris.create', compact('jenisModals', 'kategoris', 'jurusans', 'ruangans'));
     }
 
     public function store(Request $request): RedirectResponse
@@ -173,6 +179,7 @@ class InventarisController extends Controller
             'bahan' => 'nullable|string|max:255',
             'warna' => 'nullable|string|max:255',
             'jenis_modal_id' => 'required|exists:jenis_modals,id',
+            'kategori_id' => 'nullable|exists:kategoris,id',
             'jurusan_id' => 'required|exists:jurusans,id',
             'ruangan_id' => [
                 'required',
@@ -190,8 +197,9 @@ class InventarisController extends Controller
             'sumber_dana' => 'nullable|string|max:255',
             'nama_penyedia' => 'nullable|string|max:255',
             'nomor_surat_bast' => 'nullable|string|max:255',
+            'tanggal_pembayaran' => 'nullable|date',
             'kondisi' => 'required|in:baik,layak,rusak',
-            'tanggal_pengadaan' => 'required|date',
+            'tanggal_pengadaan' => 'nullable|date',
             'foto_url' => 'nullable|url|max:2048',
         ]);
 
@@ -202,19 +210,21 @@ class InventarisController extends Controller
 
     public function show(Inventaris $inventari): View
     {
-        $inventari->load(['jenisModal', 'jurusan', 'ruangan']);
+        $inventari->load(['jenisModal', 'kategori', 'jurusan', 'ruangan']);
         return view('inventaris.show', ['inventaris' => $inventari]);
     }
 
     public function edit(Inventaris $inventari): View
     {
         $jenisModals = JenisModal::orderBy('nama_jenis_modal')->get();
+        $kategoris = Kategori::orderBy('nama_kategori')->get();
         $jurusans = Jurusan::orderBy('nama_jurusan')->get();
         $ruangans = Ruangan::with('jurusan')->orderBy('nama_ruangan')->get();
 
         return view('inventaris.edit', [
             'inventaris' => $inventari,
             'jenisModals' => $jenisModals,
+            'kategoris' => $kategoris,
             'jurusans' => $jurusans,
             'ruangans' => $ruangans
         ]);
@@ -236,6 +246,7 @@ class InventarisController extends Controller
             'bahan' => 'nullable|string|max:255',
             'warna' => 'nullable|string|max:255',
             'jenis_modal_id' => 'required|exists:jenis_modals,id',
+            'kategori_id' => 'nullable|exists:kategoris,id',
             'jurusan_id' => 'required|exists:jurusans,id',
             'ruangan_id' => [
                 'required',
@@ -253,8 +264,9 @@ class InventarisController extends Controller
             'sumber_dana' => 'nullable|string|max:255',
             'nama_penyedia' => 'nullable|string|max:255',
             'nomor_surat_bast' => 'nullable|string|max:255',
+            'tanggal_pembayaran' => 'nullable|date',
             'kondisi' => 'required|in:baik,layak,rusak',
-            'tanggal_pengadaan' => 'required|date',
+            'tanggal_pengadaan' => 'nullable|date',
             'foto_url' => 'nullable|url|max:2048',
         ]);
 
@@ -304,7 +316,7 @@ class InventarisController extends Controller
      */
     public function printLabelBulk(Request $request)
     {
-        $itemsQuery = Inventaris::with(['jenisModal', 'jurusan', 'ruangan']);
+        $itemsQuery = Inventaris::with(['jenisModal', 'kategori', 'jurusan', 'ruangan']);
  
         if ($request->boolean('all')) {
             $itemsQuery
@@ -317,6 +329,7 @@ class InventarisController extends Controller
                     });
                 })
                 ->when($request->filled('jenis_modal_id'), fn ($query) => $query->where('jenis_modal_id', $request->jenis_modal_id))
+                ->when($request->filled('kategori_id'), fn ($query) => $query->where('kategori_id', $request->kategori_id))
                 ->when($request->filled('jurusan_id'), fn ($query) => $query->where('jurusan_id', $request->jurusan_id))
                 ->when($request->filled('ruangan_id'), fn ($query) => $query->where('ruangan_id', $request->ruangan_id))
                 ->when($request->filled('tahun_pengadaan'), fn ($query) => $query->whereYear('tanggal_pengadaan', $request->tahun_pengadaan))

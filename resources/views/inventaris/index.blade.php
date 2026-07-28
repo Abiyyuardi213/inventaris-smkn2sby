@@ -101,6 +101,19 @@
                 </select>
             </div>
 
+            {{-- Kategori Barang --}}
+            <div class="space-y-1.5">
+                <label for="kategori_id" class="text-xs font-semibold text-zinc-500 uppercase tracking-wider">Kategori Barang</label>
+                <select id="kategori_id" name="kategori_id" class="flex h-9 w-full rounded-md border border-zinc-200 bg-transparent px-3 py-1 text-xs text-zinc-900 focus:outline-none focus:ring-1 focus:ring-zinc-950">
+                    <option value="">Semua Kategori</option>
+                    @foreach($kategoris as $kategori)
+                        <option value="{{ $kategori->id }}" {{ request('kategori_id') == $kategori->id ? 'selected' : '' }}>
+                            {{ $kategori->nama_kategori }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+
             {{-- Unit Kerja --}}
             <div class="space-y-1.5">
                 <label for="jurusan_id" class="text-xs font-semibold text-zinc-500 uppercase tracking-wider">Unit Kerja</label>
@@ -178,6 +191,7 @@
                         <th scope="col" class="px-6 py-4 font-semibold">Nama Barang</th>
                         <th scope="col" class="px-6 py-4 font-semibold">Merek</th>
                         <th scope="col" class="px-6 py-4 font-semibold">Tipe</th>
+                        <th scope="col" class="px-6 py-4 font-semibold">Kategori</th>
                         <th scope="col" class="px-6 py-4 font-semibold text-center">Jumlah</th>
                         <th scope="col" class="px-6 py-4 font-semibold text-right">Harga Satuan</th>
                         <th scope="col" class="px-6 py-4 font-semibold text-right">Harga Total</th>
@@ -223,6 +237,11 @@
                             </td>
                             <td class="px-6 py-4 text-zinc-600 text-xs font-mono">
                                 {{ $item->type ?: '-' }}
+                            </td>
+                            <td class="px-6 py-4 text-zinc-700 text-xs font-medium">
+                                <span class="inline-flex items-center rounded-md bg-indigo-50 px-2 py-0.5 text-xs font-medium text-indigo-700 border border-indigo-200/60">
+                                    {{ $item->kategori->nama_kategori ?? '-' }}
+                                </span>
                             </td>
                             <td class="px-6 py-4 text-center font-semibold text-zinc-800">
                                 {{ $item->jumlah_total }}

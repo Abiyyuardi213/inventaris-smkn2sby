@@ -38,7 +38,7 @@ return new class extends Migration
 
             $table->integer('jumlah_total');
             $table->enum('kondisi', ['baik', 'layak', 'rusak']);
-            $table->date('tanggal_pengadaan');
+            $table->date('tanggal_pengadaan')->nullable();
             
             $table->timestamps();
         });

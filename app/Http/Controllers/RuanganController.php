@@ -40,6 +40,7 @@ class RuanganController extends Controller
                     'merek' => $item->merek,
                     'type' => $item->type,
                     'jenis_modal' => $item->jenisModal?->nama_jenis_modal ?? '-',
+                    'kategori' => $item->kategori?->nama_kategori ?? '-',
                     'jumlah' => $item->jumlah_total,
                     'kondisi' => $item->kondisi,
                 ])->values(),
@@ -54,7 +55,7 @@ class RuanganController extends Controller
         $ruangan->load([
             'jurusan',
             'inventaris' => fn ($query) => $query
-                ->with('jenisModal')
+                ->with(['jenisModal', 'kategori'])
                 ->orderBy('nama_barang'),
         ]);
 

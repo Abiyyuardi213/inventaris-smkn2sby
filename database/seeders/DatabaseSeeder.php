@@ -17,12 +17,12 @@ class DatabaseSeeder extends Seeder
 
         // Seed Jurusans
         $rpl = \App\Models\Jurusan::firstOrCreate(
-            ['nama_jurusan' => 'Rekayasa Perangkat Lunak'],
-            ['kode_jurusan' => 'RPL-001']
+            ['kode_jurusan' => 'RPL-001'],
+            ['nama_jurusan' => 'Rekayasa Perangkat Lunak']
         );
         $tkj = \App\Models\Jurusan::firstOrCreate(
-            ['nama_jurusan' => 'Teknik Komputer & Jaringan'],
-            ['kode_jurusan' => 'TKJ-002']
+            ['kode_jurusan' => 'TKJ-002'],
+            ['nama_jurusan' => 'Teknik Komputer & Jaringan']
         );
 
         // Seed Ruangans
@@ -34,13 +34,27 @@ class DatabaseSeeder extends Seeder
         );
 
         // Seed Jenis Modals
-        $elektronik = \App\Models\JenisModal::firstOrCreate(
+        $modalPeralatan = \App\Models\JenisModal::firstOrCreate(
             ['nama_jenis_modal' => 'Modal Peralatan dan Mesin'],
             ['kode_jenis_modal' => 'MPM-001']
         );
-        $mebel = \App\Models\JenisModal::firstOrCreate(
-            ['nama_jenis_modal' => 'Mebel & Furniture'],
-            ['kode_jenis_modal' => 'MBL-002']
+        $modalGedung = \App\Models\JenisModal::firstOrCreate(
+            ['nama_jenis_modal' => 'Modal Gedung dan Bangunan'],
+            ['kode_jenis_modal' => 'MGB-002']
+        );
+
+        // Seed Kategoris
+        $katKomputer = \App\Models\Kategori::firstOrCreate(
+            ['kode_kategori' => 'KAT-KOM-001'],
+            ['nama_kategori' => 'Komputer dan Laptop']
+        );
+        $katMebel = \App\Models\Kategori::firstOrCreate(
+            ['nama_kategori' => 'Mebel & Furniture'],
+            ['kode_kategori' => 'KAT-MBL-002']
+        );
+        $katJaringan = \App\Models\Kategori::firstOrCreate(
+            ['nama_kategori' => 'Perangkat Jaringan'],
+            ['kode_kategori' => 'KAT-JAR-003']
         );
 
         // Seed Inventaris
@@ -51,12 +65,15 @@ class DatabaseSeeder extends Seeder
                 'merek' => 'Asus',
                 'type' => 'ExpertBook B1400',
                 'spesifikasi' => 'Intel Core i5, RAM 8GB, SSD 512GB, Windows 11',
-                'jenis_modal_id' => $elektronik->id,
+                'jenis_modal_id' => $modalPeralatan->id,
+                'kategori_id' => $katKomputer->id,
                 'jurusan_id' => $rpl->id,
                 'ruangan_id' => $labRpl->id,
                 'jumlah_total' => 20,
                 'kondisi' => 'baik',
-                'tanggal_pengadaan' => '2025-01-15'
+                'tanggal_pembayaran' => '2025-01-15',
+                'nomor_surat_bast' => 'BAST/001/RPL/2025',
+                'tanggal_pengadaan' => '2025-01-18',
             ]
         );
 
@@ -67,12 +84,15 @@ class DatabaseSeeder extends Seeder
                 'merek' => 'Olympus',
                 'type' => 'Standard Meja Praktikum',
                 'spesifikasi' => 'Meja kayu lapis besi ukuran 120x60cm',
-                'jenis_modal_id' => $mebel->id,
+                'jenis_modal_id' => $modalPeralatan->id,
+                'kategori_id' => $katMebel->id,
                 'jurusan_id' => $rpl->id,
                 'ruangan_id' => $labRpl->id,
                 'jumlah_total' => 20,
                 'kondisi' => 'baik',
-                'tanggal_pengadaan' => '2025-01-20'
+                'tanggal_pembayaran' => '2025-01-20',
+                'nomor_surat_bast' => 'BAST/002/RPL/2025',
+                'tanggal_pengadaan' => '2025-01-22',
             ]
         );
 
@@ -83,12 +103,15 @@ class DatabaseSeeder extends Seeder
                 'merek' => 'Mikrotik',
                 'type' => 'CCR1009-7G-1C-1S+',
                 'spesifikasi' => '9 Core CPU, 2GB RAM, 8x Gigabit Ethernet, 1x SFP Port',
-                'jenis_modal_id' => $elektronik->id,
+                'jenis_modal_id' => $modalPeralatan->id,
+                'kategori_id' => $katJaringan->id,
                 'jurusan_id' => $tkj->id,
                 'ruangan_id' => $labTkj->id,
                 'jumlah_total' => 5,
                 'kondisi' => 'layak',
-                'tanggal_pengadaan' => '2024-11-05'
+                'tanggal_pembayaran' => '2024-11-05',
+                'nomor_surat_bast' => 'BAST/001/TKJ/2024',
+                'tanggal_pengadaan' => '2024-11-10',
             ]
         );
 
@@ -99,12 +122,15 @@ class DatabaseSeeder extends Seeder
                 'merek' => 'Cisco',
                 'type' => 'WS-C2960+24TC-L',
                 'spesifikasi' => '24 Port 10/100/1000 + 2 T/SFP',
-                'jenis_modal_id' => $elektronik->id,
+                'jenis_modal_id' => $modalPeralatan->id,
+                'kategori_id' => $katJaringan->id,
                 'jurusan_id' => $tkj->id,
                 'ruangan_id' => $labTkj->id,
                 'jumlah_total' => 2,
                 'kondisi' => 'rusak',
-                'tanggal_pengadaan' => '2023-08-12'
+                'tanggal_pembayaran' => '2023-08-12',
+                'nomor_surat_bast' => 'BAST/005/TKJ/2023',
+                'tanggal_pengadaan' => '2023-08-15',
             ]
         );
 
@@ -136,7 +162,8 @@ class DatabaseSeeder extends Seeder
         $pengadaans = [
             [
                 'nama_barang_usulan' => 'Proyektor Epson EB-X500',
-                'jenis_modal_id' => $elektronik->id,
+                'jenis_modal_id' => $modalPeralatan->id,
+                'kategori_id' => $katKomputer->id,
                 'jurusan_id' => $rpl->id,
                 'jumlah' => 3,
                 'perkiraan_harga' => 7500000,
@@ -146,7 +173,8 @@ class DatabaseSeeder extends Seeder
             ],
             [
                 'nama_barang_usulan' => 'Air Conditioner (AC) Daikin 1.5 PK',
-                'jenis_modal_id' => $elektronik->id,
+                'jenis_modal_id' => $modalPeralatan->id,
+                'kategori_id' => $katKomputer->id,
                 'jurusan_id' => $tkj->id,
                 'jumlah' => 2,
                 'perkiraan_harga' => 6000000,
@@ -158,7 +186,8 @@ class DatabaseSeeder extends Seeder
             ],
             [
                 'nama_barang_usulan' => 'Meja Kursi Guru Set',
-                'jenis_modal_id' => $mebel->id,
+                'jenis_modal_id' => $modalPeralatan->id,
+                'kategori_id' => $katMebel->id,
                 'jurusan_id' => $rpl->id,
                 'jumlah' => 5,
                 'perkiraan_harga' => 1500000,
@@ -173,7 +202,8 @@ class DatabaseSeeder extends Seeder
             ],
             [
                 'nama_barang_usulan' => 'Printer HP Laserjet Pro M404dn',
-                'jenis_modal_id' => $elektronik->id,
+                'jenis_modal_id' => $modalPeralatan->id,
+                'kategori_id' => $katKomputer->id,
                 'jurusan_id' => $rpl->id,
                 'jumlah' => 1,
                 'perkiraan_harga' => 4800000,
@@ -185,7 +215,8 @@ class DatabaseSeeder extends Seeder
             ],
             [
                 'nama_barang_usulan' => 'Kursi Lipat Chitose',
-                'jenis_modal_id' => $mebel->id,
+                'jenis_modal_id' => $modalPeralatan->id,
+                'kategori_id' => $katMebel->id,
                 'jurusan_id' => $tkj->id,
                 'jumlah' => 30,
                 'perkiraan_harga' => 350000,

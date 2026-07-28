@@ -384,7 +384,8 @@
                     <th style="width: 85px;">Tipe</th>
                     <th style="width: 50px;">Jumlah</th>
                     <th style="width: 70px;">Kondisi</th>
-                    <th style="width: 110px;">Jenis Modal</th>
+                    <th style="width: 100px;">Jenis Modal</th>
+                    <th style="width: 100px;">Kategori</th>
                     <th style="width: 100px;">Keterangan</th>
                 </tr>
             </thead>
@@ -405,11 +406,12 @@
                         <td class="text-center">{{ $item->jumlah_total }}</td>
                         <td class="text-center">{{ ucfirst($item->kondisi) }}</td>
                         <td>{{ $item->jenisModal?->nama_jenis_modal ?? '-' }}</td>
+                        <td>{{ $item->kategori?->nama_kategori ?? '-' }}</td>
                         <td>{{ $item->ruangan?->nama_ruangan ?? $ruangan->nama_ruangan }}</td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="10" class="text-center">Belum ada aset di ruangan ini.</td>
+                        <td colspan="11" class="text-center">Belum ada aset di ruangan ini.</td>
                     </tr>
                 @endforelse
             </tbody>
