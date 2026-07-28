@@ -19,6 +19,7 @@ class InventarisSpreadsheetService
         'bahan',
         'warna',
         'jenis_modal_id',
+        'kategori_id',
         'jurusan_id',
         'ruangan_id',
         'jumlah_total',
@@ -26,6 +27,7 @@ class InventarisSpreadsheetService
         'sumber_dana',
         'nama_penyedia',
         'nomor_surat_bast',
+        'tanggal_pembayaran',
         'kondisi',
         'tanggal_pengadaan',
         'foto_url',
@@ -36,6 +38,7 @@ class InventarisSpreadsheetService
         'Jenis Barang Modal',
         'Kode Barang',
         'Jenis Modal',
+        'Kategori Barang',
         'Nama Barang',
         'Merk',
         'Type',
@@ -50,7 +53,7 @@ class InventarisSpreadsheetService
         'Nama Penyedia',
         'Tanggal Pembayaran',
         'Nomor Surat BAST',
-        'Tanggal BAST',
+        'Tanggal Pengadaan',
         'Link Drive Dokumen',
     ];
 
@@ -75,6 +78,7 @@ class InventarisSpreadsheetService
                 'Plastik dan logam',
                 'Hitam',
                 'isi-dengan-jenis_modal_id',
+                'isi-dengan-kategori_id',
                 'isi-dengan-jurusan_id',
                 'isi-dengan-ruangan_id',
                 1,
@@ -82,6 +86,7 @@ class InventarisSpreadsheetService
                 'BOS',
                 'PT Contoh Penyedia',
                 'BAST/001/2026',
+                now()->toDateString(),
                 'baik',
                 now()->toDateString(),
                 'https://drive.google.com/file/d/FILE_ID/view',
@@ -103,6 +108,7 @@ class InventarisSpreadsheetService
                 'Modal Peralatan dan Mesin',
                 $item->kode_inventaris,
                 $item->jenisModal?->nama_jenis_modal ?? '',
+                $item->kategori?->nama_kategori ?? '',
                 $item->nama_barang,
                 $item->merek,
                 $item->type,
@@ -115,7 +121,7 @@ class InventarisSpreadsheetService
                 $item->harga_total,
                 trim(($item->ruangan?->nama_ruangan ?? '') . (($item->jurusan?->nama_jurusan ?? '') !== '' ? ' - ' . $item->jurusan->nama_jurusan : '')),
                 $item->nama_penyedia,
-                optional($item->tanggal_pengadaan)->format('Y-m-d'),
+                optional($item->tanggal_pembayaran)->format('Y-m-d'),
                 $item->nomor_surat_bast,
                 optional($item->tanggal_pengadaan)->format('Y-m-d'),
                 $item->foto_url,
@@ -253,7 +259,7 @@ class InventarisSpreadsheetService
     {
         $value = trim((string) $value);
 
-        if ($header === 'tanggal_pengadaan' && is_numeric($value)) {
+        if (in_array($header, ['tanggal_pengadaan', 'tanggal_pembayaran'], true) && is_numeric($value)) {
             return \Carbon\Carbon::create(1899, 12, 30)
                 ->addDays((int) $value)
                 ->toDateString();

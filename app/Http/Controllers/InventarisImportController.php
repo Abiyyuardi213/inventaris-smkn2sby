@@ -6,6 +6,7 @@ use App\Models\Inventaris;
 use App\Models\InventarisImportBatch;
 use App\Models\InventarisImportRow;
 use App\Models\JenisModal;
+use App\Models\Kategori;
 use App\Models\Jurusan;
 use App\Models\Ruangan;
 use App\Services\InventarisCodeGenerator;
@@ -90,10 +91,11 @@ class InventarisImportController extends Controller
     {
         $batch->load(['creator', 'reviewer', 'rows' => fn ($query) => $query->orderBy('row_number')]);
         $jenisModals = JenisModal::pluck('nama_jenis_modal', 'id');
+        $kategoris = Kategori::pluck('nama_kategori', 'id');
         $jurusans = Jurusan::pluck('nama_jurusan', 'id');
         $ruangans = Ruangan::pluck('nama_ruangan', 'id');
 
-        return view('inventaris.import-approval', compact('batch', 'jenisModals', 'jurusans', 'ruangans'));
+        return view('inventaris.import-approval', compact('batch', 'jenisModals', 'kategoris', 'jurusans', 'ruangans'));
     }
 
     public function editRow(InventarisImportBatch $batch, InventarisImportRow $row): View
@@ -105,10 +107,11 @@ class InventarisImportController extends Controller
         }
 
         $jenisModals = JenisModal::orderBy('nama_jenis_modal')->get();
+        $kategoris = Kategori::orderBy('nama_kategori')->get();
         $jurusans = Jurusan::orderBy('nama_jurusan')->get();
         $ruangans = Ruangan::with('jurusan')->orderBy('nama_ruangan')->get();
 
-        return view('inventaris.import-row-edit', compact('batch', 'row', 'jenisModals', 'jurusans', 'ruangans'));
+        return view('inventaris.import-row-edit', compact('batch', 'row', 'jenisModals', 'kategoris', 'jurusans', 'ruangans'));
     }
 
     public function updateRow(Request $request, InventarisImportBatch $batch, InventarisImportRow $row): RedirectResponse
@@ -129,6 +132,7 @@ class InventarisImportController extends Controller
             'bahan' => 'nullable|string|max:255',
             'warna' => 'nullable|string|max:255',
             'jenis_modal_id' => 'required|string',
+            'kategori_id' => 'nullable|string',
             'jurusan_id' => 'required|string',
             'ruangan_id' => 'required|string',
             'jumlah_total' => 'required|integer|min:0',
@@ -136,8 +140,9 @@ class InventarisImportController extends Controller
             'sumber_dana' => 'nullable|string|max:255',
             'nama_penyedia' => 'nullable|string|max:255',
             'nomor_surat_bast' => 'nullable|string|max:255',
+            'tanggal_pembayaran' => 'nullable|date',
             'kondisi' => 'required|in:baik,layak,rusak',
-            'tanggal_pengadaan' => 'required|date',
+            'tanggal_pengadaan' => 'nullable|date',
             'foto_url' => 'nullable|url|max:2048',
         ]);
 
@@ -195,8 +200,9 @@ class InventarisImportController extends Controller
                     'sumber_dana' => $payload['sumber_dana'] ?? null,
                     'nama_penyedia' => $payload['nama_penyedia'] ?? null,
                     'nomor_surat_bast' => $payload['nomor_surat_bast'] ?? null,
+                    'tanggal_pembayaran' => $payload['tanggal_pembayaran'] ?? null,
                     'kondisi' => $payload['kondisi'],
-                    'tanggal_pengadaan' => $payload['tanggal_pengadaan'],
+                    'tanggal_pengadaan' => $payload['tanggal_pengadaan'] ?? null,
                     'foto_url' => $payload['foto_url'] ?? null,
                 ]);
 
@@ -268,7 +274,10 @@ class InventarisImportController extends Controller
             'sumber_dana',
             'nama_penyedia',
             'nomor_surat_bast',
+            'tanggal_pembayaran',
+            'tanggal_pengadaan',
             'type',
+            'kategori_id',
         ]));
 
         foreach ($required as $field) {
@@ -283,6 +292,10 @@ class InventarisImportController extends Controller
 
         if (!JenisModal::whereKey($payload['jenis_modal_id'])->exists()) {
             $errors[] = 'jenis_modal_id tidak ditemukan.';
+        }
+
+        if (!empty($payload['kategori_id']) && !Kategori::whereKey($payload['kategori_id'])->exists()) {
+            $errors[] = 'kategori_id tidak ditemukan.';
         }
 
         if (!Jurusan::whereKey($payload['jurusan_id'])->exists()) {
@@ -308,7 +321,11 @@ class InventarisImportController extends Controller
             $errors[] = 'kondisi harus salah satu dari: baik, layak, rusak.';
         }
 
-        if (!strtotime($payload['tanggal_pengadaan'])) {
+        if (!empty($payload['tanggal_pembayaran']) && !strtotime($payload['tanggal_pembayaran'])) {
+            $errors[] = 'tanggal_pembayaran harus berupa tanggal valid, contoh: 2026-06-04.';
+        }
+
+        if (!empty($payload['tanggal_pengadaan']) && !strtotime($payload['tanggal_pengadaan'])) {
             $errors[] = 'tanggal_pengadaan harus berupa tanggal valid, contoh: 2026-06-04.';
         }
 

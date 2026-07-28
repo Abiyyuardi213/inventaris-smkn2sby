@@ -20,6 +20,7 @@ use App\Models\Peminjaman;
     'bahan',
     'warna',
     'jenis_modal_id',
+    'kategori_id',
     'jurusan_id',
     'ruangan_id',
     'jumlah_total',
@@ -27,6 +28,7 @@ use App\Models\Peminjaman;
     'sumber_dana',
     'nama_penyedia',
     'nomor_surat_bast',
+    'tanggal_pembayaran',
     'kondisi',
     'tanggal_pengadaan',
     'qr_code_path',
@@ -51,6 +53,7 @@ class Inventaris extends Model
     protected function casts(): array
     {
         return [
+            'tanggal_pembayaran' => 'date',
             'tanggal_pengadaan' => 'date',
             'jumlah_total' => 'integer',
             'harga_satuan' => 'integer',
@@ -146,6 +149,14 @@ class Inventaris extends Model
     public function jenisModal(): BelongsTo
     {
         return $this->belongsTo(JenisModal::class, 'jenis_modal_id');
+    }
+
+    /**
+     * Relasi ke model Kategori.
+     */
+    public function kategori(): BelongsTo
+    {
+        return $this->belongsTo(Kategori::class, 'kategori_id');
     }
 
     /**

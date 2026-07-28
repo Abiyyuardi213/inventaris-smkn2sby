@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\JurusanController;
 use App\Http\Controllers\JenisModalController;
+use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\RuanganController;
 use App\Http\Controllers\UserController;
@@ -48,6 +49,7 @@ Route::middleware('auth')->prefix('admin')->group(function () {
         ->name('ruangans.monitor.print-assets');
     Route::resource('ruangans', RuanganController::class)->middleware('permission:ruangans.manage');
     Route::resource('jenis-modals', JenisModalController::class)->middleware('permission:jenis_modals.manage');
+    Route::resource('kategoris', KategoriController::class)->middleware('permission:kategoris.manage');
     Route::middleware('permission:inventaris.manage')->group(function () {
         Route::get('inventaris/import', [InventarisImportController::class, 'create'])->name('inventaris.imports.create');
         Route::post('inventaris/import', [InventarisImportController::class, 'store'])->name('inventaris.imports.store');

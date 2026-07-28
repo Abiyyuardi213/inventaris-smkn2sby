@@ -135,6 +135,10 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
                     <div class="rounded-md border border-zinc-100 bg-zinc-50/50 p-3">
                         <span class="text-[10px] font-bold uppercase tracking-wider text-zinc-400 block">Jenis Modal</span>
+                        <span id="result-jenis-modal" class="mt-1 font-semibold text-zinc-800 block"></span>
+                    </div>
+                    <div class="rounded-md border border-zinc-100 bg-zinc-50/50 p-3">
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-zinc-400 block">Kategori Barang</span>
                         <span id="result-kategori" class="mt-1 font-semibold text-zinc-800 block"></span>
                     </div>
                     <div class="rounded-md border border-zinc-100 bg-zinc-50/50 p-3">
@@ -177,9 +181,13 @@
                         <span class="text-[10px] font-bold uppercase tracking-wider text-zinc-400 block">Nama Penyedia</span>
                         <span id="result-nama-penyedia" class="mt-1 font-semibold text-zinc-800 block"></span>
                     </div>
-                    <div class="rounded-md border border-zinc-100 bg-zinc-50/50 p-3 sm:col-span-2">
+                    <div class="rounded-md border border-zinc-100 bg-zinc-50/50 p-3">
                         <span class="text-[10px] font-bold uppercase tracking-wider text-zinc-400 block">Nomor Surat BAST</span>
                         <span id="result-nomor-bast" class="mt-1 font-semibold text-zinc-800 block"></span>
+                    </div>
+                    <div class="rounded-md border border-zinc-100 bg-zinc-50/50 p-3">
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-zinc-400 block">Tanggal Pembayaran</span>
+                        <span id="result-tanggal-pembayaran" class="mt-1 font-semibold text-zinc-800 block"></span>
                     </div>
                     <div class="rounded-md border border-zinc-100 bg-zinc-50/50 p-3 sm:col-span-2">
                         <span class="text-[10px] font-bold uppercase tracking-wider text-zinc-400 block">Spesifikasi Detail</span>
@@ -360,6 +368,7 @@
             document.getElementById('result-main-location').textContent = roomName + (unitName ? ` - ${unitName}` : '');
 
             document.getElementById('result-code').textContent = item.kode_inventaris ?? '-';
+            document.getElementById('result-jenis-modal').textContent = item.jenis_modal ?? '-';
             document.getElementById('result-kategori').textContent = item.kategori ?? '-';
             document.getElementById('result-brand').textContent = item.merek ?? '-';
             document.getElementById('result-type').textContent = item.type ?? '-';
@@ -372,6 +381,7 @@
             document.getElementById('result-sumber-dana').textContent = item.sumber_dana ?? '-';
             document.getElementById('result-nama-penyedia').textContent = item.nama_penyedia ?? '-';
             document.getElementById('result-nomor-bast').textContent = item.nomor_surat_bast ?? '-';
+            document.getElementById('result-tanggal-pembayaran').textContent = item.tanggal_pembayaran ?? '-';
             document.getElementById('result-spec').textContent = item.spesifikasi ?? '-';
             document.getElementById('result-link').href = payload.redirect_url;
 
