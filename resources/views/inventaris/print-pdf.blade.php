@@ -216,7 +216,7 @@
                         @foreach ($ruangan->inventaris as $item)
                             <tr>
                                 <td class="text-center">{{ $loop->iteration }}</td>
-                                <td class="text-center nowrap">{{ $item->created_at?->format('d F Y') ?? '-' }}</td>
+                                <td class="text-center nowrap">{{ $item->tanggal_catat_aset?->format('d F Y') ?? $item->created_at?->format('d F Y') ?? '-' }}</td>
                                 <td class="text-center">{{ $item->kode_inventaris }}</td>
                                 <td>
                                     <strong>{{ $item->nama_barang }}</strong>

@@ -94,19 +94,19 @@
                     <span class="text-sm text-zinc-700 block">{{ $inventaris->ruangan->nama_ruangan }}</span>
                 </div>
 
-                <!-- Tanggal Pengadaan -->
+                <!-- Tanggal Catat Aset -->
                 <div>
-                    <span class="text-xs font-semibold text-zinc-400 uppercase tracking-wider block mb-1">Tanggal Pengadaan</span>
+                    <span class="text-xs font-semibold text-zinc-400 uppercase tracking-wider block mb-1">Tanggal Catat Aset</span>
                     <span class="text-sm text-zinc-700 block font-medium">
-                        {{ $inventaris->tanggal_pengadaan ? $inventaris->tanggal_pengadaan->format('d F Y') : '-' }}
+                        {{ $inventaris->tanggal_catat_aset ? $inventaris->tanggal_catat_aset->format('d F Y') : '-' }}
                     </span>
                 </div>
 
-                <!-- Tanggal Pembayaran -->
+                <!-- Tanggal BAST -->
                 <div>
-                    <span class="text-xs font-semibold text-zinc-400 uppercase tracking-wider block mb-1">Tanggal Pembayaran</span>
+                    <span class="text-xs font-semibold text-zinc-400 uppercase tracking-wider block mb-1">Tanggal BAST</span>
                     <span class="text-sm text-zinc-700 block font-medium">
-                        {{ $inventaris->tanggal_pembayaran ? $inventaris->tanggal_pembayaran->format('d F Y') : '-' }}
+                        {{ $inventaris->tanggal_bast ? $inventaris->tanggal_bast->format('d F Y') : '-' }}
                     </span>
                 </div>
 

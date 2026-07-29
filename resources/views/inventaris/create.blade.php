@@ -384,19 +384,19 @@
                         @enderror
                     </div>
 
-                    <!-- Tanggal Pembayaran -->
+                    <!-- Tanggal BAST -->
                     <div class="space-y-2">
-                        <label for="tanggal_pembayaran" class="text-sm font-medium leading-none text-zinc-900">
-                            Tanggal Pembayaran
+                        <label for="tanggal_bast" class="text-sm font-medium leading-none text-zinc-900">
+                            Tanggal BAST
                         </label>
                         <input
                             type="date"
-                            id="tanggal_pembayaran"
-                            name="tanggal_pembayaran"
-                            value="{{ old('tanggal_pembayaran') }}"
-                            class="flex h-10 w-full rounded-md border {{ $errors->has('tanggal_pembayaran') ? 'border-red-500 focus:ring-red-500' : 'border-zinc-200 focus:ring-zinc-950' }} bg-transparent px-3 py-2 text-sm ring-offset-white placeholder:text-zinc-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 text-zinc-900"
+                            id="tanggal_bast"
+                            name="tanggal_bast"
+                            value="{{ old('tanggal_bast') }}"
+                            class="flex h-10 w-full rounded-md border {{ $errors->has('tanggal_bast') ? 'border-red-500 focus:ring-red-500' : 'border-zinc-200 focus:ring-zinc-950' }} bg-transparent px-3 py-2 text-sm ring-offset-white placeholder:text-zinc-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 text-zinc-900"
                         >
-                        @error('tanggal_pembayaran')
+                        @error('tanggal_bast')
                             <p class="text-xs font-medium text-red-500">{{ $message }}</p>
                         @enderror
                     </div>
@@ -421,20 +421,19 @@
                         @enderror
                     </div>
 
-                    <!-- Tanggal Pengadaan -->
+                    <!-- Tanggal Catat Aset -->
                     <div class="space-y-2">
-                        <label for="tanggal_pengadaan" class="text-sm font-medium leading-none text-zinc-900">
-                            Tanggal Pengadaan
+                        <label for="tanggal_catat_aset" class="text-sm font-medium leading-none text-zinc-900">
+                            Tanggal Catat Aset
                         </label>
                         <input 
                             type="date" 
-                            id="tanggal_pengadaan" 
-                            name="tanggal_pengadaan" 
-                            value="{{ old('tanggal_pengadaan', date('Y-m-d')) }}"
-                            class="flex h-10 w-full rounded-md border {{ $errors->has('tanggal_pengadaan') ? 'border-red-500 focus:ring-red-500' : 'border-zinc-200 focus:ring-zinc-950' }} bg-transparent px-3 py-2 text-sm ring-offset-white placeholder:text-zinc-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 text-zinc-900"
-                            required
+                            id="tanggal_catat_aset" 
+                            name="tanggal_catat_aset" 
+                            value="{{ old('tanggal_catat_aset', date('Y-m-d')) }}"
+                            class="flex h-10 w-full rounded-md border {{ $errors->has('tanggal_catat_aset') ? 'border-red-500 focus:ring-red-500' : 'border-zinc-200 focus:ring-zinc-950' }} bg-transparent px-3 py-2 text-sm ring-offset-white placeholder:text-zinc-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 text-zinc-900"
                         >
-                        @error('tanggal_pengadaan')
+                        @error('tanggal_catat_aset')
                             <p class="text-xs font-medium text-red-500">{{ $message }}</p>
                         @enderror
                     </div>

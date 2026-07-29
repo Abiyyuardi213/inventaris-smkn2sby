@@ -155,6 +155,11 @@
                         @error('nomor_surat_bast') <p class="text-xs text-red-500">{{ $message }}</p> @enderror
                     </div>
                     <div class="space-y-2">
+                        <label for="tanggal_bast" class="text-sm font-medium text-zinc-900">Tanggal BAST</label>
+                        <input id="tanggal_bast" name="tanggal_bast" type="date" value="{{ old('tanggal_bast', $payload['tanggal_bast'] ?? '') }}" class="h-10 w-full rounded-md border border-zinc-200 px-3 text-sm">
+                        @error('tanggal_bast') <p class="text-xs text-red-500">{{ $message }}</p> @enderror
+                    </div>
+                    <div class="space-y-2">
                         <label for="kondisi" class="text-sm font-medium text-zinc-900">Kondisi</label>
                         <select id="kondisi" name="kondisi" class="h-10 w-full rounded-md border border-zinc-200 px-3 text-sm" required>
                             @foreach(['baik' => 'Baik', 'layak' => 'Layak Pakai', 'rusak' => 'Rusak'] as $value => $label)
@@ -164,9 +169,9 @@
                         @error('kondisi') <p class="text-xs text-red-500">{{ $message }}</p> @enderror
                     </div>
                     <div class="space-y-2">
-                        <label for="tanggal_pengadaan" class="text-sm font-medium text-zinc-900">Tanggal Pengadaan</label>
-                        <input id="tanggal_pengadaan" name="tanggal_pengadaan" type="date" value="{{ old('tanggal_pengadaan', $payload['tanggal_pengadaan'] ?? '') }}" class="h-10 w-full rounded-md border border-zinc-200 px-3 text-sm" required>
-                        @error('tanggal_pengadaan') <p class="text-xs text-red-500">{{ $message }}</p> @enderror
+                        <label for="tanggal_catat_aset" class="text-sm font-medium text-zinc-900">Tanggal Catat Aset</label>
+                        <input id="tanggal_catat_aset" name="tanggal_catat_aset" type="date" value="{{ old('tanggal_catat_aset', $payload['tanggal_catat_aset'] ?? '') }}" class="h-10 w-full rounded-md border border-zinc-200 px-3 text-sm">
+                        @error('tanggal_catat_aset') <p class="text-xs text-red-500">{{ $message }}</p> @enderror
                     </div>
                 </div>
 
