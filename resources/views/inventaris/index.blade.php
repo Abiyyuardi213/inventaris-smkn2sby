@@ -62,6 +62,34 @@
                 </svg>
                 Cetak PDF
             </a>
+            <a href="{{ route('inventaris.print-kib-b', request()->only(['search', 'jurusan_id', 'ruangan_id', 'tahun_pengadaan', 'tahun'])) }}" target="_blank"
+                class="inline-flex items-center justify-center gap-2 rounded-md border border-amber-200 bg-amber-50 text-amber-800 hover:bg-amber-100 px-3 py-2 text-sm font-medium shadow-sm transition-all duration-150">
+                <svg class="h-4 w-4 text-amber-700" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
+                </svg>
+                Cetak KIB B
+            </a>
+            <a href="{{ route('inventaris.print-kib-c', request()->only(['search', 'jurusan_id', 'ruangan_id', 'tahun_pengadaan', 'tahun'])) }}" target="_blank"
+                class="inline-flex items-center justify-center gap-2 rounded-md border border-emerald-200 bg-emerald-50 text-emerald-800 hover:bg-emerald-100 px-3 py-2 text-sm font-medium shadow-sm transition-all duration-150">
+                <svg class="h-4 w-4 text-emerald-700" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3.75h.008v.008h-.008v-.008Zm0 3h.008v.008h-.008v-.008Zm0 3h.008v.008h-.008v-.008Z" />
+                </svg>
+                Cetak KIB C
+            </a>
+            <a href="{{ route('inventaris.print-kib-e', request()->only(['search', 'jurusan_id', 'ruangan_id', 'tahun_pengadaan', 'tahun'])) }}" target="_blank"
+                class="inline-flex items-center justify-center gap-2 rounded-md border border-purple-200 bg-purple-50 text-purple-800 hover:bg-purple-100 px-3 py-2 text-sm font-medium shadow-sm transition-all duration-150">
+                <svg class="h-4 w-4 text-purple-700" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25" />
+                </svg>
+                Cetak KIB E
+            </a>
+            <a href="{{ route('inventaris.print-buku-induk', request()->only(['search', 'jenis_modal_id', 'kategori_id', 'jurusan_id', 'ruangan_id', 'tahun_pengadaan', 'tahun', 'kondisi'])) }}" target="_blank"
+                class="inline-flex items-center justify-center gap-2 rounded-md border border-indigo-200 bg-indigo-50 text-indigo-800 hover:bg-indigo-100 px-3 py-2 text-sm font-medium shadow-sm transition-all duration-150">
+                <svg class="h-4 w-4 text-indigo-700" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25" />
+                </svg>
+                Cetak Buku Induk
+            </a>
             <a href="{{ route('inventaris.create') }}"
                 class="inline-flex items-center justify-center gap-2 rounded-md bg-zinc-900 text-zinc-50 hover:bg-zinc-800 px-4 py-2 text-sm font-medium shadow-sm transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 cursor-pointer">
                 <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
@@ -186,7 +214,7 @@
                             <input type="checkbox" id="select_all" class="rounded border-zinc-300 text-zinc-950 focus:ring-zinc-900 cursor-pointer">
                         </th>
                         <th scope="col" class="px-6 py-4 font-semibold w-12">Nomor</th>
-                        <th scope="col" class="px-6 py-4 font-semibold">Tanggal Pengadaan</th>
+                        <th scope="col" class="px-6 py-4 font-semibold">Tanggal Catat Aset</th>
                         <th scope="col" class="px-6 py-4 font-semibold">Kode</th>
                         <th scope="col" class="px-6 py-4 font-semibold">Nama Barang</th>
                         <th scope="col" class="px-6 py-4 font-semibold">Merek</th>
@@ -199,9 +227,9 @@
                         <th scope="col" class="px-6 py-4 font-semibold text-right">Aksi</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-zinc-100">
+                <tbody class="divide-y divide-zinc-200">
                     @forelse ($inventaris as $item)
-                        <tr class="hover:bg-zinc-50/60 transition-colors {{ $loop->even ? 'bg-zinc-50/30' : 'bg-white' }}">
+                        <tr class="hover:bg-zinc-50/80 transition-colors duration-150">
                             <td class="px-6 py-4 text-center">
                                 <input type="checkbox" name="selected_ids[]" value="{{ $item->id }}" class="item-checkbox rounded border-zinc-300 text-zinc-950 focus:ring-zinc-900 cursor-pointer">
                             </td>
@@ -209,7 +237,7 @@
                                 {{ ($inventaris->currentPage() - 1) * $inventaris->perPage() + $loop->iteration }}
                             </td>
                             <td class="px-6 py-4 text-zinc-600">
-                                <div class="font-medium text-xs text-zinc-700">{{ $item->tanggal_pengadaan?->format('d M Y') ?? '-' }}</div>
+                                <div class="font-medium text-xs text-zinc-700">{{ $item->tanggal_catat_aset?->format('d M Y') ?? '-' }}</div>
                                 <div class="text-[10px] text-zinc-400">{{ $item->created_at?->format('H:i') ?? '' }}</div>
                             </td>
                             <td class="px-6 py-4">

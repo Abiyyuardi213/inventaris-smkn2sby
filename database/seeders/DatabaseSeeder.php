@@ -71,9 +71,9 @@ class DatabaseSeeder extends Seeder
                 'ruangan_id' => $labRpl->id,
                 'jumlah_total' => 20,
                 'kondisi' => 'baik',
-                'tanggal_pembayaran' => '2025-01-15',
+                'tanggal_bast' => '2025-01-15',
                 'nomor_surat_bast' => 'BAST/001/RPL/2025',
-                'tanggal_pengadaan' => '2025-01-18',
+                'tanggal_catat_aset' => '2025-01-18',
             ]
         );
 
@@ -90,9 +90,9 @@ class DatabaseSeeder extends Seeder
                 'ruangan_id' => $labRpl->id,
                 'jumlah_total' => 20,
                 'kondisi' => 'baik',
-                'tanggal_pembayaran' => '2025-01-20',
+                'tanggal_bast' => '2025-01-20',
                 'nomor_surat_bast' => 'BAST/002/RPL/2025',
-                'tanggal_pengadaan' => '2025-01-22',
+                'tanggal_catat_aset' => '2025-01-22',
             ]
         );
 
@@ -109,9 +109,9 @@ class DatabaseSeeder extends Seeder
                 'ruangan_id' => $labTkj->id,
                 'jumlah_total' => 5,
                 'kondisi' => 'layak',
-                'tanggal_pembayaran' => '2024-11-05',
+                'tanggal_bast' => '2024-11-05',
                 'nomor_surat_bast' => 'BAST/001/TKJ/2024',
-                'tanggal_pengadaan' => '2024-11-10',
+                'tanggal_catat_aset' => '2024-11-10',
             ]
         );
 
@@ -128,9 +128,9 @@ class DatabaseSeeder extends Seeder
                 'ruangan_id' => $labTkj->id,
                 'jumlah_total' => 2,
                 'kondisi' => 'rusak',
-                'tanggal_pembayaran' => '2023-08-12',
+                'tanggal_bast' => '2023-08-12',
                 'nomor_surat_bast' => 'BAST/005/TKJ/2023',
-                'tanggal_pengadaan' => '2023-08-15',
+                'tanggal_catat_aset' => '2023-08-15',
             ]
         );
 

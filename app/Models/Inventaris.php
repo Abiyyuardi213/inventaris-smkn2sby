@@ -28,9 +28,9 @@ use App\Models\Peminjaman;
     'sumber_dana',
     'nama_penyedia',
     'nomor_surat_bast',
-    'tanggal_pembayaran',
+    'tanggal_bast',
     'kondisi',
-    'tanggal_pengadaan',
+    'tanggal_catat_aset',
     'qr_code_path',
     'foto_url'
 ])]
@@ -53,8 +53,8 @@ class Inventaris extends Model
     protected function casts(): array
     {
         return [
-            'tanggal_pembayaran' => 'date',
-            'tanggal_pengadaan' => 'date',
+            'tanggal_bast' => 'date',
+            'tanggal_catat_aset' => 'date',
             'jumlah_total' => 'integer',
             'harga_satuan' => 'integer',
         ];

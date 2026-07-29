@@ -65,6 +65,10 @@ Route::middleware('auth')->prefix('admin')->group(function () {
             ->whereIn('format', ['xlsx'])
             ->name('inventaris.export');
         Route::get('inventaris/print-pdf', [InventarisController::class, 'printPdf'])->name('inventaris.print-pdf');
+        Route::get('inventaris/print-kib-b', [InventarisController::class, 'printKibB'])->name('inventaris.print-kib-b');
+        Route::get('inventaris/print-kib-c', [InventarisController::class, 'printKibC'])->name('inventaris.print-kib-c');
+        Route::get('inventaris/print-kib-e', [InventarisController::class, 'printKibE'])->name('inventaris.print-kib-e');
+        Route::get('inventaris/print-buku-induk', [InventarisController::class, 'printBukuInduk'])->name('inventaris.print-buku-induk');
         Route::get('inventaris/print-label-bulk', [InventarisController::class, 'printLabelBulk'])->name('inventaris.print-label-bulk');
         Route::get('inventaris/scan', [InventarisController::class, 'scan'])->name('inventaris.scan');
         Route::get('inventaris/scan/resolve', [InventarisController::class, 'resolveScan'])->name('inventaris.scan.resolve');

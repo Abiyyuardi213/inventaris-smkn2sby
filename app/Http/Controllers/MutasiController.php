@@ -105,9 +105,9 @@ class MutasiController extends Controller
                         'sumber_dana' => $original->sumber_dana,
                         'nama_penyedia' => $original->nama_penyedia,
                         'nomor_surat_bast' => $original->nomor_surat_bast,
-                        'tanggal_pembayaran' => $original->tanggal_pembayaran,
+                        'tanggal_bast' => $original->tanggal_bast,
                         'kondisi' => $original->kondisi,
-                        'tanggal_pengadaan' => $original->tanggal_pengadaan,
+                        'tanggal_catat_aset' => $original->tanggal_catat_aset,
                         'foto_url' => $original->foto_url,
                     ]);
                     $inventarisIdForLog = $newInventaris->id;

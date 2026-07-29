@@ -177,15 +177,11 @@ class InventarisImportController extends Controller
         }
 
         DB::transaction(function () use ($batch) {
-            $reservedCodes = [];
-
-            foreach ($batch->rows as $row) {
+            foreach ($batch->rows->where('status', 'pending') as $row) {
                 $payload = $row->payload;
-                $kodeInventaris = InventarisCodeGenerator::generate($payload['nama_barang'], $reservedCodes);
-                $reservedCodes[] = $kodeInventaris;
 
                 $inventaris = Inventaris::create([
-                    'kode_inventaris' => $kodeInventaris,
+                    'kode_inventaris' => $payload['kode_inventaris'] ?? InventarisController::generateKodeInventaris(),
                     'nama_barang' => $payload['nama_barang'],
                     'merek' => $payload['merek'],
                     'type' => $payload['type'] ?? null,
@@ -200,9 +196,9 @@ class InventarisImportController extends Controller
                     'sumber_dana' => $payload['sumber_dana'] ?? null,
                     'nama_penyedia' => $payload['nama_penyedia'] ?? null,
                     'nomor_surat_bast' => $payload['nomor_surat_bast'] ?? null,
-                    'tanggal_pembayaran' => $payload['tanggal_pembayaran'] ?? null,
+                    'tanggal_bast' => $payload['tanggal_bast'] ?? null,
                     'kondisi' => $payload['kondisi'],
-                    'tanggal_pengadaan' => $payload['tanggal_pengadaan'] ?? null,
+                    'tanggal_catat_aset' => $payload['tanggal_catat_aset'] ?? null,
                     'foto_url' => $payload['foto_url'] ?? null,
                 ]);
 
@@ -274,8 +270,8 @@ class InventarisImportController extends Controller
             'sumber_dana',
             'nama_penyedia',
             'nomor_surat_bast',
-            'tanggal_pembayaran',
-            'tanggal_pengadaan',
+            'tanggal_bast',
+            'tanggal_catat_aset',
             'type',
             'kategori_id',
         ]));
@@ -321,12 +317,12 @@ class InventarisImportController extends Controller
             $errors[] = 'kondisi harus salah satu dari: baik, layak, rusak.';
         }
 
-        if (!empty($payload['tanggal_pembayaran']) && !strtotime($payload['tanggal_pembayaran'])) {
-            $errors[] = 'tanggal_pembayaran harus berupa tanggal valid, contoh: 2026-06-04.';
+        if (!empty($payload['tanggal_bast']) && !strtotime($payload['tanggal_bast'])) {
+            $errors[] = 'tanggal_bast harus berupa tanggal valid, contoh: 2026-06-04.';
         }
 
-        if (!empty($payload['tanggal_pengadaan']) && !strtotime($payload['tanggal_pengadaan'])) {
-            $errors[] = 'tanggal_pengadaan harus berupa tanggal valid, contoh: 2026-06-04.';
+        if (!empty($payload['tanggal_catat_aset']) && !strtotime($payload['tanggal_catat_aset'])) {
+            $errors[] = 'tanggal_catat_aset harus berupa tanggal valid, contoh: 2026-06-04.';
         }
 
         if (($payload['foto_url'] ?? '') !== '' && filter_var($payload['foto_url'], FILTER_VALIDATE_URL) === false) {

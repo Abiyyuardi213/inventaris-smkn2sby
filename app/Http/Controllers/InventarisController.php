@@ -26,11 +26,11 @@ class InventarisController extends Controller
             ->orderBy('nama_ruangan')
             ->get();
         $isSqlite = DB::getDriverName() === 'sqlite';
-        $yearExpression = $isSqlite ? "strftime('%Y', tanggal_pengadaan)" : "YEAR(tanggal_pengadaan)";
+        $yearExpression = $isSqlite ? "strftime('%Y', tanggal_catat_aset)" : "YEAR(tanggal_catat_aset)";
 
         $tahunPengadaans = Inventaris::query()
             ->selectRaw("{$yearExpression} as tahun")
-            ->whereNotNull('tanggal_pengadaan')
+            ->whereNotNull('tanggal_catat_aset')
             ->distinct()
             ->orderByDesc('tahun')
             ->pluck('tahun');
@@ -49,7 +49,7 @@ class InventarisController extends Controller
             ->when(request('kategori_id'), fn($q) => $q->where('kategori_id', request('kategori_id')))
             ->when(request('jurusan_id'), fn($q) => $q->where('jurusan_id', request('jurusan_id')))
             ->when(request('ruangan_id'), fn($q) => $q->where('ruangan_id', request('ruangan_id')))
-            ->when(request('tahun_pengadaan'), fn($q) => $q->whereYear('tanggal_pengadaan', request('tahun_pengadaan')))
+            ->when(request('tahun_pengadaan'), fn($q) => $q->whereYear('tanggal_catat_aset', request('tahun_pengadaan')))
             ->when(request('kondisi'), fn($q) => $q->where('kondisi', request('kondisi')))
             ->latest()
             ->paginate(10)
@@ -76,6 +76,207 @@ class InventarisController extends Controller
         $totalUnit = $ruangans->sum(fn (Ruangan $ruangan) => $ruangan->total_unit ?? 0);
 
         return view('inventaris.print-pdf', compact('ruangans', 'totalJenis', 'totalUnit'));
+    }
+
+    public function printKibB(Request $request): View
+    {
+        $jenisModalPeralatan = JenisModal::where('nama_jenis_modal', 'like', '%Peralatan%')
+            ->orWhere('nama_jenis_modal', 'like', '%Mesin%')
+            ->first();
+
+        $isSqlite = DB::getDriverName() === 'sqlite';
+        $yearExpression = $isSqlite ? "strftime('%Y', tanggal_catat_aset)" : "YEAR(tanggal_catat_aset)";
+
+        $availableYears = Inventaris::query()
+            ->selectRaw("{$yearExpression} as tahun")
+            ->whereNotNull('tanggal_catat_aset')
+            ->distinct()
+            ->orderByDesc('tahun')
+            ->pluck('tahun')
+            ->filter()
+            ->values();
+
+        $selectedTahun = $request->input('tahun_pengadaan') ?: $request->input('tahun');
+
+        $query = Inventaris::with(['jenisModal', 'kategori', 'jurusan', 'ruangan']);
+
+        if ($jenisModalPeralatan) {
+            $query->where('jenis_modal_id', $jenisModalPeralatan->id);
+        }
+
+        if ($selectedTahun && $selectedTahun !== 'all') {
+            $query->whereYear('tanggal_catat_aset', $selectedTahun);
+        }
+
+        if ($request->filled('jurusan_id')) {
+            $query->where('jurusan_id', $request->jurusan_id);
+        }
+        if ($request->filled('ruangan_id')) {
+            $query->where('ruangan_id', $request->ruangan_id);
+        }
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('nama_barang', 'like', "%{$search}%")
+                  ->orWhere('merek', 'like', "%{$search}%")
+                  ->orWhere('type', 'like', "%{$search}%");
+            });
+        }
+
+        $items = $query->orderBy('nama_barang')->get();
+
+        return view('inventaris.print-kib-b', compact('items', 'availableYears', 'selectedTahun'));
+    }
+
+    public function printKibC(Request $request): View
+    {
+        $jenisModalGedung = JenisModal::where('nama_jenis_modal', 'like', '%Gedung%')
+            ->orWhere('nama_jenis_modal', 'like', '%Bangunan%')
+            ->first();
+
+        $isSqlite = DB::getDriverName() === 'sqlite';
+        $yearExpression = $isSqlite ? "strftime('%Y', tanggal_catat_aset)" : "YEAR(tanggal_catat_aset)";
+
+        $availableYears = Inventaris::query()
+            ->selectRaw("{$yearExpression} as tahun")
+            ->whereNotNull('tanggal_catat_aset')
+            ->distinct()
+            ->orderByDesc('tahun')
+            ->pluck('tahun')
+            ->filter()
+            ->values();
+
+        $selectedTahun = $request->input('tahun_pengadaan') ?: $request->input('tahun');
+
+        $query = Inventaris::with(['jenisModal', 'kategori', 'jurusan', 'ruangan']);
+
+        if ($jenisModalGedung) {
+            $query->where('jenis_modal_id', $jenisModalGedung->id);
+        }
+
+        if ($selectedTahun && $selectedTahun !== 'all') {
+            $query->whereYear('tanggal_catat_aset', $selectedTahun);
+        }
+
+        if ($request->filled('jurusan_id')) {
+            $query->where('jurusan_id', $request->jurusan_id);
+        }
+        if ($request->filled('ruangan_id')) {
+            $query->where('ruangan_id', $request->ruangan_id);
+        }
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('nama_barang', 'like', "%{$search}%")
+                  ->orWhere('merek', 'like', "%{$search}%")
+                  ->orWhere('type', 'like', "%{$search}%");
+            });
+        }
+
+        $items = $query->orderBy('nama_barang')->get();
+
+        return view('inventaris.print-kib-c', compact('items', 'availableYears', 'selectedTahun'));
+    }
+
+    public function printKibE(Request $request): View
+    {
+        $jenisModalLainnya = JenisModal::where('nama_jenis_modal', 'like', '%Lainnya%')
+            ->orWhere('nama_jenis_modal', 'like', '%Aset Tetap%')
+            ->first();
+
+        $isSqlite = DB::getDriverName() === 'sqlite';
+        $yearExpression = $isSqlite ? "strftime('%Y', tanggal_catat_aset)" : "YEAR(tanggal_catat_aset)";
+
+        $availableYears = Inventaris::query()
+            ->selectRaw("{$yearExpression} as tahun")
+            ->whereNotNull('tanggal_catat_aset')
+            ->distinct()
+            ->orderByDesc('tahun')
+            ->pluck('tahun')
+            ->filter()
+            ->values();
+
+        $selectedTahun = $request->input('tahun_pengadaan') ?: $request->input('tahun');
+
+        $query = Inventaris::with(['jenisModal', 'kategori', 'jurusan', 'ruangan']);
+
+        if ($jenisModalLainnya) {
+            $query->where('jenis_modal_id', $jenisModalLainnya->id);
+        }
+
+        if ($selectedTahun && $selectedTahun !== 'all') {
+            $query->whereYear('tanggal_catat_aset', $selectedTahun);
+        }
+
+        if ($request->filled('jurusan_id')) {
+            $query->where('jurusan_id', $request->jurusan_id);
+        }
+        if ($request->filled('ruangan_id')) {
+            $query->where('ruangan_id', $request->ruangan_id);
+        }
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('nama_barang', 'like', "%{$search}%")
+                  ->orWhere('merek', 'like', "%{$search}%")
+                  ->orWhere('type', 'like', "%{$search}%");
+            });
+        }
+
+        $items = $query->orderBy('nama_barang')->get();
+
+        return view('inventaris.print-kib-e', compact('items', 'availableYears', 'selectedTahun'));
+    }
+
+    public function printBukuInduk(Request $request): View
+    {
+        $isSqlite = DB::getDriverName() === 'sqlite';
+        $yearExpression = $isSqlite ? "strftime('%Y', tanggal_catat_aset)" : "YEAR(tanggal_catat_aset)";
+
+        $availableYears = Inventaris::query()
+            ->selectRaw("{$yearExpression} as tahun")
+            ->whereNotNull('tanggal_catat_aset')
+            ->distinct()
+            ->orderByDesc('tahun')
+            ->pluck('tahun')
+            ->filter()
+            ->values();
+
+        $selectedTahun = $request->input('tahun_pengadaan') ?: $request->input('tahun');
+
+        $query = Inventaris::with(['jenisModal', 'kategori', 'jurusan', 'ruangan']);
+
+        if ($selectedTahun && $selectedTahun !== 'all') {
+            $query->whereYear('tanggal_catat_aset', $selectedTahun);
+        }
+
+        if ($request->filled('jenis_modal_id')) {
+            $query->where('jenis_modal_id', $request->jenis_modal_id);
+        }
+        if ($request->filled('kategori_id')) {
+            $query->where('kategori_id', $request->kategori_id);
+        }
+        if ($request->filled('jurusan_id')) {
+            $query->where('jurusan_id', $request->jurusan_id);
+        }
+        if ($request->filled('ruangan_id')) {
+            $query->where('ruangan_id', $request->ruangan_id);
+        }
+        if ($request->filled('kondisi')) {
+            $query->where('kondisi', $request->kondisi);
+        }
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('nama_barang', 'like', "%{$search}%")
+                  ->orWhere('merek', 'like', "%{$search}%")
+                  ->orWhere('type', 'like', "%{$search}%");
+            });
+        }
+
+        $items = $query->orderBy('tanggal_catat_aset', 'desc')->orderBy('nama_barang')->get();
+
+        return view('inventaris.print-buku-induk', compact('items', 'availableYears', 'selectedTahun'));
     }
 
     public function scan(): View
@@ -129,13 +330,13 @@ class InventarisController extends Controller
                 'sumber_dana' => $inventaris->sumber_dana ?? '-',
                 'nama_penyedia' => $inventaris->nama_penyedia ?? '-',
                 'nomor_surat_bast' => $inventaris->nomor_surat_bast ?? '-',
-                'tanggal_pembayaran' => $inventaris->tanggal_pembayaran?->format('d M Y') ?? '-',
+                'tanggal_bast' => $inventaris->tanggal_bast?->format('d M Y') ?? '-',
                 'kondisi' => $inventaris->kondisi,
                 'jenis_modal' => $inventaris->jenisModal?->nama_jenis_modal ?? '-',
                 'kategori' => $inventaris->kategori?->nama_kategori ?? '-',
                 'jurusan' => $inventaris->jurusan?->nama_jurusan,
                 'ruangan' => $inventaris->ruangan?->nama_ruangan,
-                'tanggal_pengadaan' => $inventaris->tanggal_pengadaan?->format('d M Y') ?? '-',
+                'tanggal_catat_aset' => $inventaris->tanggal_catat_aset?->format('d M Y') ?? '-',
             ],
         ]);
     }
@@ -197,9 +398,9 @@ class InventarisController extends Controller
             'sumber_dana' => 'nullable|string|max:255',
             'nama_penyedia' => 'nullable|string|max:255',
             'nomor_surat_bast' => 'nullable|string|max:255',
-            'tanggal_pembayaran' => 'nullable|date',
+            'tanggal_bast' => 'nullable|date',
             'kondisi' => 'required|in:baik,layak,rusak',
-            'tanggal_pengadaan' => 'nullable|date',
+            'tanggal_catat_aset' => 'nullable|date',
             'foto_url' => 'nullable|url|max:2048',
         ]);
 
@@ -208,37 +409,30 @@ class InventarisController extends Controller
         return redirect()->route('inventaris.index')->with('success', 'Data inventaris berhasil ditambahkan.');
     }
 
-    public function show(Inventaris $inventari): View
+    public function show(string $id): View
     {
-        $inventari->load(['jenisModal', 'kategori', 'jurusan', 'ruangan']);
-        return view('inventaris.show', ['inventaris' => $inventari]);
+        $inventaris = Inventaris::with(['jenisModal', 'kategori', 'jurusan', 'ruangan'])->findOrFail($id);
+
+        return view('inventaris.show', compact('inventaris'));
     }
 
-    public function edit(Inventaris $inventari): View
+    public function edit(string $id): View
     {
+        $inventaris = Inventaris::findOrFail($id);
         $jenisModals = JenisModal::orderBy('nama_jenis_modal')->get();
         $kategoris = Kategori::orderBy('nama_kategori')->get();
         $jurusans = Jurusan::orderBy('nama_jurusan')->get();
         $ruangans = Ruangan::with('jurusan')->orderBy('nama_ruangan')->get();
 
-        return view('inventaris.edit', [
-            'inventaris' => $inventari,
-            'jenisModals' => $jenisModals,
-            'kategoris' => $kategoris,
-            'jurusans' => $jurusans,
-            'ruangans' => $ruangans
-        ]);
+        return view('inventaris.edit', compact('inventaris', 'jenisModals', 'kategoris', 'jurusans', 'ruangans'));
     }
 
-    public function update(Request $request, Inventaris $inventari): RedirectResponse
+    public function update(Request $request, string $id): RedirectResponse
     {
+        $inventari = Inventaris::findOrFail($id);
+
         $validated = $request->validate([
-            'kode_inventaris' => [
-                'required',
-                'string',
-                'max:100',
-                Rule::unique('inventaris')->ignore($inventari->id),
-            ],
+            'kode_inventaris' => 'required|string|max:100|unique:inventaris,kode_inventaris,' . $inventari->id,
             'nama_barang' => 'required|string|max:255',
             'merek' => 'required|string|max:100',
             'type' => 'nullable|string|max:255',
@@ -264,9 +458,9 @@ class InventarisController extends Controller
             'sumber_dana' => 'nullable|string|max:255',
             'nama_penyedia' => 'nullable|string|max:255',
             'nomor_surat_bast' => 'nullable|string|max:255',
-            'tanggal_pembayaran' => 'nullable|date',
+            'tanggal_bast' => 'nullable|date',
             'kondisi' => 'required|in:baik,layak,rusak',
-            'tanggal_pengadaan' => 'nullable|date',
+            'tanggal_catat_aset' => 'nullable|date',
             'foto_url' => 'nullable|url|max:2048',
         ]);
 

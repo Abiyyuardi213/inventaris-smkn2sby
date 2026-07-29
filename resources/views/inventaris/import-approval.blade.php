@@ -85,7 +85,7 @@
                                 <span class="block text-[10px] font-medium text-zinc-400">{{ $payload['nomor_surat_bast'] ?? '-' }}</span>
                             </td>
                             <td class="px-4 py-3">{{ $payload['kondisi'] ?? '-' }}</td>
-                            <td class="px-4 py-3">{{ $payload['tanggal_pengadaan'] ?? '-' }}</td>
+                            <td class="px-4 py-3">{{ $payload['tanggal_catat_aset'] ?? $payload['tanggal_bast'] ?? '-' }}</td>
                             <td class="px-4 py-3">
                                 @if($row->validation_errors)
                                     <ul class="space-y-1 text-xs text-red-600">

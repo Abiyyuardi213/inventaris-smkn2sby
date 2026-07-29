@@ -162,8 +162,8 @@
                         <span id="result-qty" class="mt-1 font-semibold text-zinc-800 block"></span>
                     </div>
                     <div class="rounded-md border border-zinc-100 bg-zinc-50/50 p-3">
-                        <span class="text-[10px] font-bold uppercase tracking-wider text-zinc-400 block">Tanggal Pengadaan</span>
-                        <span id="result-tanggal" class="mt-1 font-semibold text-zinc-800 block"></span>
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-zinc-400 block">Tanggal Catat Aset</span>
+                        <span id="result-tanggal-catat-aset" class="mt-1 font-semibold text-zinc-800 block"></span>
                     </div>
                     <div class="rounded-md border border-zinc-100 bg-zinc-50/50 p-3">
                         <span class="text-[10px] font-bold uppercase tracking-wider text-zinc-400 block">Harga Satuan</span>
@@ -186,8 +186,8 @@
                         <span id="result-nomor-bast" class="mt-1 font-semibold text-zinc-800 block"></span>
                     </div>
                     <div class="rounded-md border border-zinc-100 bg-zinc-50/50 p-3">
-                        <span class="text-[10px] font-bold uppercase tracking-wider text-zinc-400 block">Tanggal Pembayaran</span>
-                        <span id="result-tanggal-pembayaran" class="mt-1 font-semibold text-zinc-800 block"></span>
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-zinc-400 block">Tanggal BAST</span>
+                        <span id="result-tanggal-bast" class="mt-1 font-semibold text-zinc-800 block"></span>
                     </div>
                     <div class="rounded-md border border-zinc-100 bg-zinc-50/50 p-3 sm:col-span-2">
                         <span class="text-[10px] font-bold uppercase tracking-wider text-zinc-400 block">Spesifikasi Detail</span>
@@ -375,13 +375,13 @@
             document.getElementById('result-bahan').textContent = item.bahan ?? '-';
             document.getElementById('result-warna').textContent = item.warna ?? '-';
             document.getElementById('result-qty').textContent = `${item.jumlah_total ?? 0} Unit`;
-            document.getElementById('result-tanggal').textContent = item.tanggal_pengadaan ?? '-';
+            document.getElementById('result-tanggal-catat-aset').textContent = item.tanggal_catat_aset ?? '-';
             document.getElementById('result-harga-satuan').textContent = item.harga_satuan ?? '-';
             document.getElementById('result-harga-total').textContent = item.harga_total ?? '-';
             document.getElementById('result-sumber-dana').textContent = item.sumber_dana ?? '-';
             document.getElementById('result-nama-penyedia').textContent = item.nama_penyedia ?? '-';
             document.getElementById('result-nomor-bast').textContent = item.nomor_surat_bast ?? '-';
-            document.getElementById('result-tanggal-pembayaran').textContent = item.tanggal_pembayaran ?? '-';
+            document.getElementById('result-tanggal-bast').textContent = item.tanggal_bast ?? '-';
             document.getElementById('result-spec').textContent = item.spesifikasi ?? '-';
             document.getElementById('result-link').href = payload.redirect_url;
 

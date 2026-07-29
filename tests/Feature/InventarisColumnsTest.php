@@ -40,9 +40,9 @@ class InventarisColumnsTest extends TestCase
             'sumber_dana' => 'BOS Kinerja',
             'nama_penyedia' => 'PT Ergo Jaya',
             'nomor_surat_bast' => 'BAST-ERG-2026',
-            'tanggal_pembayaran' => '2026-07-12',
+            'tanggal_bast' => '2026-07-12',
             'kondisi' => 'baik',
-            'tanggal_pengadaan' => '2026-07-10',
+            'tanggal_catat_aset' => '2026-07-10',
             'foto_url' => 'https://drive.google.com/file/d/test/view',
         ];
 
@@ -63,7 +63,7 @@ class InventarisColumnsTest extends TestCase
 
         // Verify detail page shows values
         $item = Inventaris::where('kode_inventaris', 'INV-TEST-999')->first();
-        $this->assertEquals('2026-07-12', $item->tanggal_pembayaran->toDateString());
+        $this->assertEquals('2026-07-12', $item->tanggal_bast->toDateString());
 
         $response = $this->actingAs($user)
             ->get(route('inventaris.show', $item->id));
@@ -99,9 +99,9 @@ class InventarisColumnsTest extends TestCase
             'sumber_dana' => $item->sumber_dana,
             'nama_penyedia' => 'CV Jati Agung',
             'nomor_surat_bast' => 'BAST-JATI-11',
-            'tanggal_pembayaran' => '2026-07-18',
+            'tanggal_bast' => '2026-07-18',
             'kondisi' => $item->kondisi,
-            'tanggal_pengadaan' => $item->tanggal_pengadaan?->toDateString(),
+            'tanggal_catat_aset' => $item->tanggal_catat_aset?->toDateString(),
             'foto_url' => $item->foto_url,
         ];
 
@@ -112,7 +112,7 @@ class InventarisColumnsTest extends TestCase
 
         // Verify updated in database
         $item->refresh();
-        $this->assertEquals('2026-07-18', $item->tanggal_pembayaran->toDateString());
+        $this->assertEquals('2026-07-18', $item->tanggal_bast->toDateString());
         $this->assertDatabaseHas('inventaris', [
             'id' => $item->id,
             'type' => 'New Type V2',
@@ -135,7 +135,7 @@ class InventarisColumnsTest extends TestCase
             'warna' => 'Hitam Pekat',
             'nama_penyedia' => 'PT Baja Bersama',
             'nomor_surat_bast' => 'BAST-BAJA-123',
-            'tanggal_pembayaran' => '2026-07-20',
+            'tanggal_bast' => '2026-07-20',
         ]);
 
         $response = $this->actingAs($user)
@@ -152,7 +152,7 @@ class InventarisColumnsTest extends TestCase
                 'warna' => 'Hitam Pekat',
                 'nama_penyedia' => 'PT Baja Bersama',
                 'nomor_surat_bast' => 'BAST-BAJA-123',
-                'tanggal_pembayaran' => '20 Jul 2026',
+                'tanggal_bast' => '20 Jul 2026',
             ],
         ]);
     }
@@ -223,5 +223,65 @@ class InventarisColumnsTest extends TestCase
 
         $response->assertRedirect(route('inventaris.index'));
         $this->assertEquals(0, Inventaris::count());
+    }
+
+    public function test_can_render_print_kib_b_page(): void
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $user = User::where('email', 'adminutama@example.com')->first();
+
+        $response = $this->actingAs($user)
+            ->get(route('inventaris.print-kib-b'));
+
+        $response->assertStatus(200);
+        $response->assertSee('KARTU INVENTARIS BARANG (KIB)');
+        $response->assertSee('PERALATAN DAN MESIN');
+        $response->assertSee('Nomor Register');
+    }
+
+    public function test_can_render_print_kib_c_page(): void
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $user = User::where('email', 'adminutama@example.com')->first();
+
+        $response = $this->actingAs($user)
+            ->get(route('inventaris.print-kib-c'));
+
+        $response->assertStatus(200);
+        $response->assertSee('KARTU INVENTARIS BARANG (KIB)');
+        $response->assertSee('GEDUNG DAN BANGUNAN');
+        $response->assertSee('Kondisi bangunan');
+    }
+
+    public function test_can_render_print_kib_e_page(): void
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $user = User::where('email', 'adminutama@example.com')->first();
+
+        $response = $this->actingAs($user)
+            ->get(route('inventaris.print-kib-e'));
+
+        $response->assertStatus(200);
+        $response->assertSee('KARTU INVENTARIS BARANG (KIB)');
+        $response->assertSee('ASET TETAP LAINNYA');
+        $response->assertSee('Buku / Perpustakaan');
+    }
+
+    public function test_can_render_print_buku_induk_page(): void
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $user = User::where('email', 'adminutama@example.com')->first();
+
+        $response = $this->actingAs($user)
+            ->get(route('inventaris.print-buku-induk'));
+
+        $response->assertStatus(200);
+        $response->assertSee('BUKU INDUK INVENTARIS');
+        $response->assertSee('Spesifikasi Barang');
+        $response->assertSee('Rincian Harga');
     }
 }

@@ -27,9 +27,9 @@ class InventarisSpreadsheetService
         'sumber_dana',
         'nama_penyedia',
         'nomor_surat_bast',
-        'tanggal_pembayaran',
+        'tanggal_bast',
         'kondisi',
-        'tanggal_pengadaan',
+        'tanggal_catat_aset',
         'foto_url',
     ];
 
@@ -51,9 +51,9 @@ class InventarisSpreadsheetService
         'Jumlah',
         'Lokasi Barang',
         'Nama Penyedia',
-        'Tanggal Pembayaran',
+        'Tanggal BAST',
         'Nomor Surat BAST',
-        'Tanggal Pengadaan',
+        'Tanggal Catat Aset',
         'Link Drive Dokumen',
     ];
 
@@ -121,9 +121,9 @@ class InventarisSpreadsheetService
                 $item->harga_total,
                 trim(($item->ruangan?->nama_ruangan ?? '') . (($item->jurusan?->nama_jurusan ?? '') !== '' ? ' - ' . $item->jurusan->nama_jurusan : '')),
                 $item->nama_penyedia,
-                optional($item->tanggal_pembayaran)->format('Y-m-d'),
+                optional($item->tanggal_bast)->format('Y-m-d'),
                 $item->nomor_surat_bast,
-                optional($item->tanggal_pengadaan)->format('Y-m-d'),
+                optional($item->tanggal_catat_aset)->format('Y-m-d'),
                 $item->foto_url,
             ];
         }
@@ -259,7 +259,7 @@ class InventarisSpreadsheetService
     {
         $value = trim((string) $value);
 
-        if (in_array($header, ['tanggal_pengadaan', 'tanggal_pembayaran'], true) && is_numeric($value)) {
+        if (in_array($header, ['tanggal_catat_aset', 'tanggal_bast'], true) && is_numeric($value)) {
             return \Carbon\Carbon::create(1899, 12, 30)
                 ->addDays((int) $value)
                 ->toDateString();
