@@ -16,6 +16,7 @@ use App\Http\Controllers\PeminjamanController;
 use App\Http\Controllers\PengadaanController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ApprovalKepsekController;
+use App\Http\Controllers\GedungDanBangunanController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [AuthController::class, 'login'])->name('login');
@@ -69,6 +70,14 @@ Route::middleware('auth')->prefix('admin')->group(function () {
         Route::get('inventaris/print-kib-c', [InventarisController::class, 'printKibC'])->name('inventaris.print-kib-c');
         Route::get('inventaris/print-kib-e', [InventarisController::class, 'printKibE'])->name('inventaris.print-kib-e');
         Route::get('inventaris/print-buku-induk', [InventarisController::class, 'printBukuInduk'])->name('inventaris.print-buku-induk');
+        Route::get('gedung-dan-bangunan', [GedungDanBangunanController::class, 'index'])->name('gedung-dan-bangunan.index');
+        Route::get('gedung-dan-bangunan/create', [GedungDanBangunanController::class, 'create'])->name('gedung-dan-bangunan.create');
+        Route::post('gedung-dan-bangunan', [GedungDanBangunanController::class, 'store'])->name('gedung-dan-bangunan.store');
+        Route::get('gedung-dan-bangunan/print-kib-c', [GedungDanBangunanController::class, 'printKibC'])->name('gedung-dan-bangunan.print-kib-c');
+        Route::get('gedung-dan-bangunan/{gedungDanBangunan}', [GedungDanBangunanController::class, 'show'])->name('gedung-dan-bangunan.show');
+        Route::get('gedung-dan-bangunan/{gedungDanBangunan}/edit', [GedungDanBangunanController::class, 'edit'])->name('gedung-dan-bangunan.edit');
+        Route::put('gedung-dan-bangunan/{gedungDanBangunan}', [GedungDanBangunanController::class, 'update'])->name('gedung-dan-bangunan.update');
+        Route::delete('gedung-dan-bangunan/{gedungDanBangunan}', [GedungDanBangunanController::class, 'destroy'])->name('gedung-dan-bangunan.destroy');
         Route::get('inventaris/print-label-bulk', [InventarisController::class, 'printLabelBulk'])->name('inventaris.print-label-bulk');
         Route::get('inventaris/scan', [InventarisController::class, 'scan'])->name('inventaris.scan');
         Route::get('inventaris/scan/resolve', [InventarisController::class, 'resolveScan'])->name('inventaris.scan.resolve');

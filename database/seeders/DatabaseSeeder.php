@@ -134,6 +134,40 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
+        $modalGedung = \App\Models\JenisModal::firstOrCreate(
+            ['nama_jenis_modal' => 'Modal Gedung dan Bangunan'],
+            ['kode_jenis_modal' => 'JM-GDG-002']
+        );
+
+        \App\Models\Inventaris::updateOrCreate(
+            ['kode_inventaris' => 'GDG-0001'],
+            [
+                'nama_barang' => 'Gedung Sekolah Utama A',
+                'merek' => '-',
+                'spesifikasi' => 'Gedung Utama Pembelajaran 2 Lantai',
+                'bahan' => 'Beton',
+                'jenis_modal_id' => $modalGedung->id,
+                'jurusan_id' => $rpl->id,
+                'ruangan_id' => $labRpl->id,
+                'jumlah_total' => 1,
+                'harga_satuan' => 750000000,
+                'kondisi' => 'baik',
+                'konstruksi_bertingkat' => 'Tidak',
+                'konstruksi_beton' => 'BTN',
+                'luas_lantai' => 500,
+                'luas_tanah' => 1200,
+                'lokasi_alamat' => 'Jl. Tentara Genie Pelajar No. 26, Sawahan, Surabaya',
+                'status_tanah' => 'Hak Pakai',
+                'nomor_kode_tanah' => '12.11.00.01',
+                'dokumen_nomor' => '500/01/2020',
+                'dokumen_tanggal' => '2020-01-15',
+                'sumber_dana' => 'APBD',
+                'tanggal_bast' => '2020-01-20',
+                'nomor_surat_bast' => 'BAST/001/GDG/2020',
+                'tanggal_catat_aset' => '2020-01-25',
+            ]
+        );
+
         // Sample peminjaman (external) if an inventaris exists
         $sampleInventaris = \App\Models\Inventaris::first();
         if ($sampleInventaris) {
