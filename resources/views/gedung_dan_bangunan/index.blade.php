@@ -173,7 +173,7 @@
                         <th rowspan="2" class="px-2 py-2 border-r border-zinc-200 w-10">No Urut</th>
                         <th rowspan="2" class="px-3 py-2 border-r border-zinc-200 min-w-[130px]">Nama Barang / Jenis Barang</th>
                         <th colspan="2" class="px-2 py-1.5 border-b border-r border-zinc-200">Nomor</th>
-                        <th rowspan="2" class="px-2 py-2 border-r border-zinc-200 w-16">Kondisi bangunan (B, KB, RB)</th>
+                        <th rowspan="2" class="px-2 py-2 border-r border-zinc-200 min-w-[110px]">Kondisi bangunan (B, RR, RS, RB)</th>
                         <th colspan="2" class="px-2 py-1.5 border-b border-r border-zinc-200">Konstruksi</th>
                         <th rowspan="2" class="px-2 py-2 border-r border-zinc-200 w-16">Luas Lantai (M2)</th>
                         <th rowspan="2" class="px-3 py-2 border-r border-zinc-200 min-w-[120px]">Letak / Lokasi Alamat</th>
@@ -242,17 +242,17 @@
                             <td class="px-2 py-2.5 text-center font-mono text-[11px] border-r border-zinc-200">
                                 {{ str_pad($index + 1, 4, '0', STR_PAD_LEFT) }}
                             </td>
-                            <td class="px-2 py-2.5 text-center font-bold border-r border-zinc-200">
+                            <td class="px-2 py-2.5 text-center font-semibold border-r border-zinc-200 whitespace-nowrap">
                                 @if($item->kondisi === 'baik')
-                                    <span class="text-emerald-700">B</span>
+                                    <span class="text-emerald-700 font-bold">B</span> <span class="text-zinc-500 font-normal text-[11px]">(Baik)</span>
                                 @elseif($item->kondisi === 'rusak_ringan')
-                                    <span class="text-blue-700">RR</span>
+                                    <span class="text-blue-700 font-bold">RR</span> <span class="text-zinc-500 font-normal text-[11px]">(Rusak Ringan)</span>
                                 @elseif($item->kondisi === 'rusak_sedang')
-                                    <span class="text-amber-700">RS</span>
+                                    <span class="text-amber-700 font-bold">RS</span> <span class="text-zinc-500 font-normal text-[11px]">(Rusak Sedang)</span>
                                 @elseif($item->kondisi === 'rusak_berat' || $item->kondisi === 'rusak')
-                                    <span class="text-red-700">RB</span>
+                                    <span class="text-red-700 font-bold">RB</span> <span class="text-zinc-500 font-normal text-[11px]">(Rusak Berat)</span>
                                 @else
-                                    <span class="text-amber-700">KB</span>
+                                    <span class="text-amber-700 font-bold">KB</span> <span class="text-zinc-500 font-normal text-[11px]">(Kurang Baik)</span>
                                 @endif
                             </td>
                             <td class="px-2 py-2.5 text-center border-r border-zinc-200">

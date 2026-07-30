@@ -261,7 +261,7 @@
                     <th rowspan="2" style="width: 32px;">No Urut</th>
                     <th rowspan="2" style="width: 140px;">Nama Barang/ Jenis Barang</th>
                     <th colspan="2">Nomor</th>
-                    <th rowspan="2" style="width: 65px;">Kondisi bangunan (B, KB, RB)</th>
+                    <th rowspan="2" style="width: 80px;">Kondisi bangunan (B, RR, RS, RB)</th>
                     <th colspan="2">Konstruksi</th>
                     <th rowspan="2" style="width: 60px;">Luas Lantai (M2)</th>
                     <th rowspan="2" style="width: 110px;">Letak/ Lokasi Alamat</th>
@@ -313,7 +313,7 @@
                         <td class="text-left">{{ $item->nama_barang }}</td>
                         <td style="font-family: 'Geist Mono', monospace; font-size: 9.5px;">{{ $item->kode_inventaris }}</td>
                         <td>{{ str_pad($index + 1, 4, '0', STR_PAD_LEFT) }}</td>
-                        <td>{{ $item->kondisi === 'baik' ? 'B' : ($item->kondisi === 'rusak_ringan' ? 'RR' : ($item->kondisi === 'rusak_sedang' ? 'RS' : ($item->kondisi === 'rusak_berat' || $item->kondisi === 'rusak' ? 'RB' : 'KB'))) }}</td>
+                        <td>{{ $item->kondisi === 'baik' ? 'B (Baik)' : ($item->kondisi === 'rusak_ringan' ? 'RR (Rusak Ringan)' : ($item->kondisi === 'rusak_sedang' ? 'RS (Rusak Sedang)' : ($item->kondisi === 'rusak_berat' || $item->kondisi === 'rusak' ? 'RB (Rusak Berat)' : 'KB (Kurang Baik)'))) }}</td>
                         <td>{{ $item->konstruksi_bertingkat ?: 'Tidak' }}</td>
                         <td>{{ $item->konstruksi_beton ?: 'Beton' }}</td>
                         <td>{{ $item->luas_lantai ? number_format($item->luas_lantai, 0, ',', '.') : '-' }}</td>
