@@ -303,24 +303,26 @@
             </thead>
             <tbody>
                 @php($totalHarga = 0)
+                @php($totalLuasTanah = 0)
                 @forelse ($items as $index => $item)
                     @php($subtotal = $item->harga_satuan * $item->jumlah_total)
                     @php($totalHarga += $subtotal)
+                    @php($totalLuasTanah += ($item->luas_tanah ?? 0))
                     <tr>
                         <td>{{ $index + 1 }}</td>
                         <td class="text-left">{{ $item->nama_barang }}</td>
                         <td style="font-family: 'Geist Mono', monospace; font-size: 9.5px;">{{ $item->kode_inventaris }}</td>
                         <td>{{ str_pad($index + 1, 4, '0', STR_PAD_LEFT) }}</td>
-                        <td>{{ $item->kondisi === 'baik' ? 'B' : ($item->kondisi === 'layak' ? 'KB' : 'RB') }}</td>
-                        <td>Tidak</td>
-                        <td>{{ $item->bahan ?: 'BTN' }}</td>
-                        <td>-</td>
-                        <td class="text-left">{{ $item->ruangan->nama_ruangan ?? '-' }}</td>
-                        <td>{{ optional($item->tanggal_bast ?? $item->tanggal_catat_aset)->format('d/m/Y') ?? '-' }}</td>
-                        <td>{{ $item->nomor_surat_bast ?: '-' }}</td>
-                        <td>-</td>
-                        <td>Hak Milik</td>
-                        <td>-</td>
+                        <td>{{ $item->kondisi === 'baik' ? 'B' : ($item->kondisi === 'rusak_ringan' ? 'RR' : ($item->kondisi === 'rusak_sedang' ? 'RS' : ($item->kondisi === 'rusak_berat' || $item->kondisi === 'rusak' ? 'RB' : 'KB'))) }}</td>
+                        <td>{{ $item->konstruksi_bertingkat ?: 'Tidak' }}</td>
+                        <td>{{ $item->konstruksi_beton ?: 'Beton' }}</td>
+                        <td>{{ $item->luas_lantai ? number_format($item->luas_lantai, 0, ',', '.') : '-' }}</td>
+                        <td class="text-left">{{ $item->lokasi_alamat ?: ($item->ruangan->nama_ruangan ?? '-') }}</td>
+                        <td>{{ optional($item->dokumen_tanggal ?? $item->tanggal_bast ?? $item->tanggal_catat_aset)->format('d/m/Y') ?? '-' }}</td>
+                        <td>{{ $item->dokumen_nomor ?: ($item->nomor_surat_bast ?: '-') }}</td>
+                        <td>{{ $item->luas_tanah ? number_format($item->luas_tanah, 0, ',', '.') : '-' }}</td>
+                        <td>{{ $item->status_tanah ?: 'Hak Pakai' }}</td>
+                        <td>{{ $item->nomor_kode_tanah ?: '-' }}</td>
                         <td>{{ $item->sumber_dana ?: 'APBD' }}</td>
                         <td class="text-right">{{ number_format($subtotal, 0, ',', '.') }}</td>
                         <td class="text-left">{{ $item->ruangan->nama_ruangan ?? '-' }}</td>
@@ -336,7 +338,7 @@
             <tfoot>
                 <tr style="font-weight: 700; background-color: #fafafa;">
                     <td colspan="11" style="text-align: center;">Jumlah</td>
-                    <td>0</td>
+                    <td>{{ number_format($totalLuasTanah, 0, ',', '.') }}</td>
                     <td></td>
                     <td></td>
                     <td></td>

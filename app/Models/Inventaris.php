@@ -32,7 +32,16 @@ use App\Models\Peminjaman;
     'kondisi',
     'tanggal_catat_aset',
     'qr_code_path',
-    'foto_url'
+    'foto_url',
+    'konstruksi_bertingkat',
+    'konstruksi_beton',
+    'luas_lantai',
+    'lokasi_alamat',
+    'dokumen_tanggal',
+    'dokumen_nomor',
+    'luas_tanah',
+    'status_tanah',
+    'nomor_kode_tanah'
 ])]
 class Inventaris extends Model
 {
@@ -55,8 +64,11 @@ class Inventaris extends Model
         return [
             'tanggal_bast' => 'date',
             'tanggal_catat_aset' => 'date',
+            'dokumen_tanggal' => 'date',
             'jumlah_total' => 'integer',
             'harga_satuan' => 'integer',
+            'luas_lantai' => 'float',
+            'luas_tanah' => 'float',
         ];
     }
 

@@ -342,7 +342,6 @@
                 <p class="kicker">PEMERINTAH PROVINSI JAWA TIMUR</p>
                 <p class="kicker">DINAS PENDIDIKAN</p>
                 <h2 class="title">SMK NEGERI 2 SURABAYA</h2>
-                <h3 class="school">KARTU INVENTARIS RUANG</h3>
                 <p class="address">Jalan Tentara Genie Pelajar No. 26, Sawahan, Surabaya, Jawa Timur</p>
                 <p class="contact">Telepon (031) 5343208 | Email: smkn2surabaya@gmail.com</p>
             </div>
@@ -350,7 +349,7 @@
         </header>
 
         <section class="document-title">
-            <h1>Pencatatan Aset Sekolah</h1>
+            <h1>KARTU INVENTARIS RUANG</h1>
             <p>Tahun {{ now()->format('Y') }}</p>
         </section>
 

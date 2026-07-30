@@ -284,4 +284,36 @@ class InventarisColumnsTest extends TestCase
         $response->assertSee('Spesifikasi Barang');
         $response->assertSee('Rincian Harga');
     }
+
+    public function test_can_render_gedung_dan_bangunan_module_and_print_kib_c(): void
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $user = User::where('email', 'adminutama@example.com')->first();
+
+        $responseIndex = $this->actingAs($user)
+            ->get(route('gedung-dan-bangunan.index'));
+
+        $responseIndex->assertStatus(200);
+        $responseIndex->assertSee('Gedung');
+        $responseIndex->assertSee('Bangunan');
+        $responseIndex->assertSee('Cetak KIB C');
+
+        $responsePrint = $this->actingAs($user)
+            ->get(route('gedung-dan-bangunan.print-kib-c'));
+
+        $responsePrint->assertStatus(200);
+        $responsePrint->assertSee('KARTU INVENTARIS BARANG (KIB)');
+        $responsePrint->assertSee('GEDUNG DAN BANGUNAN');
+
+        $item = Inventaris::where('kode_inventaris', 'GDG-0001')->first();
+        if ($item) {
+            $responseShow = $this->actingAs($user)
+                ->get(route('gedung-dan-bangunan.show', $item->id));
+
+            $responseShow->assertStatus(200);
+            $responseShow->assertSee('Gedung Sekolah Utama A');
+            $responseShow->assertSee('GDG-0001');
+        }
+    }
 }

@@ -69,13 +69,6 @@
                 </svg>
                 Cetak KIB B
             </a>
-            <a href="{{ route('inventaris.print-kib-c', request()->only(['search', 'jurusan_id', 'ruangan_id', 'tahun_pengadaan', 'tahun'])) }}" target="_blank"
-                class="inline-flex items-center justify-center gap-2 rounded-md border border-emerald-200 bg-emerald-50 text-emerald-800 hover:bg-emerald-100 px-3 py-2 text-sm font-medium shadow-sm transition-all duration-150">
-                <svg class="h-4 w-4 text-emerald-700" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3.75h.008v.008h-.008v-.008Zm0 3h.008v.008h-.008v-.008Zm0 3h.008v.008h-.008v-.008Z" />
-                </svg>
-                Cetak KIB C
-            </a>
             <a href="{{ route('inventaris.print-kib-e', request()->only(['search', 'jurusan_id', 'ruangan_id', 'tahun_pengadaan', 'tahun'])) }}" target="_blank"
                 class="inline-flex items-center justify-center gap-2 rounded-md border border-purple-200 bg-purple-50 text-purple-800 hover:bg-purple-100 px-3 py-2 text-sm font-medium shadow-sm transition-all duration-150">
                 <svg class="h-4 w-4 text-purple-700" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
