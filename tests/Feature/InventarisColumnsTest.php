@@ -281,8 +281,9 @@ class InventarisColumnsTest extends TestCase
 
         $response->assertStatus(200);
         $response->assertSee('BUKU INDUK INVENTARIS');
-        $response->assertSee('Spesifikasi Barang');
-        $response->assertSee('Rincian Harga');
+        $response->assertSee('A. TANAH');
+        $response->assertSee('B. PERALATAN DAN MESIN');
+        $response->assertSee('TOTAL KESELURUHAN NILAI ASET');
     }
 
     public function test_can_render_gedung_dan_bangunan_module_and_print_kib_c(): void
